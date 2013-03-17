@@ -1,0 +1,41 @@
+===============================================================================================================
+TODO:
+===============================================================================================================
+1) Gameplay
+	Win/loose conditions?
+	Weapons?
+	Powerups/Items?
+	Story?
+	
+2) Scoring system
+	Floating score text when mobs are hit/killed
+	Player total score display
+	Score bonus?
+		Bonus for killing many mobs within certain time-interval?
+		Bonus for killing many mobs with one shot? (grenade, bombs etc)
+
+3) Menu system
+	Main menu?
+	Options?
+	Inventory?
+
+===============================================================================================================
+BUGS:
+===============================================================================================================
+1) Zombies exploding near walls will eject their body parts through wall/ceiling tiles.
+2) Mobs killed sometimes are not removed from tile entity-list.
+	This seems to occur if a mob is moving from one tile to another. A zombies alive state is
+	set to false in its tick() method, and if, at that point, the zombie was entered into another
+	tile, the postTick() method will see this condition, and re-register itself with the new tiles
+	entity list. Subsequent game.tick()'s will not call the zombies tick() method, nor its postTick(),
+	but the zombie will remain registered with the new tiles entity list, and collision code will react
+	on it.
+	
+	UPDATE:
+		Modified postTick() to check for alive-state first, and remove if needed.
+
+3) Player cant shoot mobs if they are on the same tile.
+	
+	UPDATE:
+		Modified fireWeapon() method to start weapon hit check at player tile.		
+		
