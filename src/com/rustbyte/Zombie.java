@@ -30,8 +30,8 @@ public class Zombie extends Mob {
 		
 		if(hitpoints <= 0) {
 			// initiate death-sequence
-			double x = xx - (wid / 2);
-			double y = yy - (hgt / 2);
+			double x = xx;// - (wid / 2);
+			double y = yy;// - (hgt / 2);
 			int partitions = 8;
 			int psize = partitions / 2;
 			for(int i=0; i < partitions; i++) {

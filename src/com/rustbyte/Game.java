@@ -41,8 +41,9 @@ public class Game {
 		//addEntity(player);
 		Random rand = new Random();
 		int xx = 40;
-		int minspacing = WIDTH / 50;
-		for(int i=0; i < 50; i++) {
+		int nummobs = 1000;
+		int minspacing = WIDTH / nummobs;
+		for(int i=0; i < nummobs; i++) {
 			xx += minspacing + rand.nextInt(40);
 			if(xx > (level.width * level.tileWidth) - 40)
 				xx = 40;

@@ -29,6 +29,11 @@ TODO:
 BUGS:
 ===============================================================================================================
 1) Zombies exploding near walls will eject their body parts through wall/ceiling tiles.
+	UPDATE:
+		Modified body part debris to spawn at zombie world coord.
+		Not a real fix, but keeps them from spawning inside blocking tiles, and also looks better
+		when the zombie explodes.
+		
 2) Mobs killed sometimes are not removed from tile entity-list.
 	This seems to occur if a mob is moving from one tile to another. A zombies alive state is
 	set to false in its tick() method, and if, at that point, the zombie was entered into another
