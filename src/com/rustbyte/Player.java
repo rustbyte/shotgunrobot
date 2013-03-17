@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.awt.event.KeyEvent;
 
 import com.rustbyte.Game;
+import com.rustbyte.vector.Vector2;
 
 public class Player extends Mob  {
 	private int ANIM_WALK_RIGHT;
@@ -152,12 +153,14 @@ public class Player extends Mob  {
 	@Override
 	public void takeDamage(Entity source, int amount) {		
 		if(!isHurt()) {
-			hurt(50);				
-			/*velX = -((source.xx - xx) / 4);
+			hurt(50);		
+			game.addEntity(new FloatingText("-" + amount,Art.getColor(255,0,0),xx,yy,new Vector2(0,-1), null, game));
+			
+			velX = -((source.xx - xx) / 4);
 			dirX = velX < 0 ? -1 : 1;
 			velY = -2;
 			jumping = true;			
-			knockedBack = true;*/
+			knockedBack = true;
 		}
 	}
 }

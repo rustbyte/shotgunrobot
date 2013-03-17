@@ -88,9 +88,7 @@ public class Game {
 		
 		level.draw(screen);
 				
-		screen.drawText(Art.font, "fps: " + FPS, 0,0,0xFFFF00, true);
-		
-		screen.drawText(Art.font,"numbers: 012345 999 !?()",0,50, 0xFFFF00, true);
+		screen.drawText(Art.font, "fps: " + FPS, 0,0,0xFFFF00, true);			
 				
 		for(int i=0; i < entities.size();i++) {
 			Entity ent = entities.get(i);

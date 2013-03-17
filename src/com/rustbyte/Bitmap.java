@@ -4,6 +4,8 @@ public class Bitmap {
 	public static String chararray = "ABCDEFGHIJKLMNOPQRSTUVWXYZ.,!?\"´/\\<>()[]{}" +
 									 "abcdefghijklmnopqrstuvwxyz_               " +
 									 "0123456789+-=*:;                          ";
+	public static final int FONTWIDTH = 6;
+	public static final int FONTHEIGHT = 8;
 	
 	public int width;
 	public int height;
@@ -111,9 +113,7 @@ public class Bitmap {
 		drawText(fontBitmap, text,xOffset, yOffset, col);
 	}
 	private void drawText(Bitmap fontBitmap, String text, int xOffset, int yOffset, int col) {
-		
-		int fontWidth = 6;
-		int fontHeight = 8;		
+				
 		int charIndex = -1;
 		
 		int fontOffsetX = -1; 
@@ -125,15 +125,15 @@ public class Bitmap {
 		for(int i=0; i < text.length(); i++) {			
 			charIndex = chararray.indexOf(text.charAt(i));
 			
-			fontOffsetX = (charIndex % 42) * fontWidth;
-			fontOffsetY = (charIndex / 42) * fontHeight;
+			fontOffsetX = (charIndex % 42) * FONTWIDTH;
+			fontOffsetY = (charIndex / 42) * FONTHEIGHT;
 			
-			for(int y=fontOffsetY; y < (fontOffsetY + fontHeight); y++) {
+			for(int y=fontOffsetY; y < (fontOffsetY + FONTHEIGHT); y++) {
 				yFinal = yOffset + (y - fontOffsetY);
 				if(yFinal < 0 || yFinal >= height) continue;
 				
-				for(int x=fontOffsetX; x < (fontOffsetX + fontWidth); x++) {
-					xFinal = (xOffset + (x - fontOffsetX)) + (i * fontWidth);
+				for(int x=fontOffsetX; x < (fontOffsetX + FONTWIDTH); x++) {
+					xFinal = (xOffset + (x - fontOffsetX)) + (i * FONTWIDTH);
 					if(xFinal < 0 || xFinal >= width) continue;
 					
 					int src = fontBitmap.pixels[x + y * fontBitmap.width];

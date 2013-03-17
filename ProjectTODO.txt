@@ -12,7 +12,35 @@ TODO:
 	Weapons?
 	Powerups/Items?
 	Story?
-	
+		* Synopsis *
+		
+		Well, Zombie apocolypse is upon the world. 
+		Mankinds last line of defense has been activated....SHOTGUN ROBOT!
+		
+		This topsecret weapon was originally developed as a new kind of "super-soldier" against
+		the enemies of "the free world".
+		
+		The same defense-contractor that developed this killing-machine, 
+		was also hired to develop another weapon... a virus!
+		
+		The purpose of the virus was to kill a target population much the same as Ebola.
+		However, the virus produced a side-effect....along with killing its vicitim, it also caused
+		the corpse to reanimate, and walk the earth once more!
+		
+		Blah, blah blah...
+		
+		Somehow this thing escaped or was set loose upon the world..
+		
+		yadiyadiyada....everybody dies...
+		
+		blah bla,
+		
+		* The Mission *
+		
+		1) Kill zombies.... ( o'rly?? :P )		
+		2) Save people?
+		
+		
 2) Scoring system
 	Floating score text when mobs are hit/killed
 	Player total score display

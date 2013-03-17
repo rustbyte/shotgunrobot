@@ -120,6 +120,7 @@ public class Zombie extends Mob {
 	public void takeDamage(Entity source, int amount) {
 		hitpoints -= amount;
 		hurt(20);
+		game.addEntity(new FloatingText("-" + amount, Art.getColor(255, 255, 0), xx,yy, new Vector2(0,-1), null, game));
 		int px = 0;
 		int py = -10;
 		ParticleEmitter pe = new ParticleEmitter(px, py, (double)source.facing, -1.0, 2, 10, Art.getColor(255,0,0), this, game);
