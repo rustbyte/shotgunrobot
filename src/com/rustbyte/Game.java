@@ -25,6 +25,11 @@ public class Game {
 	public int tickcount = 0;	
 	public int FPS = 0;
 	
+	// parallax background
+	private int numLayers = 5;
+	private int layerHeight = 48;
+	private BackgroundLayer[] layers = new BackgroundLayer[numLayers];	
+	
 	public Game(int wid, int hgt) {
 		this.WIDTH = wid;
 		this.HEIGHT = hgt;
@@ -41,16 +46,28 @@ public class Game {
 		//addEntity(player);
 		Random rand = new Random();
 		int xx = 40;
-		int nummobs = 1000;
-		int minspacing = WIDTH / nummobs;
-		for(int i=0; i < nummobs; i++) {
-			xx += minspacing + rand.nextInt(40);
-			if(xx > (level.width * level.tileWidth) - 40)
-				xx = 40;
-			if( xx >= ((level.width * level.tileWidth) - 40))
-				xx = (level.width * level.tileWidth) - 40;			
-			addEntity(new Zombie(xx,50, 20, 20, null ,this));
-		}	
+		int nummobs = 0;
+		if(nummobs > 0) {
+			int minspacing = WIDTH / nummobs;
+			for(int i=0; i < nummobs; i++) {
+				xx += minspacing + rand.nextInt(40);
+				if(xx > (level.width * level.tileWidth) - 40)
+					xx = 40;
+				if( xx >= ((level.width * level.tileWidth) - 40))
+					xx = (level.width * level.tileWidth) - 40;			
+				addEntity(new Zombie(xx,50, 20, 20, null ,this));
+			}	
+		}
+		
+		for(int i=0; i < numLayers;i++) {
+			BackgroundLayer nextLayer = new BackgroundLayer();
+			nextLayer.width = 320;
+			nextLayer.height = layerHeight;
+			nextLayer.x1 = 0;
+			nextLayer.x2 = nextLayer.width;
+			nextLayer.yy = layerHeight * i;
+			layers[i] = nextLayer;
+		}
 	}
 	
 	public void addEntity(Entity ent) {
@@ -76,15 +93,33 @@ public class Game {
 		player.tick();
 		player.postTick();
 		
-		System.out.println("Active entities: " + entities.size());
+		//System.out.println("Active entities: " + entities.size());
 		
 		level.tick();
-		level.setViewPos((int)player.xx, (int)player.yy);		
+		level.setViewPos((int)player.xx, (int)player.yy);
+		
+		if( level.viewX > 0 && (level.viewX + level.viewWidth) < level.tileWidth * level.width) {
+			for(int i=0; i<numLayers;i++) {
+				double layerSpeed = 0;
+				if( player.velX < 0) {
+					layerSpeed = 1 + i;
+				} else if ( player.velX > 0) {
+					layerSpeed = -(1 + i);
+				}				
+				layers[i].move(layerSpeed);
+			}
+		}	
 	}
 	
 	public void render() {
 		for(int i=0; i < WIDTH * HEIGHT;i++)
 			screen.pixels[i] = 0x498FFF;
+		
+		// render background
+		for(int i=0; i < numLayers;i++) {
+			BackgroundLayer layer = layers[i];
+			layer.draw(screen);
+		}
 		
 		level.draw(screen);
 				

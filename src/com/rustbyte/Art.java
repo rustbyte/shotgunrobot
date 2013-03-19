@@ -7,11 +7,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Art {
-
-	
 	public static Bitmap sprites = loadBitmap("/tex/spritesheet.png");
 	public static Bitmap level1 = loadBitmap("/tex/level1.png");
 	public static Bitmap font = loadBitmap("/tex/font.png");
+	public static Bitmap background = loadBitmap("/tex/background_city1.png");	
 	
 	public static Bitmap loadBitmap(String filename) {
 		try {
