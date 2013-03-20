@@ -26,8 +26,7 @@ public class Game {
 	public int FPS = 0;
 	
 	// parallax background
-	private int numLayers = 5;
-	private int layerHeight = 48;
+	private int numLayers = 3;
 	private BackgroundLayer[] layers = new BackgroundLayer[numLayers];	
 	
 	public Game(int wid, int hgt) {
@@ -46,7 +45,7 @@ public class Game {
 		//addEntity(player);
 		Random rand = new Random();
 		int xx = 40;
-		int nummobs = 0;
+		int nummobs = 50;
 		if(nummobs > 0) {
 			int minspacing = WIDTH / nummobs;
 			for(int i=0; i < nummobs; i++) {
@@ -59,15 +58,9 @@ public class Game {
 			}	
 		}
 		
-		for(int i=0; i < numLayers;i++) {
-			BackgroundLayer nextLayer = new BackgroundLayer();
-			nextLayer.width = 320;
-			nextLayer.height = layerHeight;
-			nextLayer.x1 = 0;
-			nextLayer.x2 = nextLayer.width;
-			nextLayer.yy = layerHeight * i;
-			layers[i] = nextLayer;
-		}
+		layers[0] = new BackgroundLayer(Art.background, 0, 100);
+		layers[1] = new BackgroundLayer(Art.background, 100, 50);		
+		layers[2] = new BackgroundLayer(Art.background, 150, 90);		
 	}
 	
 	public void addEntity(Entity ent) {
@@ -91,24 +84,17 @@ public class Game {
 		}
 		player.applyGravity(gravity);
 		player.tick();
-		player.postTick();
-		
-		//System.out.println("Active entities: " + entities.size());
+		player.postTick();		
 		
 		level.tick();
 		level.setViewPos((int)player.xx, (int)player.yy);
 		
 		if( level.viewX > 0 && (level.viewX + level.viewWidth) < level.tileWidth * level.width) {
-			for(int i=0; i<numLayers;i++) {
-				double layerSpeed = 0;
-				if( player.velX < 0) {
-					layerSpeed = 1 + i;
-				} else if ( player.velX > 0) {
-					layerSpeed = -(1 + i);
-				}				
-				layers[i].move(layerSpeed);
+			for(int i=0; i<numLayers;i++) {				
+				double layerSpeed = player.velX / (numLayers - i);
+				layers[i].move(-layerSpeed * 1.1);				
 			}
-		}	
+		}			
 	}
 	
 	public void render() {

@@ -63,7 +63,7 @@ public class Tile implements Destructable {
 	public void takeDamage(Entity source, int amount) {		
 		double px = (this.tx * this.width) + this.halfWidth + (this.halfWidth * -source.facing);
 		double py = source.yy;	
-		ParticleEmitter pe = new ParticleEmitter(px, py, -(double)source.facing, -1.0, 1, 5, baseColor, null, level.game);
+		ParticleEmitter pe = new ParticleEmitter(px, py, -(double)source.facing, -1.0, 1, 5, 0x000000, null, level.game);
 		level.game.addEntity(pe);		
 	}
 }

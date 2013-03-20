@@ -6,7 +6,16 @@ public class BackgroundLayer {
 	public double yy;
 	public int width;
 	public int height;
+	public Bitmap bitmap;
 	
+	public BackgroundLayer(Bitmap background, int layerY, int hgt) {
+		bitmap = background;
+		width = bitmap.width;
+		x1 = 0;
+		x2 = width;
+		yy = layerY;
+		height = hgt;		
+	}
 	public void move(double vel) {
 		x1 += vel;
 		x2 += vel;

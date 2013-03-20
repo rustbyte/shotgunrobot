@@ -42,6 +42,7 @@ public class Player extends Mob  {
 		super.tick();								
 		
 		speed = 1.50;
+		
 		if(hurtTimer < 40)
 			knockedBack = false;
 		
