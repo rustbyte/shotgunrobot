@@ -19,8 +19,7 @@ public class Player extends Mob  {
 	
 	public boolean weaponFired = false;
 	public int weaponTimer = 0;
-	private final int weaponDamage = 10;
-	private boolean knockedBack = false;
+	private final int weaponDamage = 25;
 	
 	public Player(int x, int y, int w, int h, Entity p, Game g) {
 		super(x, y, w, h, p, g);
@@ -30,22 +29,31 @@ public class Player extends Mob  {
 		ANIM_IDLE_LEFT = this.animator.addAnimation(1, 101, 0, w, h, true,0);
 		ANIM_JUMP_RIGHT = this.animator.addAnimation(1, 101 + w * 3, 0, w, h, false,0);
 		ANIM_JUMP_LEFT = this.animator.addAnimation(1, 101  + w * 3, 0, w, h, true,0);
+		this.animator.setFrameRate(15.0);
 		
 		animator.setCurrentAnimation(ANIM_IDLE_RIGHT);
 		input = g.input;
 		speed = 1.50;
 		xr = 6;
 		hurtColor = 0xFFFF00;
+		hitpoints = 100;
 	}
 	@Override
 	public void tick() {
 		super.tick();								
 		
 		speed = 1.50;
+
+		if(hitpoints <= 0) {
+			this.explode(4, Art.getColor(255,255,0), 100);
+			this.alive = false;
+		}
+
 		
 		if(hurtTimer < 40)
 			knockedBack = false;
 		
+
 		if(!knockedBack) {
 			dirY = dirX = 0;		
 
@@ -63,7 +71,8 @@ public class Player extends Mob  {
 			if(weaponFired && --weaponTimer <= 0)
 				weaponFired = false;			
 		}		
-				
+
+		
 		move();
 		
 		if(!knockedBack) {
@@ -154,14 +163,10 @@ public class Player extends Mob  {
 	@Override
 	public void takeDamage(Entity source, int amount) {		
 		if(!isHurt()) {
+			hitpoints -= amount;
 			hurt(50);		
 			game.addEntity(new FloatingText("-" + amount,Art.getColor(255,0,0),xx,yy,new Vector2(0,-1), null, game));
-			
-			velX = -((source.xx - xx) / 4);
-			dirX = velX < 0 ? -1 : 1;
-			velY = -2;
-			jumping = true;			
-			knockedBack = true;
+			this.knockBack((source.xx - xx), 1.0);
 		}
 	}
 }

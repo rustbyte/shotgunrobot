@@ -1,6 +1,5 @@
 package com.rustbyte;
 
-import java.util.Random;
 import com.rustbyte.Game;
 import com.rustbyte.vector.Vector2;
 
@@ -10,17 +9,16 @@ public class Zombie extends Mob {
 	private int ANIM_IDLE_LEFT;
 	private int ANIM_IDLE_RIGHT;	
 	private int actionTimer = 0;	
-	private Random rand = new Random();
 	
 	public Zombie(int x, int y, int w, int h, Entity p, Game g) {
 		super(x, y, w, h, p, g);
-		
-		hitpoints = 10;
+				
 		ANIM_WALK_RIGHT = this.animator.addAnimation(5, 121, 101, w, h, false,1);
 		ANIM_WALK_LEFT = this.animator.addAnimation(5, 121, 101, w, h, true,1);
 		ANIM_IDLE_RIGHT = this.animator.addAnimation(1, 100, 101, w, h, false,1);
 		ANIM_IDLE_LEFT = this.animator.addAnimation(1, 100, 101, w, h, true,1);
 		
+		this.hitpoints = 100;
 		this.speed = 0.75;		
 	}
 
@@ -30,25 +28,7 @@ public class Zombie extends Mob {
 		
 		if(hitpoints <= 0) {
 			// initiate death-sequence
-			double x = xx;// - (wid / 2);
-			double y = yy;// - (hgt / 2);
-			int partitions = 8;
-			int psize = partitions / 2;
-			for(int i=0; i < partitions; i++) {
-				int sx = this.animator.getCurrentAnimation().getOffsetX() + ((i % 2) * (wid/psize));
-				int sy = this.animator.getCurrentAnimation().getOffsetY() + ((i / 2) * (hgt/psize));
-				boolean flip = this.animator.getCurrentAnimation().flip;
-				Debris d = new Debris(x, y, wid/psize, hgt/psize, sx, sy, flip, this, this.game);
-				d.velY = -(4 + rand.nextInt(5));
-				if(i % 2 == 0)
-					d.velX = 1;
-				else
-					d.velX = -1;				
-				
-				game.addEntity(d);
-				ParticleEmitter pe = new ParticleEmitter(0, 0, -d.velX, -1.0, 1, 50, Art.getColor(255,0,0), d, game);
-				game.addEntity(pe);				
-			}
+			this.explode(8, Art.getColor(255,0,0),50);
 			this.alive = false;
 		}
 		

@@ -47,6 +47,9 @@ public class SpriteAnimator {
 		
 	}
 	
+	public void setFrameRate(double fps) {	
+		nsPerTick = 1000000000.0 / fps;
+	}
 	public void tick() {
 		Animation curAnim = getCurrentAnimation();
 		

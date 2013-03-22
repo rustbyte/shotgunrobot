@@ -37,6 +37,7 @@ public class Game {
 		input = new InputHandler();
 		level = new Level(Art.level1, 20,20, this);
 		player = new Player(30, 30, 20, 20, null, this);
+		player.alive = true;
 		
 		level.viewX = 0;
 		level.viewY = 0;
@@ -82,9 +83,11 @@ public class Game {
 				entities.remove(ent);
 			}
 		}
-		player.applyGravity(gravity);
-		player.tick();
-		player.postTick();		
+		if(player.alive) { 
+			player.applyGravity(gravity);
+			player.tick();
+			player.postTick();		
+		}
 		
 		level.tick();
 		level.setViewPos((int)player.xx, (int)player.yy);
@@ -109,8 +112,12 @@ public class Game {
 		
 		level.draw(screen);
 				
-		screen.drawText(Art.font, "fps: " + FPS, 0,0,0xFFFF00, true);			
-				
+		screen.drawText(Art.font, "fps: " + FPS, 0,0,0xFFFF00, true);
+		if(player.alive)
+			screen.drawText(Art.font, "HP: " + player.hitpoints, 0,10,0xFFFF00, true);
+		else
+			screen.drawText(Art.font, "PLAYER DEAD!!", 0,10,0xFFFF00, true);
+		
 		for(int i=0; i < entities.size();i++) {
 			Entity ent = entities.get(i);
 			if( ent.alive ) {
@@ -123,6 +130,7 @@ public class Game {
 			}
 		}
 		
-		player.render();
+		if(player.alive)
+			player.render();
 	}
 }

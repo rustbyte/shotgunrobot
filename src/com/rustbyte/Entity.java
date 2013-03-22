@@ -56,9 +56,7 @@ public abstract class Entity {
 					curTile.addEntity(this);
 					tileID = curTile.tileID;
 				}
-			} else {
-				System.out.println( this.getClass().getName() + ".postTick() got null for current tile!");
-			}		
+			}
 		}
 	}
 	public void tick() {
