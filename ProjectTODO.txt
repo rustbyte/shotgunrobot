@@ -64,17 +64,20 @@ TODO:
 ===============================================================================================================
 BUGS:
 ===============================================================================================================
-1) When the player is located at the far end of the map, and above half the height of the map
+1) Mob.explode() and breakApart() sprite-partitioning doesnt properly handle sprites that are
+   rendered flipped.
+   
+2) When the player is located at the far end of the map, and above half the height of the map
    shooting the weapon facing postive X, the bullet trace moves to negative X ??
    The problem does however NOT occur if there is a blocking tile in the bullets path...
 
-2) Zombies exploding near walls will eject their body parts through wall/ceiling tiles.
+3) Zombies exploding near walls will eject their body parts through wall/ceiling tiles.
 	UPDATE:
 		Modified body part debris to spawn at zombie world coord.
 		Not a real fix, but keeps them from spawning inside blocking tiles, and also looks better
 		when the zombie explodes.
 		
-3) Mobs killed sometimes are not removed from tile entity-list.
+4) Mobs killed sometimes are not removed from tile entity-list.
 	This seems to occur if a mob is moving from one tile to another. A zombies alive state is
 	set to false in its tick() method, and if, at that point, the zombie was entered into another
 	tile, the postTick() method will see this condition, and re-register itself with the new tiles
@@ -85,7 +88,7 @@ BUGS:
 	UPDATE:
 		Modified postTick() to check for alive-state first, and remove if needed.
 
-4) Player cant shoot mobs if they are on the same tile.
+5) Player cant shoot mobs if they are on the same tile.
 	
 	UPDATE:
 		Modified fireWeapon() method to start weapon hit check at player tile.		

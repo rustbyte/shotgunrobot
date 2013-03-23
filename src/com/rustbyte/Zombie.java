@@ -28,7 +28,10 @@ public class Zombie extends Mob {
 		
 		if(hitpoints <= 0) {
 			// initiate death-sequence
-			this.explode(8, Art.getColor(255,0,0),50);
+			//this.explode(8, Art.getColor(255,0,0),50);
+			//this.breakApart(16, Art.getColor(255,0,0), 10);
+			this.explode(16, Art.getColor(255,0,0), 50);
+			
 			this.alive = false;
 		}
 		

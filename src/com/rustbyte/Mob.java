@@ -44,14 +44,20 @@ public abstract class Mob extends Entity implements Destructable {
 		knockedBack = true;		
 	}
 	protected void explode(int partitions, int color, int particleCount) {
-		double x = xx;// - (wid / 2);
-		double y = yy;// - (hgt / 2);		
-		int psize = partitions / 2;
+		double xo = xx - (wid / 2);
+		double yo = yy - (hgt / 2);
+		double x = 0;
+		double y = 0;		
+		int cells = (int) Math.sqrt(partitions);		
 		for(int i=0; i < partitions; i++) {
-			int sx = this.animator.getCurrentAnimation().getOffsetX() + ((i % 2) * (wid/psize));
-			int sy = this.animator.getCurrentAnimation().getOffsetY() + ((i / 2) * (hgt/psize));
+			int sx = this.animator.getCurrentAnimation().getOffsetX() + ((i % cells) * (wid/cells));
+			int sy = this.animator.getCurrentAnimation().getOffsetY() + ((i / cells) * (hgt/cells));
+			
+			x = xo + (sx - this.animator.getCurrentAnimation().getOffsetX());
+			y = yo + (sy - this.animator.getCurrentAnimation().getOffsetY());
+			
 			boolean flip = this.animator.getCurrentAnimation().flip;
-			Debris d = new Debris(x, y, wid/psize, hgt/psize, sx, sy, flip, this, this.game);
+			Debris d = new Debris(x, y, wid/cells, hgt/cells, sx, sy, flip, this, this.game);
 			d.velY = -(4 + rand.nextInt(5));
 			if(i % 2 == 0)
 				d.velX = 1;
@@ -62,6 +68,33 @@ public abstract class Mob extends Entity implements Destructable {
 			ParticleEmitter pe = new ParticleEmitter(0, 0, -d.velX, -1.0, 1, particleCount, color, d, game);
 			game.addEntity(pe);				
 		}		
+	}
+	protected void breakApart(int partitions, int color, int particleCount) {
+		double xo = xx - (wid / 2);
+		double yo = yy - (hgt / 2);
+		double x = 0;
+		double y = 0;		
+		int cells = (int) Math.sqrt(partitions);		
+		for(int i=0; i < partitions; i++) {
+			int sx = this.animator.getCurrentAnimation().getOffsetX() + ((i % cells) * (wid/cells));
+			int sy = this.animator.getCurrentAnimation().getOffsetY() + ((i / cells) * (hgt/cells));
+			
+			x = xo + (sx - this.animator.getCurrentAnimation().getOffsetX());
+			y = yo + (sy - this.animator.getCurrentAnimation().getOffsetY());
+			
+			boolean flip = this.animator.getCurrentAnimation().flip;
+			Debris d = new Debris(x, y, wid/cells, hgt/cells, sx, sy, flip, this, this.game);
+			//d.ignoresGravity = true;
+			d.velY = -(1);// + rand.nextInt(2));
+			if(i % 2 == 0)
+				d.velX = 0.5;
+			else
+				d.velX = -0.5;				
+			
+			game.addEntity(d);
+			ParticleEmitter pe = new ParticleEmitter(0, 0, -d.velX, -1.0, 1, particleCount, color, d, game);
+			game.addEntity(pe);				
+		}
 	}
 	
 	protected boolean isHurt() {
