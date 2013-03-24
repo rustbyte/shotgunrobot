@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tile implements Destructable {
-	public static final Tile TILE_NONE = new Tile(0x498FFF, false, Art.getColor(255,255,255));
-	public static final Tile TILE_BRICK = new Tile(0x404040, true, Art.getColor(180,180,180));
-	private static Tile[] tileTypes = {
+	public static final Tile TILE_NONE = new Tile(0x498FFF, false, Art.getColor(255,255,255), 0,0);
+	public static final Tile TILE_BRICK = new Tile(0x404040, true, Art.getColor(180,180,180), 51, 1);
+	public static final Tile TILE_WALL = new Tile(0x202020, false, Art.getColor(32,32,32), 72, 1);
+	public static final Tile TILE_DOOR_LEFT = new Tile(0x7F6A00, true, 0x7F6A00, 51, 72 );
+	public static Tile[] tileTypes = {
 		TILE_NONE,
-		TILE_BRICK
+		TILE_BRICK,
+		TILE_WALL,
+		TILE_DOOR_LEFT
 	};
 	
 	public int tileID;
@@ -19,15 +23,19 @@ public class Tile implements Destructable {
 	public int height;
 	public int halfWidth;
 	public int halfHeight;
+	public int tsetOffsetX;
+	public int tsetOffsetY;
 	public boolean blocking;
 	public int baseColor;
 	private Level level;
 	private List<Entity> entities = new ArrayList<Entity>();
 	
-	private Tile(int id, boolean b, int col) {
+	private Tile(int id, boolean b, int col, int ox, int oy) {
 		this.typeID = id;
 		this.blocking = b;
 		this.baseColor = col;
+		this.tsetOffsetX = ox;
+		this.tsetOffsetY = oy;
 	}
 	
 	public Tile(int x, int y, int wid, int hgt, Tile type, Level lev) {

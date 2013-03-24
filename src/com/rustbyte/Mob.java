@@ -36,8 +36,8 @@ public abstract class Mob extends Entity implements Destructable {
 	protected void hurt(int time) {
 		hurtTimer = time;
 	}
-	protected void knockBack(double d, double force) {
-		velX = -(d / 4) * force;
+	protected void knockBack(double d, double force) {		
+		velX = -( (d / Math.sqrt(d * d))  * force);
 		dirX = velX < 0 ? -1 : 1;
 		velY = -2;
 		jumping = true;
@@ -84,8 +84,7 @@ public abstract class Mob extends Entity implements Destructable {
 			
 			boolean flip = this.animator.getCurrentAnimation().flip;
 			Debris d = new Debris(x, y, wid/cells, hgt/cells, sx, sy, flip, this, this.game);
-			//d.ignoresGravity = true;
-			d.velY = -(1);// + rand.nextInt(2));
+			d.velY = -(1 + rand.nextInt(2));
 			if(i % 2 == 0)
 				d.velX = 0.5;
 			else

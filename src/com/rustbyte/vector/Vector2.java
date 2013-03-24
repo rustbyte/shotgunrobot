@@ -23,7 +23,7 @@ public class Vector2 {
 		return new Vector2(this.x * scalar, this.y * scalar);
 	}
 	public double length() {
-		return Math.sqrt(Math.abs(this.x) * 2.0 + Math.abs(this.y) * 2.0);		
+		return Math.sqrt( Math.abs( (x * x) + (y * y) ));
 	}
 	public Vector2 normalize() {
 		double len = length();

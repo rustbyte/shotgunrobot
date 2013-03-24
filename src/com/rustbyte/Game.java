@@ -45,14 +45,14 @@ public class Game {
 		level.viewHeight = HEIGHT;
 		//addEntity(player);
 		Random rand = new Random();
-		int xx = 40;
+		int xx = 100;
 		int nummobs = 50;
 		if(nummobs > 0) {
 			int minspacing = WIDTH / nummobs;
 			for(int i=0; i < nummobs; i++) {
 				xx += minspacing + rand.nextInt(40);
 				if(xx > (level.width * level.tileWidth) - 40)
-					xx = 40;
+					xx = 100;
 				if( xx >= ((level.width * level.tileWidth) - 40))
 					xx = (level.width * level.tileWidth) - 40;			
 				addEntity(new Zombie(xx,50, 20, 20, null ,this));

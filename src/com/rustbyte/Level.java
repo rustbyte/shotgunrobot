@@ -73,7 +73,10 @@ public class Level {
 			if( (xx + tileWidth) < viewX || ( xx > (viewX + viewWidth))) continue;
 			if( (yy + tileHeight) < viewY || ( yy > (viewY + viewHeight))) continue;						
 			
-			Art.sprites.draw(dest, xx - viewX, yy - viewY, 51,1,20,20);
+			int sx = Tile.getTileTypeFromID(t.typeID).tsetOffsetX;
+			int sy = Tile.getTileTypeFromID(t.typeID).tsetOffsetY;
+			
+			Art.sprites.draw(dest, xx - viewX, yy - viewY, sx,sy,20,20);
 		}
 	}
 	

@@ -28,57 +28,68 @@ public class Zombie extends Mob {
 		
 		if(hitpoints <= 0) {
 			// initiate death-sequence
-			//this.explode(8, Art.getColor(255,0,0),50);
-			//this.breakApart(16, Art.getColor(255,0,0), 10);
-			this.explode(16, Art.getColor(255,0,0), 50);
-			
+			this.breakApart(16, Art.getColor(255,0,0), 10);
+			//this.explode(16, Art.getColor(255,0,0), 50);			
 			this.alive = false;
 		}
 		
-		if(--actionTimer <= 0) {
-			int tempNewDir = 0;
-			rand.setSeed(System.nanoTime());
-			switch(1 + rand.nextInt(3)) {
-			case 1:
-				tempNewDir = 0;
-				break;
-			case 2:
-				tempNewDir = -1;
-				break;
-			case 3:
-				tempNewDir = 1;
-				break;
+		if(hurtTimer <= 0)
+			knockedBack = false;
+		
+		if(!knockedBack) {
+			if(--actionTimer <= 0) {
+				int tempNewDir = 0;
+				rand.setSeed(System.nanoTime());
+				switch(1 + rand.nextInt(3)) {
+				case 1:
+					tempNewDir = 0;
+					break;
+				case 2:
+					tempNewDir = -1;
+					break;
+				case 3:
+					tempNewDir = 1;
+					break;
+				}
+				dirX = tempNewDir;
+				actionTimer = 100 + rand.nextInt(200);
 			}
-			dirX = tempNewDir;
-			actionTimer = 100 + rand.nextInt(200);
+							
+			
+			Vector2 v1 = new Vector2(xx,yy);
+			Vector2 v2 = new Vector2(game.player.xx, game.player.yy);
+			Vector2 v3 = v1.sub(v2);
+			if(v3.length() < 5) {
+				game.player.takeDamage(this, 5);
+			}
+			
+			if(blockedX && onground) {
+				int tx = (int)this.xx / game.level.tileWidth;
+				int ty = (int)this.yy / game.level.tileHeight;
+				boolean jumpObstacle = false;
+				for(int i=0; i < 2; i++) {
+					Tile t = game.level.getTile(tx + dirX, ty - (i+1));
+					if( t == null || !t.blocking) {
+						jump();
+						jumpObstacle = true;
+						break;
+					}
+				}
+				if(!jumpObstacle)
+					dirX = -dirX;
+			}
+			velX = dirX * speed;
 		}
-						
-		
-		Vector2 v1 = new Vector2(xx,yy);
-		Vector2 v2 = new Vector2(game.player.xx, game.player.yy);
-		Vector2 v3 = v1.sub(v2);
-		if(v3.length() < 5) {
-			game.player.takeDamage(this, 5);
-		}
-		
-		if(blockedX) {
-			int tx = (int)this.xx / game.level.tileWidth;
-			int ty = (int)this.yy / game.level.tileHeight;
-			Tile t = game.level.getTile(tx + dirX, ty - 2);
-			if( t == null || !t.blocking)
-				jump();
-			else
-				dirX = -dirX;
-		}
-		velX = dirX * speed;
 		
 		move();
 		
-		if(velX < 0 ) this.animator.setCurrentAnimation(ANIM_WALK_LEFT);
-		else if(velX > 0) this.animator.setCurrentAnimation(ANIM_WALK_RIGHT);
-		else {
-			if(facing == -1) this.animator.setCurrentAnimation(ANIM_IDLE_LEFT);
-			if(facing == 1) this.animator.setCurrentAnimation(ANIM_IDLE_RIGHT);
+		if(!knockedBack) {
+			if(velX < 0 ) this.animator.setCurrentAnimation(ANIM_WALK_LEFT);
+			else if(velX > 0) this.animator.setCurrentAnimation(ANIM_WALK_RIGHT);
+			else {
+				if(facing == -1) this.animator.setCurrentAnimation(ANIM_IDLE_LEFT);
+				if(facing == 1) this.animator.setCurrentAnimation(ANIM_IDLE_RIGHT);
+			}
 		}
 		
 		animator.tick();		
@@ -103,7 +114,8 @@ public class Zombie extends Mob {
 	public void takeDamage(Entity source, int amount) {
 		hitpoints -= amount;
 		hurt(20);
-		game.addEntity(new FloatingText("-" + amount, Art.getColor(255, 255, 0), xx,yy, new Vector2(0,-1), null, game));
+		this.knockBack( (source.xx - xx), 2.0 );
+		game.addEntity(new FloatingText("-" + amount, Art.getColor(255, 255, 0), xx,yy - 10, new Vector2(0,-1), null, game));
 		int px = 0;
 		int py = -10;
 		ParticleEmitter pe = new ParticleEmitter(px, py, (double)source.facing, -1.0, 2, 10, Art.getColor(255,0,0), this, game);
