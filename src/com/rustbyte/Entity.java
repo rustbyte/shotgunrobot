@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.rustbyte.Game;
+import com.rustbyte.level.*;
 
 public abstract class Entity {
 	public double xx;

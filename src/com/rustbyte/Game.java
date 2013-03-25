@@ -8,9 +8,9 @@ import com.rustbyte.Art;
 import com.rustbyte.Bitmap;
 import com.rustbyte.Entity;
 import com.rustbyte.InputHandler;
-import com.rustbyte.Level;
 import com.rustbyte.Player;
 import com.rustbyte.Zombie;
+import com.rustbyte.level.*;
 
 public class Game {
 	public int WIDTH;

@@ -2,6 +2,7 @@ package com.rustbyte;
 
 import com.rustbyte.Game;
 import com.rustbyte.vector.Vector2;
+import com.rustbyte.level.*;
 
 public class Zombie extends Mob {
 	private int ANIM_WALK_RIGHT;

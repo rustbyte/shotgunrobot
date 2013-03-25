@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 
 import com.rustbyte.Game;
 import com.rustbyte.vector.Vector2;
+import com.rustbyte.level.*;
 
 public class Player extends Mob  {
 	private int ANIM_WALK_RIGHT;
