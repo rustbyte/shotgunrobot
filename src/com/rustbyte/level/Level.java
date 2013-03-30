@@ -3,7 +3,6 @@ package com.rustbyte.level;
 import com.rustbyte.level.Tile;
 import com.rustbyte.Game;
 import com.rustbyte.Bitmap;
-import com.rustbyte.Art;
 import com.rustbyte.Entity;
 
 public class Level {	
@@ -17,7 +16,6 @@ public class Level {
 	public int viewY;
 	public int viewWidth;
 	public int viewHeight;
-	public int tickcount = 0;	
 	public Game game = null;
 	
 	public Level(int w, int h, int tw, int th, Game g) {
@@ -43,6 +41,9 @@ public class Level {
 			t.tileID = i;
 			map[i] = t;
 		}
+		
+		for(int i=0; i < (width * height);i++)
+			map[i].init();			
 	}
 	public Tile getTile(int tx, int ty) {
 		if(tx < 0 || tx > (width-1) || ty < 0 || ty > (height-1)) return null;
@@ -66,7 +67,8 @@ public class Level {
 	}
 	
 	public void tick() {
-		tickcount++;	
+		for(int i=0; i < (width * height); i++)
+			map[i].tick();
 	}
 	public void draw(Bitmap dest) {
 		for(int i=0; i < (width * height); i++) {
@@ -78,10 +80,7 @@ public class Level {
 			if( (xx + tileWidth) < viewX || ( xx > (viewX + viewWidth))) continue;
 			if( (yy + tileHeight) < viewY || ( yy > (viewY + viewHeight))) continue;						
 			
-			int sx = t.tsetOffsetX;
-			int sy = t.tsetOffsetY;
-			
-			Art.sprites.draw(dest, xx - viewX, yy - viewY, sx,sy,20,20);
+			t.draw(dest, xx - viewX, yy - viewY);
 		}
 	}
 	

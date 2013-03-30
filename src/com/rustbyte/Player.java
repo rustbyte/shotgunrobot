@@ -36,7 +36,7 @@ public class Player extends Mob  {
 		input = g.input;
 		speed = 1.50;
 		xr = 6;
-		hurtColor = 0xFFFF00;
+		flashEffect.setColor(0xFFFF00);
 		hitpoints = 100;
 	}
 	@Override
@@ -148,18 +148,17 @@ public class Player extends Mob  {
 			else
 				Art.sprites.draw(game.screen, (((int)xx) - 5 - wid/2)  - game.level.viewX, 
 						 (((int)yy)) - game.level.viewY, 82, 82,5,3,true);
-		}
-		renderFrame.clear(-1);
-		animator.render(renderFrame, 0, 0);
+		}				
 		
 		if(isHurt()) {
-			renderHurtEffect();
+			flashEffect.clear();
+			animator.render(flashEffect.renderFrame, 0, 0);
+			flashEffect.render(game.tickcount, game.screen, (((int)xx) - (wid / 2)) - game.level.viewX,
+															(((int)yy) - (hgt / 2)) - game.level.viewY);
+		} else {
+			animator.render(game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
+				   	 					 (((int)yy) - (hgt / 2)) - game.level.viewY);
 		}
-		 					                 
-		renderFrame.draw(game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
-                					  (((int)yy) - (hgt / 2)) - game.level.viewY,
-                					  0,0,wid,hgt);		
-		
 	}
 	@Override
 	public void takeDamage(Entity source, int amount) {		

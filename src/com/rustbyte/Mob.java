@@ -4,13 +4,9 @@ import java.util.Random;
 
 import com.rustbyte.Game;
 
-public abstract class Mob extends Entity implements Destructable {
-
-	public Bitmap renderFrame;
-	public int hitpoints;
-	
-	protected int hurtTimer = 0;
-	protected int hurtColor = 0xFFFFFF;
+public abstract class Mob extends Entity implements Destructable {	
+	public int hitpoints;	
+	protected int hurtTimer = 0;	
 	
 	public boolean jumping = false;
 	public double jumpVel = -4.45;
@@ -20,10 +16,11 @@ public abstract class Mob extends Entity implements Destructable {
 	protected boolean blockedY = false;
 	
 	protected Random rand = new Random();
+	protected FlashEffect flashEffect;
 	
 	public Mob(int x, int y, int w, int h, Entity p, Game g) {
 		super(x, y, w, h, p, g);
-		renderFrame = new Bitmap(w,h);
+		flashEffect = new FlashEffect(0xFFFFFF, 5, w,h);
 	}
 
 	@Override
@@ -99,15 +96,6 @@ public abstract class Mob extends Entity implements Destructable {
 	protected boolean isHurt() {
 		return (hurtTimer > 0);			
 	}
-	protected void renderHurtEffect() {
-		if(game.tickcount % 5 == 0) {
-			for(int i=0; i < wid * hgt; i++){
-				if(renderFrame.pixels[i] != 0xFF5DFF)
-					renderFrame.pixels[i] = hurtColor;
-			}		
-		}
-	}
-	
 	@Override
 	public void move() {
 		

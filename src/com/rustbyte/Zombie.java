@@ -98,17 +98,16 @@ public class Zombie extends Mob {
 
 	@Override
 	public void render() {
-		renderFrame.clear(-1);
-		
-		animator.render(renderFrame, 0, 0);
-		
+				
 		if(isHurt()) {
-			renderHurtEffect();
+			flashEffect.clear();
+			animator.render(flashEffect.renderFrame, 0, 0);			
+			flashEffect.render(game.tickcount, game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
+				   	  					    			    (((int)yy) - (hgt / 2)) - game.level.viewY);
+		} else {		
+			animator.render(game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
+	                				   	 (((int)yy) - (hgt / 2)) - game.level.viewY);
 		}
-		
-		renderFrame.draw(game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
-                				   	  (((int)yy) - (hgt / 2)) - game.level.viewY,
-                				      0,0, wid, hgt);
 	}
 
 	@Override
