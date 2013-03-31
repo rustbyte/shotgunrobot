@@ -96,7 +96,8 @@ public class Player extends Mob  {
 			weaponTimer = 5;
 			
 			boolean bulletHit = false;
-			double cx = 0; // bullet collision point
+			double bulletTravelDistance = 0;
+			double cx = 0; // bullet collision point			
 			Tile t = game.level.getTileFromPoint(xx,yy);			
 			while(t != null && !bulletHit) {												
 				if( t != null) {
@@ -135,7 +136,10 @@ public class Player extends Mob  {
 				}
 				// get next tile
 				t = game.level.getTile(t.tx + facing, t.ty);
-			}				
+				bulletTravelDistance += 20;
+			}
+			if(!bulletHit)
+				cx = xx + (bulletTravelDistance * facing);
 			BulletTrace bt = new BulletTrace(xx + (10 * facing),yy+1, cx, yy+1,0,0,null,game);
 			game.addEntity(bt);
 		}

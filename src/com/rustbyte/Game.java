@@ -86,8 +86,7 @@ public class Game {
 			if( input.keys[KeyEvent.VK_SPACE].pressed )
 				respawnPlayer();
 		}
-			
-		
+
 		gravity = 0.25;		
 		for(int i=0; i < entities.size(); i++) { 
 			Entity ent = entities.get(i);		
@@ -156,7 +155,7 @@ public class Game {
 				screen.draw(colorfadeEffect.renderFrame, 0, 0);
 				colorfadeEffect.render(tickcount, screen, 0, 0);
 				screen.drawText(Art.font, "YOU HAVE FAILED!", WIDTH / 2 - 40, HEIGHT / 2 - 20,0xFFFF00, true);
-				screen.drawText(Art.font, "press a key continue...", WIDTH / 2 - 50, HEIGHT / 2,0xFFFF00, true);
+				screen.drawText(Art.font, "press space continue...", WIDTH / 2 - 50, HEIGHT / 2,0xFFFF00, true);
 			}
 		}
 		
