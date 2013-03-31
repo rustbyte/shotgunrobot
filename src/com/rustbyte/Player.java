@@ -91,9 +91,9 @@ public class Player extends Mob  {
 		animator.tick();				
 	}
 	private void fireWeapon() {						
-		if(!weaponFired) {
+		if(!weaponFired) {						
 			weaponFired = true;
-			weaponTimer = 5;
+			weaponTimer = 10;
 			
 			boolean bulletHit = false;
 			double bulletTravelDistance = 0;
@@ -142,6 +142,7 @@ public class Player extends Mob  {
 				cx = xx + (bulletTravelDistance * facing);
 			BulletTrace bt = new BulletTrace(xx + (10 * facing),yy+1, cx, yy+1,0,0,null,game);
 			game.addEntity(bt);
+			//game.soundSystem.playWaveSound();
 		}
 	}
 	@Override

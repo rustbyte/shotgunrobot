@@ -1,5 +1,8 @@
 Journal:
 
+2013-03-31
+	Implemented player death system. 
+	
 2013-03-19
 	Implemented scrolling background system.
 	
@@ -64,13 +67,17 @@ TODO:
 ===============================================================================================================
 BUGS:
 ===============================================================================================================
-1) Mob.explode() and breakApart() sprite-partitioning doesnt properly handle sprites that are
+1) Mob.explode() and breakApart() sprite-partitioning doesn't properly handle sprites that are
    rendered flipped.
    
 2) When the player is located at the far end of the map, and above half the height of the map
    shooting the weapon facing postive X, the bullet trace moves to negative X ??
    The problem does however NOT occur if there is a blocking tile in the bullets path...
-
+   UPDATE:
+   		This problem occured when there was no obstacle (tile or mob) in the path of the bullet.
+   		The bullet collision point was thus never set and remained 0.
+   		Fixed this by adding a travel distance for each iteration of the bullet.
+   		
 3) Zombies exploding near walls will eject their body parts through wall/ceiling tiles.
 	UPDATE:
 		Modified body part debris to spawn at zombie world coord.
