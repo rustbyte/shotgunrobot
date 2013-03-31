@@ -1,5 +1,6 @@
 package com.rustbyte;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,15 +25,18 @@ public class Game {
 	private List<Entity> entities = new ArrayList<Entity>();
 	public int tickcount = 0;	
 	public int FPS = 0;
+	private int playerDeadTimer = 0;
 	
 	// parallax background
 	private int numLayers = 3;
 	private BackgroundLayer[] layers = new BackgroundLayer[numLayers];	
+	private ColorFadeEffect colorfadeEffect;
 	
 	public Game(int wid, int hgt) {
 		this.WIDTH = wid;
 		this.HEIGHT = hgt;
 		this.screen = new Bitmap(WIDTH, HEIGHT);
+		colorfadeEffect = new ColorFadeEffect(0,WIDTH,HEIGHT);
 		
 		input = new InputHandler();
 		level = new Level(Art.level1, 20,20, this);
@@ -43,7 +47,6 @@ public class Game {
 		level.viewY = 0;
 		level.viewWidth = WIDTH;
 		level.viewHeight = HEIGHT;
-		//addEntity(player);
 		Random rand = new Random();
 		int xx = 100;
 		int nummobs = 50;
@@ -69,8 +72,21 @@ public class Game {
 		entities.add(ent);
 	}
 	
+	public void respawnPlayer() {
+		player.xx = 30;
+		player.yy = 30;
+		player.hitpoints = 100;
+		player.alive = true;
+		playerDeadTimer = 0;		
+	}
 	public void tick() {
 		tickcount++;
+		
+		if(!player.alive && playerDeadTimer >= 100) {
+			if( input.keys[KeyEvent.VK_SPACE].pressed )
+				respawnPlayer();
+		}
+			
 		
 		gravity = 0.25;		
 		for(int i=0; i < entities.size(); i++) { 
@@ -87,17 +103,21 @@ public class Game {
 			player.applyGravity(gravity);
 			player.tick();
 			player.postTick();		
+		} else {
+			if(++playerDeadTimer > 100)
+				playerDeadTimer = 100;
 		}
 		
-		level.tick();
+		level.tick();		
 		level.setViewPos((int)player.xx, (int)player.yy);
-		
-		if( level.viewX > 0 && (level.viewX + level.viewWidth) < level.tileWidth * level.width) {
-			for(int i=0; i<numLayers;i++) {				
-				double layerSpeed = player.velX / (numLayers - i);
-				layers[i].move(-layerSpeed * 1.1);				
-			}
-		}			
+		if(player.alive) {
+			if( level.viewX > 0 && (level.viewX + level.viewWidth) < level.tileWidth * level.width) {
+				for(int i=0; i<numLayers;i++) {				
+					double layerSpeed = player.velX / (numLayers - i);
+					layers[i].move(-layerSpeed * 1.1);				
+				}
+			}			
+		}
 	}
 	
 	public void render() {
@@ -115,9 +135,7 @@ public class Game {
 		screen.drawText(Art.font, "fps: " + FPS, 0,0,0xFFFF00, true);
 		if(player.alive)
 			screen.drawText(Art.font, "HP: " + player.hitpoints, 0,10,0xFFFF00, true);
-		else
-			screen.drawText(Art.font, "PLAYER DEAD!!", 0,10,0xFFFF00, true);
-		
+
 		for(int i=0; i < entities.size();i++) {
 			Entity ent = entities.get(i);
 			if( ent.alive ) {
@@ -130,7 +148,17 @@ public class Game {
 			}
 		}
 		
-		if(player.alive)
+		if(player.alive) {
 			player.render();
+		} else {
+			if(playerDeadTimer >= 100) {				
+				colorfadeEffect.clear();
+				screen.draw(colorfadeEffect.renderFrame, 0, 0);
+				colorfadeEffect.render(tickcount, screen, 0, 0);
+				screen.drawText(Art.font, "YOU HAVE FAILED!", WIDTH / 2 - 40, HEIGHT / 2 - 20,0xFFFF00, true);
+				screen.drawText(Art.font, "press a key continue...", WIDTH / 2 - 50, HEIGHT / 2,0xFFFF00, true);
+			}
+		}
+		
 	}
 }

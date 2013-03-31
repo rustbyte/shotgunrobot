@@ -46,7 +46,8 @@ public class Player extends Mob  {
 		speed = 1.50;
 
 		if(hitpoints <= 0) {
-			this.explode(4, Art.getColor(255,255,0), 100);
+			this.explode(16, Art.getColor(255,255,0), 100);
+			//this.breakApart(16, Art.getColor(255,255,0), 100);
 			this.alive = false;
 		}
 

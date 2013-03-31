@@ -61,7 +61,7 @@ public class Zombie extends Mob {
 			Vector2 v2 = new Vector2(game.player.xx, game.player.yy);
 			Vector2 v3 = v1.sub(v2);
 			if(v3.length() < 5) {
-				game.player.takeDamage(this, 5);
+				game.player.takeDamage(this, 20);
 			}
 			
 			if(blockedX && onground) {
