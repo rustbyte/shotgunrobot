@@ -2,33 +2,30 @@ package com.rustbyte;
 
 import java.io.*;
 import java.net.URL;
+import java.util.HashMap;
+
 import javax.sound.sampled.*;
 
-public class SoundSystem {	
-	public SoundSystem() {		
+public class SoundSystem {
+	public SoundSystem() {
+		
 	}
 	
-	public void playWaveSound() {
-		try {
-			new Thread() {
-				public synchronized void run() {
-					try {
-						URL url = getClass().getResource("/snd/10mm_gun_kp66060.wav");
-						AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-						Clip clip = AudioSystem.getClip();
-						clip.open(audioIn);
-						clip.start();
-					} catch(UnsupportedAudioFileException e) {
-						e.printStackTrace();
-					} catch( IOException e){
-						e.printStackTrace();
-					} catch(LineUnavailableException e){
-						e.printStackTrace();
-					}	
+	public static synchronized void playSound(final String url) {
+		new Thread(new Runnable() {
+			// The wrapper thread is unnecessary, unless it blocks on the
+			// Clip finishing; see comments.
+			public void run() {
+				try {
+					Clip clip = AudioSystem.getClip();
+			        AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+			        SoundSystem.class.getResource("/snd/shotgunshot_reload_last_xr51442.wav"));
+			        clip.open(inputStream);
+			        clip.start(); 
+				} catch (Exception e) {
+					System.err.println(e.getMessage());
 				}
-			}.start();
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+			}
+		}).start();
 	}
 }

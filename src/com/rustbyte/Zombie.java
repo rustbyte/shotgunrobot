@@ -27,13 +27,9 @@ public class Zombie extends Mob {
 	public void tick() {
 		super.tick();
 		
-		if(hitpoints <= 0) {
-			// initiate death-sequence
-			this.breakApart(16, Art.getColor(255,0,0), 10);
-			//this.explode(16, Art.getColor(255,0,0), 50);			
-			this.alive = false;
-		}
-		
+		if(hitpoints <= 0)
+			alive = false;
+				
 		if(hurtTimer <= 0)
 			knockedBack = false;
 		
@@ -113,8 +109,16 @@ public class Zombie extends Mob {
 	@Override
 	public void takeDamage(Entity source, int amount) {
 		hitpoints -= amount;
-		hurt(20);
-		this.knockBack( (source.xx - xx), 2.0 );
+		if(hitpoints > 0) {
+			hurt(20);
+			this.knockBack( (source.xx - xx), 2.0 );
+		} else {
+			// initiate death-sequence
+			if( source instanceof Grenade )
+				this.explode(16, Art.getColor(255,0,0), 50);
+			else
+				this.breakApart(16, Art.getColor(255,0,0), 10);
+		}
 		game.addEntity(new FloatingText("-" + amount, Art.getColor(255, 255, 0), xx,yy - 10, new Vector2(0,-1), null, game));
 		int px = 0;
 		int py = -10;

@@ -40,7 +40,7 @@ public class Game {
 		colorfadeEffect = new ColorFadeEffect(0,WIDTH,HEIGHT);
 		
 		input = new InputHandler();
-		//soundSystem = new SoundSystem();
+		soundSystem = new SoundSystem();
 		level = new Level(Art.level1, 20,20, this);
 		player = new Player(30, 30, 20, 20, null, this);
 		player.alive = true;

@@ -20,7 +20,9 @@ public class Player extends Mob  {
 	
 	public boolean weaponFired = false;
 	public int weaponTimer = 0;
-	private final int weaponDamage = 25;
+	private final int weaponDelay = 10;
+	private final int weaponDamage = 35;
+	private int grenadeTimer = 0;
 	
 	public Player(int x, int y, int w, int h, Entity p, Game g) {
 		super(x, y, w, h, p, g);
@@ -43,19 +45,18 @@ public class Player extends Mob  {
 	public void tick() {
 		super.tick();								
 		
-		speed = 1.50;
-
 		if(hitpoints <= 0) {
 			this.explode(16, Art.getColor(255,255,0), 100);
 			//this.breakApart(16, Art.getColor(255,255,0), 100);
 			this.alive = false;
 		}
-
 		
 		if(hurtTimer < 40)
 			knockedBack = false;
 		
-
+		if(--grenadeTimer < 0)
+			grenadeTimer = 0;
+		
 		if(!knockedBack) {
 			dirY = dirX = 0;		
 
@@ -67,7 +68,13 @@ public class Player extends Mob  {
 				dirX = 1;
 			if(input.keys[KeyEvent.VK_D].pressed)
 				fireWeapon();
-			
+			if(input.keys[KeyEvent.VK_G].pressed && !(grenadeTimer > 0)) {
+				Grenade g = new Grenade(xx,yy,game);
+				g.velX = facing * 2;
+				g.velY = -3;
+				grenadeTimer = 100;
+				game.addEntity(g);
+			}
 			velX = dirX * speed;		
 			
 			if(weaponFired && --weaponTimer <= 0)
@@ -91,9 +98,9 @@ public class Player extends Mob  {
 		animator.tick();				
 	}
 	private void fireWeapon() {						
-		if(!weaponFired) {						
+		if(!weaponFired) {
 			weaponFired = true;
-			weaponTimer = 10;
+			weaponTimer = weaponDelay;
 			
 			boolean bulletHit = false;
 			double bulletTravelDistance = 0;
@@ -142,18 +149,24 @@ public class Player extends Mob  {
 				cx = xx + (bulletTravelDistance * facing);
 			BulletTrace bt = new BulletTrace(xx + (10 * facing),yy+1, cx, yy+1,0,0,null,game);
 			game.addEntity(bt);
-			//game.soundSystem.playWaveSound();
+			//SoundSystem.playSound("SHOTGUN_FIRE");
 		}
 	}
 	@Override
 	public void render() {		
-		if(weaponFired && !isHurt()) {
-			if(facing > 0)
+		if(weaponFired && (weaponTimer > weaponDelay - (weaponDelay / 2)) && !isHurt()) {
+			/*if(facing > 0)
 				Art.sprites.draw(game.screen, (((int)xx) + wid/2) - game.level.viewX, 
 										      (((int)yy)) - game.level.viewY, 82, 82,5,3,false);
 			else
 				Art.sprites.draw(game.screen, (((int)xx) - 5 - wid/2)  - game.level.viewX, 
-						 (((int)yy)) - game.level.viewY, 82, 82,5,3,true);
+						 					  (((int)yy)) - game.level.viewY, 82, 82,5,3,true);*/
+			if(facing > 0)
+				Art.sprites.draw(game.screen, (((int)xx) + wid/2) - game.level.viewX, 
+										      (((int)yy)) - 2 - game.level.viewY, 36, 72,9,7,false);
+			else
+				Art.sprites.draw(game.screen, (((int)xx) - 9 - wid/2)  - game.level.viewX, 
+						 					  (((int)yy)) - 2 - game.level.viewY, 36, 72,9,7,true);			
 		}				
 		
 		if(isHurt()) {
