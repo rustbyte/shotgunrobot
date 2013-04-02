@@ -40,8 +40,7 @@ public class Grenade extends Entity {
 							if( e instanceof Destructable) {
 								Vector2 v1 = new Vector2(xx,yy);
 								Vector2 v2 = new Vector2(e.xx,e.yy);
-								double d = v1.sub(v2).length();
-								System.out.println("distance from blastpoint: " + d);
+								double d = v1.sub(v2).length();								
 								int dmg = damage - (int)d;								
 								((Destructable)e).takeDamage(this, dmg);
 							}								

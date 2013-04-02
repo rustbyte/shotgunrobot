@@ -72,7 +72,7 @@ public class Player extends Mob  {
 				Grenade g = new Grenade(xx,yy,game);
 				g.velX = facing * 2;
 				g.velY = -3;
-				grenadeTimer = 100;
+				grenadeTimer = 50;
 				game.addEntity(g);
 			}
 			velX = dirX * speed;		
