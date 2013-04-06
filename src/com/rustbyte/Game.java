@@ -64,7 +64,7 @@ public class Game {
 			}	
 		}
 		
-		addEntity(new Human(30, 100,20,20,null,this));
+		addEntity(new Human(30, 300,20,20,null,this));
 		
 		layers[0] = new BackgroundLayer(Art.background, 0, 100);
 		layers[1] = new BackgroundLayer(Art.background, 100, 50);		

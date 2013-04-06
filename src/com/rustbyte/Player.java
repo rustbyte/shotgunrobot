@@ -37,7 +37,7 @@ public class Player extends Mob  {
 		animator.setCurrentAnimation(ANIM_IDLE_RIGHT);
 		input = g.input;
 		speed = 1.50;
-		xr = 6;
+		xr = 4;
 		flashEffect.setColor(0xFFFF00);
 		hitpoints = 100;
 	}
@@ -155,12 +155,6 @@ public class Player extends Mob  {
 	@Override
 	public void render() {		
 		if(weaponFired && (weaponTimer > weaponDelay - (weaponDelay / 2)) && !isHurt()) {
-			/*if(facing > 0)
-				Art.sprites.draw(game.screen, (((int)xx) + wid/2) - game.level.viewX, 
-										      (((int)yy)) - game.level.viewY, 82, 82,5,3,false);
-			else
-				Art.sprites.draw(game.screen, (((int)xx) - 5 - wid/2)  - game.level.viewX, 
-						 					  (((int)yy)) - game.level.viewY, 82, 82,5,3,true);*/
 			if(facing > 0)
 				Art.sprites.draw(game.screen, (((int)xx) + wid/2) - game.level.viewX, 
 										      (((int)yy)) - 2 - game.level.viewY, 36, 72,9,7,false);
