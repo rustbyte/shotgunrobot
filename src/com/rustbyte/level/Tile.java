@@ -46,10 +46,10 @@ public class Tile implements Destructable {
 		switch(typeID) {
 		case 0x498FFF: t = new EmptyTile(tx, ty, tw, th, l); break;
 		case 0x404040: t = new BrickTile(tx,ty,tw,th,l); break;
-		case 0x202020:
-			t = new WallTile(tx,ty,tw,th,l); break;
-		case 0x7F6A00: 
-			t = new DoorTile(tx,ty,tw,th,l); break;		
+		case 0x202020: t = new WallTile(tx,ty,tw,th,l); break;
+		case 0x7F6A00: t = new DoorTile(tx,ty,tw,th,l); break;
+		case 0x00FF21: t = new HumanSpawnerTile(tx,ty,tw,th,l); break;
+		case 0x0026FF: t = new RescueZoneTile(tx,ty,tw,th,l); break;
 		}
 		return t;
 	}
