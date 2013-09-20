@@ -2,6 +2,7 @@ package com.rustbyte;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -9,9 +10,11 @@ import com.rustbyte.Art;
 import com.rustbyte.Bitmap;
 import com.rustbyte.Entity;
 import com.rustbyte.InputHandler;
+import com.rustbyte.PathFinder.Node;
 import com.rustbyte.Player;
 import com.rustbyte.Zombie;
 import com.rustbyte.level.*;
+import com.rustbyte.vector.Vector2;
 
 public class Game {
 	public int WIDTH;
@@ -32,6 +35,8 @@ public class Game {
 	private int numLayers = 3;
 	private BackgroundLayer[] layers = new BackgroundLayer[numLayers];	
 	private ColorFadeEffect colorfadeEffect;
+	private PathFinder pf;
+	private boolean stepPathKeyPressed = false;
 	
 	public Game(int wid, int hgt) {
 		this.WIDTH = wid;
@@ -42,7 +47,7 @@ public class Game {
 		input = new InputHandler();
 		soundSystem = new SoundSystem();
 		level = new Level(Art.level1, 20,20, this);
-		player = new Player(30, 30, 20, 20, null, this);
+		player = new Player(50, 50, 20, 20, null, this);
 		player.alive = true;
 		
 		level.viewX = 0;
@@ -51,7 +56,7 @@ public class Game {
 		level.viewHeight = HEIGHT;
 		Random rand = new Random();
 		int xx = 100;
-		int nummobs = 50;
+		int nummobs = 0;
 		if(nummobs > 0) {
 			int minspacing = WIDTH / nummobs;
 			for(int i=0; i < nummobs; i++) {
@@ -64,13 +69,45 @@ public class Game {
 			}	
 		}
 		
-		addEntity(new Human(30, 300,20,20,null,this));
+		//addEntity(new Human(30, 300,20,20,null,this));
 		
 		layers[0] = new BackgroundLayer(Art.background, 0, 100);
 		layers[1] = new BackgroundLayer(Art.background, 100, 50);		
-		layers[2] = new BackgroundLayer(Art.background, 150, 90);		
+		layers[2] = new BackgroundLayer(Art.background, 150, 90);
+		
+		//constructPath();
+		pf = new PathFinder(level);
+		//pf.initSearch(1, 19, 61 , 20);
+		pf.initSearch(1, 19, 18 , 14);
 	}
 	
+	private void renderPath() {
+		Iterator<Entity> iter = entities.iterator();
+		while(iter.hasNext()) {
+			iter.next();
+			iter.remove();
+		}
+		
+		//List<Node> p = pf.findPath(2, 3, 6, 3);		
+		//List<Node> p = pf.findPath(1, 19, 61 , 21 );
+		//List<Node> p = pf.findPath(1,19,18,14);
+		List<Node> p = pf.closed;
+		for(int i=0; i < p.size(); i++) {
+			Node n = p.get(i);
+			FloatingText ft = new FloatingText("" + n.costFromStart, 0xFFFF00, n.tile.tx * 20, n.tile.ty * 20, new Vector2(0,0), null, this);
+			FloatingText ft2 = new FloatingText("" + n.costToGoal, 0x00FF00, n.tile.tx * 20, n.tile.ty * 20 + 8, new Vector2(0,0), null, this);
+			addEntity(ft);
+			addEntity(ft2);
+		}
+		List<Node> p2 = pf.open;
+		for(int i=0; i < p2.size(); i++) {
+			Node n = p2.get(i);
+			FloatingText ft = new FloatingText("" + n.costFromStart, 0xFF0000, n.tile.tx * 20, n.tile.ty * 20, new Vector2(0,0), null, this);
+			FloatingText ft2 = new FloatingText("" + n.costToGoal, 0x0000FF, n.tile.tx * 20, n.tile.ty * 20 + 8, new Vector2(0,0), null, this);
+			addEntity(ft);
+			addEntity(ft2);
+		}		
+	}
 	public void addEntity(Entity ent) {
 		ent.alive = true;
 		entities.add(ent);
@@ -86,12 +123,21 @@ public class Game {
 	public void tick() {
 		tickcount++;
 		
+		/*if(input.keys[KeyEvent.VK_F].pressed && !stepPathKeyPressed) {
+			stepPathKeyPressed = true;
+			pf.step();
+		} else {
+			if(!input.keys[KeyEvent.VK_F].pressed)
+				stepPathKeyPressed = false;
+		}*/					
+		
 		if(!player.alive && playerDeadTimer >= 100) {
 			if( input.keys[KeyEvent.VK_SPACE].pressed )
 				respawnPlayer();
 		}
 
-		gravity = 0.25;		
+		gravity = 0.15;	
+		
 		for(int i=0; i < entities.size(); i++) { 
 			Entity ent = entities.get(i);		
 			if(ent.alive) {
@@ -102,6 +148,8 @@ public class Game {
 				entities.remove(ent);
 			}
 		}
+		//System.out.println("Num entities: " + entities.size());
+		
 		if(player.alive) { 
 			player.applyGravity(gravity);
 			player.tick();
@@ -131,8 +179,7 @@ public class Game {
 		for(int i=0; i < numLayers;i++) {
 			BackgroundLayer layer = layers[i];
 			layer.draw(screen);
-		}
-		
+		}		
 		level.draw(screen);
 				
 		screen.drawText(Art.font, "fps: " + FPS, 0,0,0xFFFF00, true);

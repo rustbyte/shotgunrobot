@@ -24,7 +24,7 @@ public class Player extends Mob  {
 	private final int weaponDamage = 35;
 	private int grenadeTimer = 0;
 	
-	public Player(int x, int y, int w, int h, Entity p, Game g) {
+	public Player(int x, int y, int w, int h, Entity p, Game g)	{
 		super(x, y, w, h, p, g);
 		ANIM_WALK_RIGHT = this.animator.addAnimation(5, 121, 0, w, h, false,0);
 		ANIM_WALK_LEFT = this.animator.addAnimation(5, 121, 0, w, h, true,0);
@@ -70,7 +70,7 @@ public class Player extends Mob  {
 				fireWeapon();
 			if(input.keys[KeyEvent.VK_G].pressed && !(grenadeTimer > 0)) {
 				Grenade g = new Grenade(xx,yy,game);
-				g.velX = facing * 2;
+				g.velX = (facing * 2) + velX;
 				g.velY = -3;
 				grenadeTimer = 50;
 				game.addEntity(g);
@@ -131,6 +131,8 @@ public class Player extends Mob  {
 							for(int i=0; i < entities.size();i++) {
 								Entity ent = entities.get(i);
 								if( ent!= this && ent instanceof Mob) {
+									if(ent instanceof Human)
+										break;
 									Mob m = (Mob)ent;
 									m.takeDamage(this, weaponDamage);
 									cx = ent.xx;
@@ -179,7 +181,8 @@ public class Player extends Mob  {
 			hitpoints -= amount;
 			hurt(50);		
 			game.addEntity(new FloatingText("-" + amount,Art.getColor(255,0,0),xx,yy,new Vector2(0,-1), null, game));
-			this.knockBack((source.xx - xx), 1.0);
+			double force = 1.0;
+			this.knockBack((source.xx - xx), force);
 		}
 	}
 }

@@ -142,5 +142,47 @@ public class Bitmap {
 				}
 			}
 		}		
+	}
+
+	public void drawScaled(Bitmap dest, int dx, int dy, int scaleX, int scaleY,
+						                int sx, int sy, int w, int h, boolean flip) {
+		if( ((dx + w) < 0) || (dx >= dest.width) ) return;
+		if( ((dy + h) < 0) || (dy >= dest.height) ) return;
+		
+		int xOffset = 0;
+		int yOffset = 0;
+		int xDest = dx;
+		int yDest = dy;
+		int frameWidth = w * scaleX;
+		int frameHeight = h * scaleY;
+		
+		if( dx < 0 ) {
+			xOffset = -dx;
+			xDest = 0;
+		}
+		if( dy < 0 ) {
+			yOffset = -dy;
+			yDest = 0;
+		}
+		if( (dx + frameWidth) > dest.width ) {			
+			frameWidth -= ((dx + frameWidth) - dest.width);
+		}
+		if( (dy + frameHeight) > dest.height ) {			
+			frameHeight -= ((dy + frameHeight) - dest.height);
+		}
+		
+		for(int yy=yOffset; yy < frameHeight; yy++) {
+			for(int xx=xOffset; xx < frameWidth; xx++) {
+				int offsX;
+				
+				if(flip) 
+					offsX = (sx + w - 1) - xx / scaleX;
+				else offsX = (sx + xx / scaleX);
+				
+				int srcCol = pixels[(offsX) + (sy + yy / scaleY) * width];				
+				if( (srcCol & 0xFFFFFF) != 0xFF5DFF )
+					dest.pixels[(xDest + (xx-xOffset)) + (yDest + (yy-yOffset)) * dest.width] = srcCol;
+			}
+		}		
 	}	
 }

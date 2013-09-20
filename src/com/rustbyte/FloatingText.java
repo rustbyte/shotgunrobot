@@ -27,8 +27,8 @@ public class FloatingText extends Entity {
 
 	@Override
 	public void tick() {
-		if(--timer <= 0)
-			alive = false;
+		//if(--timer <= 0)
+		//	alive = false;
 		move();
 	}
 	@Override

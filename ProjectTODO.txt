@@ -102,4 +102,7 @@ BUGS:
 	
 	UPDATE:
 		Modified fireWeapon() method to start weapon hit check at player tile.		
-		
+
+6) Zombies sometimes get stuck trying to move through a blocking tile.
+   Sprite animation seems to stutter ( or flash ) as if its flipping between
+   animations every tick.		

@@ -50,6 +50,7 @@ public class Tile implements Destructable {
 		case 0x7F6A00: t = new DoorTile(tx,ty,tw,th,l); break;
 		case 0x00FF21: t = new HumanSpawnerTile(tx,ty,tw,th,l); break;
 		case 0x0026FF: t = new RescueZoneTile(tx,ty,tw,th,l); break;
+		case 0xFF0000: t = new ZombieSpawnerTile(tx,ty,tw,th,l); break;
 		}
 		return t;
 	}

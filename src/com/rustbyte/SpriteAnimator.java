@@ -81,4 +81,13 @@ public class SpriteAnimator {
 			getCurrentAnimation().frameHeight,				
 			getCurrentAnimation().flip);
 	}
+
+	public void renderScaled(Bitmap dest, int xx, int yy, int sx, int sy) {
+		Art.sprites.drawScaled(dest, xx, yy, sx, sy, 
+				getCurrentAnimation().getOffsetX(), 
+				getCurrentAnimation().getOffsetY(), 
+				getCurrentAnimation().frameWidth, 
+				getCurrentAnimation().frameHeight,				
+				getCurrentAnimation().flip);
+	}
 }

@@ -3,6 +3,7 @@ package com.rustbyte;
 import java.util.Random;
 
 import com.rustbyte.Game;
+import com.rustbyte.level.Tile;
 
 public abstract class Mob extends Entity implements Destructable {	
 	public int hitpoints;	
@@ -118,6 +119,12 @@ public abstract class Mob extends Entity implements Destructable {
 	
 	public void jump() {
 		if(!jumping && onground) {
+			int tx = (int)xx / 20;
+			int ty = (int)yy / 20;
+			Tile t = game.level.getTile(tx,ty - 1);
+			if( t != null && t.blocking) {				
+				return;
+			}
 			jumping = true;
 			onground = false;
 			velY = jumpVel;

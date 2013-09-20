@@ -1,5 +1,8 @@
 package com.rustbyte;
 
+import java.util.List;
+
+import com.rustbyte.PathFinder.Node;
 import com.rustbyte.level.Tile;
 import com.rustbyte.vector.Vector2;
 
@@ -9,7 +12,9 @@ public class Human extends Mob {
 	private int ANIM_IDLE_LEFT;
 	private int ANIM_IDLE_RIGHT;	
 	private int actionTimer = 0;	
-
+	private FlashEffect flashEffect = null;
+	private List<Node> path;
+	
 	public Human(int x, int y, int w, int h, Entity p, Game g) {
 		super(x, y, w, h, p, g);
 		
@@ -20,12 +25,20 @@ public class Human extends Mob {
 		
 		animator.setCurrentAnimation(ANIM_WALK_RIGHT);
 		
-		this.hitpoints = 100;
-		this.speed = 0.75;		
-	}
+		hitpoints = 100;
+		speed = 0.75;
+		flashEffect = new FlashEffect(0x00FF00, 10, w,h);		
+	}	
 
+	private double distanceToPlayer() {
+		Vector2 v1 = new Vector2(xx,yy);
+		Vector2 v2 = new Vector2(game.player.xx, game.player.yy);				
+		return v1.sub(v2).length();		
+	}
+	
 	@Override
 	public void tick() {
+		super.tick();
 		if(hitpoints <= 0)
 			alive = false;
 				
@@ -46,11 +59,11 @@ public class Human extends Mob {
 				case 3:
 					tempNewDir = 1;
 					break;
-				}
+				}				
 				dirX = tempNewDir;
 				actionTimer = 100 + rand.nextInt(200);
 			}
-												
+						
 			if(blockedX && onground) {
 				int tx = (int)this.xx / game.level.tileWidth;
 				int ty = (int)this.yy / game.level.tileHeight;
@@ -90,8 +103,7 @@ public class Human extends Mob {
 
 	@Override
 	public void render() {
-		animator.render(game.screen, ((int)xx - wid / 2) - game.level.viewX,
-									 ((int)yy - hgt / 2) - game.level.viewY);
+			animator.render(game.screen, ((int)xx - wid / 2) - game.level.viewX,
+					 					 ((int)yy - hgt / 2) - game.level.viewY);
 	}
-
 }
