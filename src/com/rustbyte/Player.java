@@ -81,8 +81,8 @@ public class Player extends Mob  {
 				weaponFired = false;			
 		}					
 		
-		move();			
-					
+		move();								
+		
 		if(!knockedBack) {
 			if(velX < 0 ) this.animator.setCurrentAnimation(ANIM_WALK_LEFT);
 			else if(velX > 0) this.animator.setCurrentAnimation(ANIM_WALK_RIGHT);
@@ -177,7 +177,7 @@ public class Player extends Mob  {
 	@Override
 	public void takeDamage(Entity source, int amount) {		
 		if(!isHurt()) {
-			hitpoints -= amount;
+			//hitpoints -= amount;
 			hurt(50);		
 			game.addEntity(new FloatingText("-" + amount,Art.getColor(255,0,0),xx,yy,new Vector2(0,-1), null, game));
 			double force = 1.0;

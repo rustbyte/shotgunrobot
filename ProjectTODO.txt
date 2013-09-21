@@ -5,6 +5,8 @@ Journal:
 	Fixed movement/animation stuttering occuring when entities try
 	to move through blocking tiles.
 	
+	Fixed knock-back throwing player into wall and getting stuck.
+	
 2013-09-20
 	Removed SuperZombie
 	
@@ -121,3 +123,12 @@ BUGS:
    		less then 1, for ex, values such as +0.75 for dx would become 0, thereby not detecting
    		any collisions since the entity "appears" to not be moving.
    		Fixed with floor/ceil functions to round of dx to closest signed integer.
+   		
+7) [FIXED] Entity -> Entity collisions that results in a knockback appears to sometimes through
+   one entity ( often the Player) of the map, causing the entity to get stuck inside a 
+   blocking tile. It appears that this occurs if two enities spawn directly(or close to)
+   ontop of each other.
+   
+   UPDATE:
+   		Caused when Mob.knockBack() method received 0 for delta argument, producing a
+   		NaN result for velX. Added argument check for this.

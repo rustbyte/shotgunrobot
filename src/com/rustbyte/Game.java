@@ -47,7 +47,7 @@ public class Game {
 		input = new InputHandler();
 		soundSystem = new SoundSystem();
 		level = new Level(Art.level1, 20,20, this);
-		player = new Player(50, 50, 20, 20, null, this);
+		player = new Player(50, 390, 20, 20, null, this);
 		player.alive = true;
 		
 		level.viewX = 0;
@@ -56,7 +56,7 @@ public class Game {
 		level.viewHeight = HEIGHT;
 		Random rand = new Random();
 		int xx = 100;
-		int nummobs = 10000;
+		int nummobs = 1000;
 		if(nummobs > 0) {
 			int minspacing = WIDTH / nummobs;
 			for(int i=0; i < nummobs; i++) {
@@ -68,6 +68,8 @@ public class Game {
 				addEntity(new Zombie(xx,50, 20, 20, null ,this));
 			}	
 		}	
+		
+		//addEntity(new Zombie(50, 200,20,20, null, this));
 		
 		layers[0] = new BackgroundLayer(Art.background, 0, 100);
 		layers[1] = new BackgroundLayer(Art.background, 100, 50);		

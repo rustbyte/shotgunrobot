@@ -33,9 +33,16 @@ public class Grenade extends Entity {
 			for(int y=0; y < 3; y++) {
 				for(int x=0; x < 3; x++) {
 					Tile tt = game.level.getTile(tx + x, ty + y);
-					if(tt != null) {
+					if(tt != null) {						
 						ArrayList<Entity> ents = tt.getEntities();
-						for(int i=0; i < ents.size(); i++) {
+						int size = ents.size();
+						int start = 0, end = size;
+						if( ents.size() > 50) {			
+							start = size / 3;
+							end = size / 2;
+							System.out.println("exploding " + (end - start) + " entities.");
+						}
+						for(int i=start; i < end; i++) {
 							Entity e = ents.get(i);
 							if( e instanceof Destructable) {
 								Vector2 v1 = new Vector2(xx,yy);

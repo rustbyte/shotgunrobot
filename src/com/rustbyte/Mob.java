@@ -35,7 +35,7 @@ public abstract class Mob extends Entity implements Destructable {
 		hurtTimer = time;
 	}
 	protected void knockBack(double d, double force) {		
-		velX = -( (d / Math.sqrt(d * d))  * force);
+		velX = d == 0 ? 0 : -( (d / Math.sqrt(d * d))  * force);
 		dirX = velX < 0 ? -1 : 1;
 		velY = -2;
 		jumping = true;
@@ -55,12 +55,12 @@ public abstract class Mob extends Entity implements Destructable {
 			y = yo + (sy - this.animator.getCurrentAnimation().getOffsetY());
 			
 			boolean flip = this.animator.getCurrentAnimation().flip;
-			Debris d = new Debris(x, y, wid/cells, hgt/cells, sx, sy, flip, this, this.game);
-			d.velY = -(4 + rand.nextInt(5));
+			Debris d = new Debris(x, y, wid/cells, hgt/cells, sx, sy, flip, this, this.game);			
+			d.velY = -(4 + rand.nextInt(5 + i));
 			if(i % 2 == 0)
-				d.velX = 1;
+				d.velX = 1.0 + rand.nextDouble();
 			else
-				d.velX = -1;				
+				d.velX = -1.0 + rand.nextDouble();				
 			
 			game.addEntity(d);
 			ParticleEmitter pe = new ParticleEmitter(0, 0, -d.velX, -1.0, 1, particleCount, color, d, game);
