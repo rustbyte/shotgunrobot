@@ -36,7 +36,7 @@ public class Player extends Mob  {
 		
 		animator.setCurrentAnimation(ANIM_IDLE_RIGHT);
 		input = g.input;
-		speed = 1.50;
+		speed = 1.75;
 		xr = 4;
 		flashEffect.setColor(0xFFFF00);
 		hitpoints = 100;
@@ -79,11 +79,10 @@ public class Player extends Mob  {
 			
 			if(weaponFired && --weaponTimer <= 0)
 				weaponFired = false;			
-		}		
-
+		}					
 		
-		move();
-		
+		move();			
+					
 		if(!knockedBack) {
 			if(velX < 0 ) this.animator.setCurrentAnimation(ANIM_WALK_LEFT);
 			else if(velX > 0) this.animator.setCurrentAnimation(ANIM_WALK_RIGHT);

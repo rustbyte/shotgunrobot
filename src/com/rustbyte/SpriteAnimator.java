@@ -47,6 +47,9 @@ public class SpriteAnimator {
 		
 	}
 	
+	public String getStatusString() {
+		return "curanim: " + currentAnimation + " curframe: " + getCurrentAnimation().currentFrame;
+	}
 	public void setFrameRate(double fps) {	
 		nsPerTick = 1000000000.0 / fps;
 	}
@@ -59,7 +62,7 @@ public class SpriteAnimator {
 			if(++curAnim.currentFrame == curAnim.numFrames )
 				curAnim.currentFrame = 0;
 			unprocessed -= 1;
-		}
+		}			
 		lastTime = now;
 	}
 	public int addAnimation(int frames, int x, int y, int wid, int hgt, boolean flip, int border) {

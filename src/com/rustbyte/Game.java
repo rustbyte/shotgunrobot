@@ -56,7 +56,7 @@ public class Game {
 		level.viewHeight = HEIGHT;
 		Random rand = new Random();
 		int xx = 100;
-		int nummobs = 0;
+		int nummobs = 10000;
 		if(nummobs > 0) {
 			int minspacing = WIDTH / nummobs;
 			for(int i=0; i < nummobs; i++) {
@@ -67,9 +67,7 @@ public class Game {
 					xx = (level.width * level.tileWidth) - 40;			
 				addEntity(new Zombie(xx,50, 20, 20, null ,this));
 			}	
-		}
-		
-		//addEntity(new Human(30, 300,20,20,null,this));
+		}	
 		
 		layers[0] = new BackgroundLayer(Art.background, 0, 100);
 		layers[1] = new BackgroundLayer(Art.background, 100, 50);		

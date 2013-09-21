@@ -9,6 +9,7 @@ import com.rustbyte.vector.Vector2;
 import com.rustbyte.Game;
 import com.rustbyte.Bitmap;
 import com.rustbyte.Entity;
+import com.rustbyte.Human;
 
 public class Level {	
 	public int width;
@@ -95,8 +96,8 @@ public class Level {
 		
 		double xo = ent.xx;
 		double yo = ent.yy;
-		double xv = dx;
-		double yv = dy;				
+		double xv = dx < 0 ? Math.floor(dx) : Math.ceil(dx);
+		double yv = dy;		
 		double xr = ent.xr;
 		double yr = ent.yr;		
 				
@@ -110,7 +111,7 @@ public class Level {
 		int ytoMax = (int)(yo) / tileHeight;
 		
 		// Get min/max tile that we move to
-		int xtMin = (int)((xo + xv) - xr ) / tileWidth;
+		int xtMin = (int)((xo + xv) - xr) / tileWidth;
 		int ytMin = (int)((yo + yv) - yr) / tileHeight;
 		int xtMax = (int)((xo + xv) + xr) / tileWidth;
 		int ytMax = (int)((yo + yv) + yr) / tileHeight;
@@ -122,27 +123,19 @@ public class Level {
 					continue;				
 				if(tileIsBlocking(xt,yt)) {
 					if( dy > 0) {
-						//int newVelY = (yt * tileHeight) - (yo + yr);							
-						//ent.velY = newVelY - 1;
 						ent.yy = (yt * tileHeight) - yr - 1;
 						ent.velY = 0.0;
 						ent.onground = true;						
 					}
 					if( dy < 0) {
-						//int newVelY = ((yt * tileHeight) + tileHeight) - (yo - yr);
-						//ent.velY = newVelY + 1;
 						ent.yy = ((yt * tileHeight) + tileHeight) + yr;
 						ent.velY = 0.0;						
 					}
 					if( dx > 0) {
-						//int newVelX = (xt * tileWidth) - (xo + xr);
-						//ent.velX = newVelX - 1;
-						ent.xx = (xt * tileWidth) - xr - 1;
+						ent.xx = (xt * tileWidth) - xr - 1;						
 						ent.velX = 0.0;				
 					}
 					if( dx < 0) {
-						//int newVelX = ((xt * tileWidth) + tileWidth) - (xo - xr);
-						//ent.velX = newVelX + 1;
 						ent.xx = ((xt * tileWidth) + tileWidth) + xr;
 						ent.velX = 0.0;						
 					}

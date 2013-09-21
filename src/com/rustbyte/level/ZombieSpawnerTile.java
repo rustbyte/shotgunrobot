@@ -13,8 +13,9 @@ public class ZombieSpawnerTile extends Tile {
 	}
 	@Override
 	public void init() {	
+		/*
 		for(int i = 0; i < 10; i++) {
 			level.game.addEntity(new Zombie(tx * 20, (ty * 20) - 50,20,20,null, level.game));
-		}
+		}*/
 	}	
 }

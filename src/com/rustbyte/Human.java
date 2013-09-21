@@ -46,7 +46,7 @@ public class Human extends Mob {
 			knockedBack = false;
 		
 		if(!knockedBack) {
-			if(--actionTimer <= 0) {
+			if(--actionTimer <= 0) {				
 				int tempNewDir = 0;
 				rand.setSeed(System.nanoTime());
 				switch(1 + rand.nextInt(3)) {
@@ -61,29 +61,30 @@ public class Human extends Mob {
 					break;
 				}				
 				dirX = tempNewDir;
-				actionTimer = 100 + rand.nextInt(200);
+				actionTimer = 100 + rand.nextInt(200);				
 			}
-						
+			
 			if(blockedX && onground) {
 				int tx = (int)this.xx / game.level.tileWidth;
 				int ty = (int)this.yy / game.level.tileHeight;
 				boolean jumpObstacle = false;
 				for(int i=0; i < 2; i++) {
 					Tile t = game.level.getTile(tx + dirX, ty - (i+1));
-					if( t == null || !t.blocking) {
+					if( t == null || !t.blocking) {						
 						jump();
 						jumpObstacle = true;
 						break;
 					}
 				}
-				if(!jumpObstacle)
+				if(!jumpObstacle) {					
 					dirX = -dirX;
+				}
 			}
-			velX = dirX * speed;
+			velX = dirX * speed;				
 		}
 		
 		move();
-		
+
 		if(!knockedBack) {
 			if(velX < 0 ) this.animator.setCurrentAnimation(ANIM_WALK_LEFT);
 			else if(velX > 0) this.animator.setCurrentAnimation(ANIM_WALK_RIGHT);

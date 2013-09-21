@@ -15,7 +15,7 @@ public abstract class Entity {
 	public double velY;
 	public int wid;
 	public int hgt;
-	public double xr = 8.0;
+	public double xr = 4.0;
 	public double yr = 9.0;
 	public double speed = 0.1;
 	public int facing = 1;

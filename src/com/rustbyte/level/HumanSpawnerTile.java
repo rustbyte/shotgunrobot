@@ -11,7 +11,7 @@ public class HumanSpawnerTile extends Tile {
 	}
 	@Override
 	public void init() {	
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 1; i++) {
 			level.game.addEntity(new Human(tx * 20, (ty * 20) - 50,20,20,null, level.game));
 		}
 	}
