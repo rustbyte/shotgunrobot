@@ -11,7 +11,10 @@ public class Human extends Mob {
 	private int ANIM_WALK_LEFT;
 	private int ANIM_IDLE_LEFT;
 	private int ANIM_IDLE_RIGHT;	
-	private int actionTimer = 0;	
+	private int actionTimer = 0;
+	private boolean followingPlayer = false;
+	private boolean foundPlayer = false;
+	private int foundPlayerTimer = 0;
 	private FlashEffect flashEffect = null;
 	private List<Node> path;
 	
@@ -27,7 +30,7 @@ public class Human extends Mob {
 		
 		hitpoints = 100;
 		speed = 0.75;
-		flashEffect = new FlashEffect(0x00FF00, 10, w,h);		
+		flashEffect = new FlashEffect(0x00FF00, 3, w,h);		
 	}	
 
 	private double distanceToPlayer() {
@@ -43,25 +46,27 @@ public class Human extends Mob {
 			alive = false;
 				
 		if(hurtTimer <= 0)
-			knockedBack = false;
+			knockedBack = false;	
 		
-		if(!knockedBack) {
-			if(--actionTimer <= 0) {				
-				int tempNewDir = 0;
-				rand.setSeed(System.nanoTime());
-				switch(1 + rand.nextInt(3)) {
-				case 1:
-					tempNewDir = 0;
-					break;
-				case 2:
-					tempNewDir = -1;
-					break;
-				case 3:
-					tempNewDir = 1;
-					break;
-				}				
-				dirX = tempNewDir;
-				actionTimer = 100 + rand.nextInt(200);				
+		if(!knockedBack) {			
+			if(--actionTimer <= 0) {
+				if(!followingPlayer) {
+					int tempNewDir = 0;
+					rand.setSeed(System.nanoTime());
+					switch(1 + rand.nextInt(3)) {
+					case 1:
+						tempNewDir = 0;
+						break;
+					case 2:
+						tempNewDir = -1;
+						break;
+					case 3:
+						tempNewDir = 1;
+						break;
+					}				
+					dirX = tempNewDir;
+					actionTimer = 100 + rand.nextInt(200);
+				} 
 			}
 			
 			if(blockedX && onground) {
@@ -104,7 +109,15 @@ public class Human extends Mob {
 
 	@Override
 	public void render() {
+		if(foundPlayerTimer > 0) {
+			--foundPlayerTimer;
+			flashEffect.clear();
+			animator.render(flashEffect.renderFrame, 0, 0);
+			flashEffect.render(game.tickcount, game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
+				   	  					    			    (((int)yy) - (hgt / 2)) - game.level.viewY);			 			
+		} else {
 			animator.render(game.screen, ((int)xx - wid / 2) - game.level.viewX,
 					 					 ((int)yy - hgt / 2) - game.level.viewY);
+		}
 	}
 }

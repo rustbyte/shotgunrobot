@@ -14,7 +14,7 @@ public abstract class RenderEffect {
 	public void clear() {
 		this.renderFrame.clear(-1);
 	}
-	protected abstract void animate(int ticks);
+	public abstract void animate(int ticks);
 	
 	public void render(int ticks, Bitmap dest, int xx, int yy) {
 		animate(ticks);

@@ -54,7 +54,7 @@ public class Game {
 		level.viewY = 0;
 		level.viewWidth = WIDTH;
 		level.viewHeight = HEIGHT;
-		Random rand = new Random();
+		/*Random rand = new Random();
 		int xx = 100;
 		int nummobs = 1000;
 		if(nummobs > 0) {
@@ -67,9 +67,11 @@ public class Game {
 					xx = (level.width * level.tileWidth) - 40;			
 				addEntity(new Zombie(xx,50, 20, 20, null ,this));
 			}	
-		}	
+		}*/	
 		
 		//addEntity(new Zombie(50, 200,20,20, null, this));
+		
+		addEntity(new Human(150, 400,20,20,null,this));
 		
 		layers[0] = new BackgroundLayer(Art.background, 0, 100);
 		layers[1] = new BackgroundLayer(Art.background, 100, 50);		
@@ -148,7 +150,6 @@ public class Game {
 				entities.remove(ent);
 			}
 		}
-		//System.out.println("Num entities: " + entities.size());
 		
 		if(player.alive) { 
 			player.applyGravity(gravity);

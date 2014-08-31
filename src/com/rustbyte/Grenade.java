@@ -73,8 +73,13 @@ public class Grenade extends Entity {
 	public void move() {
 		boolean blockedX, blockedY = false;
 
+		double oldVelX = velX;
+		
 		blockedX = !game.level.moveEntity(this, velX, 0);
 		blockedY = !game.level.moveEntity(this, 0, velY);
+		
+		if(blockedX) 
+			velX = -oldVelX * 0.5;
 		
 		if(velX > 0)
 			velX -= 0.02;

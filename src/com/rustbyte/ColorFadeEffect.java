@@ -8,7 +8,7 @@ public class ColorFadeEffect extends RenderEffect {
 	}
 
 	@Override
-	protected void animate(int ticks) {
+	public void animate(int ticks) {
 		if(++color > 255)
 			color = 255;
 		

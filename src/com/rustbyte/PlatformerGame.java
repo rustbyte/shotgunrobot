@@ -34,7 +34,7 @@ public class PlatformerGame extends Canvas implements Runnable, WindowListener, 
 		game = new Game(WIDTH, HEIGHT);		
 	}
 	
-	public void start() {				
+	public void start() {		
 		if(!running) {
 			running = true;
 			thread = new Thread(this);

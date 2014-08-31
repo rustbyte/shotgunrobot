@@ -8,6 +8,9 @@ public class FlashEffect extends RenderEffect {
 		this.flashColor = col;
 		this.flashFrequency = f;
 	}
+	public void setFrequency(int f) {
+		flashFrequency = f;
+	}
 	public void setColor(int col) {
 		flashColor = col;
 	}

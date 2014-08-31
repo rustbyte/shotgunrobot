@@ -7,6 +7,8 @@ Journal:
 	
 	Fixed knock-back throwing player into wall and getting stuck.
 	
+	Added wall-bouncy-ness to grenades.
+	
 2013-09-20
 	Removed SuperZombie
 	
