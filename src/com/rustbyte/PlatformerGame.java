@@ -30,15 +30,32 @@ public class PlatformerGame extends Canvas implements Runnable, WindowListener, 
 	private Thread thread = null;
 	
 	public PlatformerGame() {
+		
+		Dimension size = new Dimension(WIDTH * SCALE, HEIGHT * SCALE);
+		setMaximumSize(size);
+		setMinimumSize(size);
+		setPreferredSize(size);
+		
 		addKeyListener(this);
 		game = new Game(WIDTH, HEIGHT);		
 	}
 	
-	public void start() {		
+	public synchronized void start() {		
 		if(!running) {
 			running = true;
 			thread = new Thread(this);
 			thread.start();
+		}
+	}
+	
+	public synchronized void stop() {
+		if(running) {
+			try {
+				running = false;
+				thread.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -48,8 +65,9 @@ public class PlatformerGame extends Canvas implements Runnable, WindowListener, 
 		double unprocessed = 0;
 		double secondsPerTick = 1.0 / 60.0;		
 		long fpsLastTime = System.currentTimeMillis();
-		int frames = 0;					
-		requestFocus();
+		int frames = 0;
+		int ticks = 0;
+		requestFocus();		
 		
 		while(running) {
 			long now = System.nanoTime();
@@ -58,16 +76,20 @@ public class PlatformerGame extends Canvas implements Runnable, WindowListener, 
 			unprocessed += elapsedTime / 1000000000.0;
 			lastTime = now;
 			boolean shouldRender = false;
+			int skippedFrames = 0;			
 			while(unprocessed > secondsPerTick) {				
 				tick(unprocessed);
 				unprocessed -= secondsPerTick;
 				shouldRender = true;
+				ticks++;
 			}
 			
 			//if(shouldRender) {
 				render();
 				frames++;
-			//}			
+			/*} else {
+				skippedFrames++;
+			}*/
 			
 			try {
 				Thread.yield();
@@ -76,25 +98,15 @@ public class PlatformerGame extends Canvas implements Runnable, WindowListener, 
 			}
 			
 			if((System.currentTimeMillis() - fpsLastTime) > 1000) {
-				//System.out.println("FPS: " + frames);
+				System.out.println("FPS: " + frames + " Ticks: " + ticks);
 				game.FPS = frames;
 				frames = 0;
+				ticks = 0;
 				fpsLastTime += 1000;
 			}			
 		}
 		
 		System.out.println("thread closing.");
-	}
-	
-	public void stop() {
-		if(running) {
-			try {
-				running = false;
-				thread.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	private void tick(double elapsedTime) {
@@ -122,10 +134,6 @@ public class PlatformerGame extends Canvas implements Runnable, WindowListener, 
 	public static void main(String[] args) {		
 				
 		PlatformerGame game = new PlatformerGame();
-		Dimension size = new Dimension(WIDTH * SCALE, HEIGHT * SCALE);
-		game.setMinimumSize(size);
-		game.setMaximumSize(size);
-		game.setPreferredSize(size);
 		
 		JFrame frame = new JFrame(TITLE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

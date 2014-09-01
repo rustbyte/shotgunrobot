@@ -28,8 +28,8 @@ public class Player extends Mob  {
 		super(x, y, w, h, p, g);
 		ANIM_WALK_RIGHT = this.animator.addAnimation(5, 121, 0, w, h, false,0);
 		ANIM_WALK_LEFT = this.animator.addAnimation(5, 121, 0, w, h, true,0);
-		ANIM_IDLE_RIGHT = this.animator.addAnimation(1, 101, 0, w, h, false,0);
-		ANIM_IDLE_LEFT = this.animator.addAnimation(1, 101, 0, w, h, true,0);
+		ANIM_IDLE_RIGHT = this.animator.addAnimation(5, 200, 72, w, h, false,1);
+		ANIM_IDLE_LEFT = this.animator.addAnimation(5, 200, 72, w, h, true,1);		
 		ANIM_JUMP_RIGHT = this.animator.addAnimation(1, 101 + w * 3, 0, w, h, false,0);
 		ANIM_JUMP_LEFT = this.animator.addAnimation(1, 101  + w * 3, 0, w, h, true,0);
 		this.animator.setFrameRate(15.0);
@@ -150,7 +150,7 @@ public class Player extends Mob  {
 				cx = xx + (bulletTravelDistance * facing);
 			BulletTrace bt = new BulletTrace(xx + (10 * facing),yy+1, cx, yy+1,0,0,null,game);
 			game.addEntity(bt);
-			//SoundSystem.playSound("SHOTGUN_FIRE");
+			SoundSystem.playSound("SHOTGUN_FIRE");
 		}
 	}
 	@Override

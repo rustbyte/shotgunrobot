@@ -173,8 +173,8 @@ public class Game {
 	}
 	
 	public void render() {
-		for(int i=0; i < WIDTH * HEIGHT;i++)
-			screen.pixels[i] = 0x498FFF;
+		/*for(int i=0; i < WIDTH * HEIGHT;i++)
+			screen.pixels[i] = 0x498FFF;*/
 		
 		// render background
 		for(int i=0; i < numLayers;i++) {
