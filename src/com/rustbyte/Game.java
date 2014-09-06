@@ -52,8 +52,8 @@ public class Game {
 		level.viewY = 0;
 		level.viewWidth = WIDTH;
 		level.viewHeight = HEIGHT;
-		/*Random rand = new Random();
-		int xx = 100;
+		Random rand = new Random();
+		/*int xx = 100;
 		int nummobs = 1000;
 		if(nummobs > 0) {
 			int minspacing = WIDTH / nummobs;
@@ -63,7 +63,7 @@ public class Game {
 					xx = 100;
 				if( xx >= ((level.width * level.tileWidth) - 40))
 					xx = (level.width * level.tileWidth) - 40;			
-				addEntity(new Zombie(xx,50, 20, 20, null ,this));
+				addEntity(new Zombie(xx,100, 20, 20, null ,this));
 			}	
 		}*/	
 		

@@ -48,6 +48,8 @@ public class Tile implements Destructable {
 		case 0x404040: t = new BrickTile(tx,ty,tw,th,l); break;
 		case 0xB70000: t = new RedBrickTile(tx,ty,tw,th,l); break;
 		case 0x910000: t = new RedBrickInsideTile(tx,ty,tw,th,l); break;
+		case 0x963C00: t = new WoodPlanksTile(tx,ty,tw,th,l); break;
+		case 0x4C1E00: t = new WoodPlanksInsideTile(tx,ty,tw,th,l); break;
 		case 0x202020: t = new WallTile(tx,ty,tw,th,l); break;
 		case 0x7F6A00: t = new DoorTile(tx,ty,tw,th,l); break;
 		case 0x00FF21: t = new HumanSpawnerTile(tx,ty,tw,th,l); break;
@@ -67,6 +69,10 @@ public class Tile implements Destructable {
 	}
 	public ArrayList<Entity> getEntities() {
 		return (ArrayList<Entity>)entities;
+	}
+	
+	public void interact(Entity e) {
+		// Override in subclasses.
 	}
 
 	@Override

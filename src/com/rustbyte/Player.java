@@ -75,6 +75,10 @@ public class Player extends Mob  {
 				grenadeTimer = 50;
 				game.addEntity(g);
 			}
+			if(input.keys[KeyEvent.VK_E].pressed) {
+				Tile t = game.level.getTileFromPoint((xx + ((xr + 16) * facing)), yy);
+				t.interact(this);
+			}
 			velX = dirX * speed;		
 			
 			if(weaponFired && --weaponTimer <= 0)
@@ -178,7 +182,7 @@ public class Player extends Mob  {
 	@Override
 	public void takeDamage(Entity source, int amount) {		
 		if(!isHurt()) {
-			//hitpoints -= amount;
+			hitpoints -= amount;
 			hurt(50);		
 			game.addEntity(new FloatingText("-" + amount,Art.getColor(255,0,0),xx,yy,new Vector2(0,-1), null, game));
 			double force = 1.0;
