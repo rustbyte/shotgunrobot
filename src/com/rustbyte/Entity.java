@@ -66,6 +66,6 @@ public abstract class Entity {
 			ent.tick();
 		}
 	}
-	public abstract void render();
+	public abstract void render() throws Exception;
 	public abstract void move();	
 }

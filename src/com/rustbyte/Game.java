@@ -30,6 +30,13 @@ public class Game {
 	public int FPS = 0;
 	private int playerDeadTimer = 0;
 	
+	// Player score stuff
+	public int humansSaved = 0;
+	public int humansLost = 0;
+	public int zombiesKilled = 0;
+	public int numZombies = 0;
+	public int numHumans = 0;
+	
 	// parallax background
 	private int numLayers = 3;
 	private BackgroundLayer[] layers = new BackgroundLayer[numLayers];	
@@ -45,16 +52,17 @@ public class Game {
 		
 		input = new InputHandler();
 		level = new Level(Art.level1, 20,20, this);
-		player = new Player(50, 390, 20, 20, null, this);
+		player = new Player(50, 50, 20, 20, null, this);
 		player.alive = true;
 		
 		level.viewX = 0;
 		level.viewY = 0;
 		level.viewWidth = WIDTH;
 		level.viewHeight = HEIGHT;
-		Random rand = new Random();
-		/*int xx = 100;
-		int nummobs = 1000;
+		/*Random rand = new Random();
+		int xx = 100;
+		int nummobs = 500;
+		int humanCount = 0;
 		if(nummobs > 0) {
 			int minspacing = WIDTH / nummobs;
 			for(int i=0; i < nummobs; i++) {
@@ -62,24 +70,29 @@ public class Game {
 				if(xx > (level.width * level.tileWidth) - 40)
 					xx = 100;
 				if( xx >= ((level.width * level.tileWidth) - 40))
-					xx = (level.width * level.tileWidth) - 40;			
-				addEntity(new Zombie(xx,100, 20, 20, null ,this));
+					xx = (level.width * level.tileWidth) - 40;
+				if(humanCount < (nummobs / 2)) {
+					addEntity(new Human(xx,100, 20, 20, null ,this));
+					humanCount++;
+				} else {
+					addEntity(new Zombie(xx,100, 20, 20, null ,this));
+				}
 			}	
-		}*/	
+		}*/			
 		
-		//addEntity(new Zombie(50, 200,20,20, null, this));
-		
-		addEntity(new Human(100, 400,20,20,null,this));
+		//addEntity(new Human(50, 120,20,20,null,this));
+		//addEntity(new Zombie(150, 120,20,20,null, this));
 		
 		layers[0] = new BackgroundLayer(Art.background, 0, 100);
 		layers[1] = new BackgroundLayer(Art.background, 100, 50);		
 		layers[2] = new BackgroundLayer(Art.background, 150, 90);
 		
 		//constructPath();
-		pf = new PathFinder(level);
+		//pf = new PathFinder(level);
 		//pf.initSearch(1, 19, 61 , 20);
-		pf.initSearch(1, 19, 18 , 14);
+		//pf.initSearch(1, 1, 18 , 14);
 	}
+	
 	
 	private void renderPath() {
 		Iterator<Entity> iter = entities.iterator();
@@ -111,6 +124,9 @@ public class Game {
 	public void addEntity(Entity ent) {
 		ent.alive = true;
 		entities.add(ent);
+		
+		if( ent instanceof Human ) numHumans++;
+		if( ent instanceof Zombie ) numZombies++;
 	}
 	
 	public void respawnPlayer() {
@@ -170,7 +186,7 @@ public class Game {
 		}
 	}
 	
-	public void render() {
+	public void render() throws Exception {
 		/*for(int i=0; i < WIDTH * HEIGHT;i++)
 			screen.pixels[i] = 0x498FFF;*/
 		
@@ -181,10 +197,14 @@ public class Game {
 		}		
 		level.draw(screen);
 				
-		screen.drawText(Art.font, "fps: " + FPS, 0,0,0xFFFF00, true);
-		if(player.alive)
-			screen.drawText(Art.font, "HP: " + player.hitpoints, 0,10,0xFFFF00, true);
-
+		//screen.drawText(Art.font, "fps: " + FPS, 0,0,0xFFFF00, true);
+		if(player.alive) {
+			screen.drawText(Art.font, "HP: " + player.hitpoints, 5, 5,0xFFFF00, true);
+			screen.drawText(Art.font, "{FFFF00}Mission: {00FF00}" + 
+											humansSaved + " {FFFF00}/ {FF0000}" + 
+											humansLost + " {FFFF00}/ {0000FF}" + zombiesKilled, 
+											5, 15,0xFFFF00, true);			
+		}
 		for(int i=0; i < entities.size();i++) {
 			Entity ent = entities.get(i);
 			if( ent.alive ) {

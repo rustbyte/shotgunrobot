@@ -1,5 +1,7 @@
 package com.rustbyte;
 
+import java.util.List;
+
 import com.rustbyte.Game;
 import com.rustbyte.vector.Vector2;
 import com.rustbyte.level.*;
@@ -11,6 +13,9 @@ public class Zombie extends Mob {
 	private int ANIM_IDLE_RIGHT;	
 	private int actionTimer = 0;	
 	
+	private Entity currentTarget = null;
+	private boolean targetAquired = false;
+	
 	public Zombie(int x, int y, int w, int h, Entity p, Game g) {
 		super(x, y, w, h, p, g);
 				
@@ -19,8 +24,8 @@ public class Zombie extends Mob {
 		ANIM_IDLE_RIGHT = this.animator.addAnimation(1, 100, 101, w, h, false,1);
 		ANIM_IDLE_LEFT = this.animator.addAnimation(1, 100, 101, w, h, true,1);
 		
-		this.hitpoints = 100;
-		this.speed = 0.75;		
+		this.hitpoints = 100;		
+		this.speed = 0.75;			
 	}
 
 	@Override
@@ -34,7 +39,7 @@ public class Zombie extends Mob {
 			knockedBack = false;
 		
 		if(!knockedBack) {
-			if(--actionTimer <= 0) {
+			if(--actionTimer <= 0 && currentTarget == null) {
 				int tempNewDir = 0;
 				rand.setSeed(System.nanoTime());
 				switch(1 + rand.nextInt(3)) {
@@ -51,15 +56,50 @@ public class Zombie extends Mob {
 				dirX = tempNewDir;
 				actionTimer = 100 + rand.nextInt(200);
 			}
+										
+			// Try to find something to chew on..........
+			if( currentTarget == null) {							
+				Tile currentTile = game.level.getTileFromPoint(xx,yy);
+				int txStart = currentTile.tx;
+				int tyStart = currentTile.ty;
+				for(int i=1; i < 5 && currentTarget == null; i++) {
+					Tile nextTile = game.level.getTile(txStart + (facing * i), tyStart);
+					if( nextTile == null || nextTile.blocking) break;
+					List<Entity> ents = nextTile.getEntities();
+					for(int j=0; j < ents.size();j++) {
+						Entity nextEntity = ents.get(j);
+						if(  nextEntity instanceof Player ||
+							 nextEntity instanceof Human) {
 							
-			
-			Vector2 v1 = new Vector2(xx,yy);
-			Vector2 v2 = new Vector2(game.player.xx, game.player.yy);
-			Vector2 v3 = v1.sub(v2);
-			if(v3.length() < 5) {
-				game.player.takeDamage(this, 20);
+							// Yummy...this one looks fat and tasty....
+							//System.out.println("Target aquired.");
+							currentTarget = nextEntity;
+							targetAquired = true;
+							break;
+						}
+					}
+				}
+			} else {
+				dirX = currentTarget.xx < xx ? -1 : 1;
+				
+				// Got something juciy to succle on....
+				Vector2 v1 = new Vector2(xx,yy);
+				Vector2 v2 = new Vector2(currentTarget.xx, currentTarget.yy);
+				Vector2 v3 = v1.sub(v2);
+				if(v3.length() < 5) {
+					if(currentTarget.alive)
+						((Mob)currentTarget).takeDamage(this, 20);
+				} else if( v3.length() > 90 ) {
+					// Rabbit got away from me....
+					currentTarget = null;
+				}
 			}
 			
+			if((currentTarget == null || !currentTarget.alive) && targetAquired) {
+				//System.out.println("Lost target");
+				currentTarget = null;
+				targetAquired = false;
+			}
 			if(blockedX && onground) {
 				int tx = (int)this.xx / game.level.tileWidth;
 				int ty = (int)this.yy / game.level.tileHeight;
@@ -75,7 +115,7 @@ public class Zombie extends Mob {
 				if(!jumpObstacle)
 					dirX = -dirX;
 			}
-			velX = dirX * speed;
+			velX = dirX * ( speed * (currentTarget == null ? 1 : 2));
 		}
 		
 		move();
@@ -118,6 +158,8 @@ public class Zombie extends Mob {
 				this.explode(16, Art.getColor(255,0,0), 50);
 			else
 				this.breakApart(16, Art.getColor(255,0,0), 10);
+			
+			game.zombiesKilled++;
 		}
 		game.addEntity(new FloatingText("-" + amount, Art.getColor(255, 255, 0), xx,yy - 10, new Vector2(0,-1), null, game));
 		int px = 0;

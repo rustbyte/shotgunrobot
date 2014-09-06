@@ -15,6 +15,8 @@ public class DoorTile extends Tile {
 	private int openTileY = 22;
 	private int closedTileX = 51;
 	private int closedTileY = 22;
+	private int backgroundTileX;
+	private int backgroundTileY;
 	
 	private FlashEffect flashEffect;
 	
@@ -29,14 +31,24 @@ public class DoorTile extends Tile {
 	}
 	@Override
 	public void init() {
-		if(tx > 0) {
-			if( this.level.getTile(tx-1, ty) instanceof EmptyTile ) {				
-				direction = 1;
-				isInside = !(this.level.getTile(tx+1,ty) instanceof EmptyTile);
-			}
-			if( this.level.getTile(tx+1,ty) instanceof EmptyTile )
-				direction = 2;
+		Tile leftTile = this.level.getTile(tx-1, ty);
+		Tile rightTile = this.level.getTile(tx+1, ty);
+		
+		if( leftTile instanceof EmptyTile ) {				
+			direction = 1;
+			isInside = !(rightTile instanceof EmptyTile);
+			backgroundTileX = rightTile.tsetOffsetX;
+			backgroundTileY = rightTile.tsetOffsetY;
+		} else if( rightTile instanceof EmptyTile ) {
+			direction = 2;
+			backgroundTileX = leftTile.tsetOffsetX;
+			backgroundTileY = leftTile.tsetOffsetY;
+		} else {
+			direction = 1;
+			backgroundTileX = rightTile.tsetOffsetX;
+			backgroundTileY = rightTile.tsetOffsetY;			
 		}
+		
 	}
 	@Override
 	public void tick() {
@@ -54,7 +66,7 @@ public class DoorTile extends Tile {
 			this.blocking = !this.isOpen;
 			this.tsetOffsetX = this.isOpen ? this.openTileX : this.closedTileX;
 			this.tsetOffsetY = this.isOpen ? this.openTileY : this.closedTileY;
-			interactTimer = 60;
+			interactTimer = 30;
 			
 			// TODO:
 			// Need to push out any entities that are standing on this tile
@@ -64,8 +76,10 @@ public class DoorTile extends Tile {
 	@Override
 	public void draw(Bitmap dest, int xx, int yy) {
 		
-		if(isInside)
-			Art.sprites.draw(dest, xx, yy, 72, 1, width, height);
+		//if(isInside)
+		//	Art.sprites.draw(dest, xx, yy, 72, 1, width, height);
+		
+		Art.sprites.draw(dest,xx, yy, backgroundTileX, backgroundTileY, width, height);
 		
 		if(hurtTimer > 0) {
 			flashEffect.clear();

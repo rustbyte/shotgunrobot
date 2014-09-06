@@ -1,5 +1,7 @@
 package com.rustbyte.level;
 
+import java.util.Random;
+
 import com.rustbyte.Human;
 
 public class HumanSpawnerTile extends Tile {
@@ -11,7 +13,8 @@ public class HumanSpawnerTile extends Tile {
 	}
 	@Override
 	public void init() {	
-		for(int i = 0; i < 0; i++) {
+		Random rand = new Random();		
+		for(int i = 0; i < 5 + rand.nextInt(5); i++) {
 			level.game.addEntity(new Human(tx * 20, (ty * 20) - 50,20,20,null, level.game));
 		}
 	}

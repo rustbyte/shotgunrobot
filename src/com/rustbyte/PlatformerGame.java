@@ -85,7 +85,11 @@ public class PlatformerGame extends Canvas implements Runnable, WindowListener, 
 			}
 			
 			//if(shouldRender) {
-				render();
+				try {
+					render();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 				frames++;
 			/*} else {
 				skippedFrames++;
@@ -113,7 +117,7 @@ public class PlatformerGame extends Canvas implements Runnable, WindowListener, 
 		game.tick();
 	}
 	
-	private void render() {
+	private void render() throws Exception {
 		BufferStrategy bs = getBufferStrategy();
 		if(bs == null) {
 			createBufferStrategy(3);

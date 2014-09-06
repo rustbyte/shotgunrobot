@@ -18,7 +18,7 @@ public class FloatingText extends Entity {
 	}
 
 	@Override
-	public void render() {
+	public void render() throws Exception {
 		int xo = (int)xx - game.level.viewX;
 		int yo = (int)yy - game.level.viewY;
 		

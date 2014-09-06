@@ -105,14 +105,17 @@ public class Bitmap {
 		}
 	}
 	
-	public void drawText(Bitmap fontBitmap, String text, int xOffset, int yOffset, int col, boolean shadow) {
+	public void drawText(Bitmap fontBitmap, String text, int xOffset, int yOffset, int col, boolean shadow)
+		throws Exception {
+		
 		if(shadow) {			
 			drawText(fontBitmap, text,xOffset + 1 , yOffset   , 0);
 			drawText(fontBitmap, text,xOffset + 1 , yOffset + 1   , 0);
 		}
 		drawText(fontBitmap, text,xOffset, yOffset, col);
 	}
-	private void drawText(Bitmap fontBitmap, String text, int xOffset, int yOffset, int col) {
+	private void drawText(Bitmap fontBitmap, String text, int xOffset, int yOffset, int col) 
+		throws Exception {
 				
 		int charIndex = -1;
 		
@@ -122,8 +125,37 @@ public class Bitmap {
 		int xFinal = -1;
 		int yFinal = -1;
 		
-		for(int i=0; i < text.length(); i++) {			
-			charIndex = chararray.indexOf(text.charAt(i));
+		boolean useColorCode = false;
+		boolean shouldRender = true;
+		String colorCode = "";
+		int specialChars = 0;
+		
+		for(int i=0; i < text.length(); i++) {
+			char nextChar = text.charAt(i);
+					
+			if( nextChar == '{' ) {
+				colorCode = "#";
+				useColorCode = true;
+				shouldRender = false;
+				specialChars++;
+				continue;
+			}
+			if( nextChar == '}') {
+				shouldRender = true;
+				specialChars++;
+				continue;
+			}
+			
+			if(!shouldRender) {
+				colorCode += nextChar;
+				specialChars++;
+				continue;
+			}
+			
+			if(useColorCode && colorCode.length() > 7 ) 
+				throw new Exception("Invalid format specified in color code.");
+			
+			charIndex = chararray.indexOf(nextChar);			
 			
 			fontOffsetX = (charIndex % 42) * FONTWIDTH;
 			fontOffsetY = (charIndex / 42) * FONTHEIGHT;
@@ -133,12 +165,12 @@ public class Bitmap {
 				if(yFinal < 0 || yFinal >= height) continue;
 				
 				for(int x=fontOffsetX; x < (fontOffsetX + FONTWIDTH); x++) {
-					xFinal = (xOffset + (x - fontOffsetX)) + (i * FONTWIDTH);
+					xFinal = (xOffset + (x - fontOffsetX)) + ((i - specialChars) * FONTWIDTH);
 					if(xFinal < 0 || xFinal >= width) continue;
 					
 					int src = fontBitmap.pixels[x + y * fontBitmap.width];
 					if((src & 0xffffff) != 0xFF5DFF)
-						pixels[xFinal + yFinal * width] = col;
+						pixels[xFinal + yFinal * width] = useColorCode ? col > 0 ? Integer.decode(colorCode) : 0 : col;
 				}
 			}
 		}		
