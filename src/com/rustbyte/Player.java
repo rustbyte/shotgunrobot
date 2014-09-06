@@ -101,6 +101,8 @@ public class Player extends Mob  {
 			weaponFired = true;
 			weaponTimer = weaponDelay;
 			
+			SoundSystem.playSound("PISTOL");
+			
 			boolean bulletHit = false;
 			double bulletTravelDistance = 0;
 			double cx = 0; // bullet collision point			
@@ -149,8 +151,7 @@ public class Player extends Mob  {
 			if(!bulletHit)
 				cx = xx + (bulletTravelDistance * facing);
 			BulletTrace bt = new BulletTrace(xx + (10 * facing),yy+1, cx, yy+1,0,0,null,game);
-			game.addEntity(bt);
-			SoundSystem.playSound("SHOTGUN_FIRE");
+			game.addEntity(bt);			
 		}
 	}
 	@Override

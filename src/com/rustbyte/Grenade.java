@@ -1,6 +1,7 @@
 package com.rustbyte;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.rustbyte.level.Tile;
 import com.rustbyte.vector.Vector2;
@@ -13,6 +14,8 @@ public class Grenade extends Entity {
 	private int ANIM_UNEXPLODED;
 	private int ANIM_EXPLOSION;
 	
+	private ParticleEmitter sparks = null;
+	
 	public Grenade(double x, double y, Game game) {
 		super(x,y,5,8,null, game);
 		ANIM_UNEXPLODED = this.animator.addAnimation(1, 201, 51, wid, hgt, false, 0);
@@ -20,6 +23,8 @@ public class Grenade extends Entity {
 		animator.setCurrentAnimation(ANIM_UNEXPLODED);		
 		this.xr = 2;
 		this.yr = 3;
+		this.sparks = new ParticleEmitter(x, y, -1, -1, 4, 50, 0xFFFFFF, this, game);
+		game.addEntity(sparks);
 	}
 
 	@Override
@@ -58,7 +63,7 @@ public class Grenade extends Entity {
 			animator.setCurrentAnimation(ANIM_EXPLOSION);
 			animator.setFrameRate(30);
 			detonated = true;
-		}
+		}	
 		
 		move();
 		

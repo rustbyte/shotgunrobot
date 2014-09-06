@@ -26,8 +26,8 @@ public class ParticleEmitter extends Entity {
 		double yv = emitVelY + (((double)rand.nextInt(3)) + rand.nextDouble()) * Math.signum(emitVelY);
 		double xxx, yyy = 0;
 		if(parent != null) {
-			xxx = parent.xx + xx;
-			yyy = parent.yy + yy;
+			xxx = parent.xx;
+			yyy = parent.yy;
 		} else {
 			xxx = xx;
 			yyy = yy;

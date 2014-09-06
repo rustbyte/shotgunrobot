@@ -23,7 +23,6 @@ public class Game {
 	private double gravity = 1;
 	
 	public InputHandler input;
-	public SoundSystem soundSystem;
 	public Level level;
 	public Player player;
 	private List<Entity> entities = new ArrayList<Entity>();
@@ -45,7 +44,6 @@ public class Game {
 		colorfadeEffect = new ColorFadeEffect(0,WIDTH,HEIGHT);
 		
 		input = new InputHandler();
-		soundSystem = new SoundSystem();
 		level = new Level(Art.level1, 20,20, this);
 		player = new Player(50, 390, 20, 20, null, this);
 		player.alive = true;
@@ -207,7 +205,7 @@ public class Game {
 				screen.draw(colorfadeEffect.renderFrame, 0, 0);
 				colorfadeEffect.render(tickcount, screen, 0, 0);
 				screen.drawText(Art.font, "YOU HAVE FAILED!", WIDTH / 2 - 40, HEIGHT / 2 - 20,0xFFFF00, true);
-				screen.drawText(Art.font, "press space continue...", WIDTH / 2 - 50, HEIGHT / 2,0xFFFF00, true);
+				screen.drawText(Art.font, "press space to continue...", WIDTH / 2 - 50, HEIGHT / 2,0xFFFF00, true);
 			}
 		}
 		
