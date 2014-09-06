@@ -22,8 +22,15 @@ public class ParticleEmitter extends Entity {
 	public void emitParticle() {
 		Random rand = new Random();
 		int lifetime = rand.nextInt(50);
+		double dir = (rand.nextInt(10) < 5) ? -1.0 : 1.0;		
+		
 		double xv = emitVelX + (((double)rand.nextInt(1)) + rand.nextDouble()) * Math.signum(emitVelX);
 		double yv = emitVelY + (((double)rand.nextInt(3)) + rand.nextDouble()) * Math.signum(emitVelY);
+		/*double accel = 1 + ((double)rand.nextInt(3)) * rand.nextDouble();
+		double xv = (emitVelX == 0) ? (dir * Math.abs(accel)) : emitVelX * accel;		
+		double yv = (emitVelY == 0) ? (dir * Math.abs(accel)) : emitVelY * (accel + 1.5);*/
+		
+		
 		double xxx, yyy = 0;
 		if(parent != null) {
 			xxx = parent.xx;

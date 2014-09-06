@@ -23,6 +23,7 @@ public class Grenade extends Entity {
 		animator.setCurrentAnimation(ANIM_UNEXPLODED);		
 		this.xr = 2;
 		this.yr = 3;
+		
 		this.sparks = new ParticleEmitter(x, y, -1, -1, 4, 50, 0xFFFFFF, this, game);
 		game.addEntity(sparks);
 	}

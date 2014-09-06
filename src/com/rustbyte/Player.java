@@ -101,7 +101,7 @@ public class Player extends Mob  {
 			weaponFired = true;
 			weaponTimer = weaponDelay;
 			
-			SoundSystem.playSound("PISTOL");
+			//SoundSystem.playSound("PISTOL");
 			
 			boolean bulletHit = false;
 			double bulletTravelDistance = 0;

@@ -98,7 +98,7 @@ public class PlatformerGame extends Canvas implements Runnable, WindowListener, 
 			}
 			
 			if((System.currentTimeMillis() - fpsLastTime) > 1000) {
-				System.out.println("FPS: " + frames + " Ticks: " + ticks);
+				//System.out.println("FPS: " + frames + " Ticks: " + ticks);
 				game.FPS = frames;
 				frames = 0;
 				ticks = 0;

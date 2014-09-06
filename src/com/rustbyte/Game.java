@@ -69,7 +69,7 @@ public class Game {
 		
 		//addEntity(new Zombie(50, 200,20,20, null, this));
 		
-		addEntity(new Human(150, 400,20,20,null,this));
+		addEntity(new Human(100, 400,20,20,null,this));
 		
 		layers[0] = new BackgroundLayer(Art.background, 0, 100);
 		layers[1] = new BackgroundLayer(Art.background, 100, 50);		
