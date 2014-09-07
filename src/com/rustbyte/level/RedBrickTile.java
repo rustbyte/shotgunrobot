@@ -8,7 +8,7 @@ public class RedBrickTile extends Tile {
 		this.typeID = 0xB70000;
 		this.blocking = true;
 		this.baseColor = Art.getColor(255,255,255);
-		this.tsetOffsetX = 72;
+		this.tsetOffsetX = 22;
 		this.tsetOffsetY = 64;
 	}
 }

@@ -11,9 +11,9 @@ public class DoorTile extends Tile {
 									  // isInside is false
 	private boolean isOpen = false;
 	private int interactTimer = 0;
-	private int openTileX = 72;
+	private int openTileX = 22;
 	private int openTileY = 22;
-	private int closedTileX = 51;
+	private int closedTileX = 1;
 	private int closedTileY = 22;
 	private int backgroundTileX;
 	private int backgroundTileY;
@@ -25,7 +25,7 @@ public class DoorTile extends Tile {
 		this.typeID = 0x7F6A00;
 		this.blocking = true;
 		this.baseColor = 0x7F6A00;
-		this.tsetOffsetX = 51;
+		this.tsetOffsetX = 1;
 		this.tsetOffsetY = 22;
 		this.flashEffect = new FlashEffect(0xFFFFFF, 5, wid,hgt);
 	}
@@ -75,18 +75,15 @@ public class DoorTile extends Tile {
 	}
 	@Override
 	public void draw(Bitmap dest, int xx, int yy) {
-		
-		//if(isInside)
-		//	Art.sprites.draw(dest, xx, yy, 72, 1, width, height);
-		
-		Art.sprites.draw(dest,xx, yy, backgroundTileX, backgroundTileY, width, height);
+				
+		Art.tiles.draw(dest,xx, yy, backgroundTileX, backgroundTileY, width, height);
 		
 		if(hurtTimer > 0) {
 			flashEffect.clear();
-			Art.sprites.draw(flashEffect.renderFrame, 0,0, tsetOffsetX, tsetOffsetY, width, height, (direction == 2));
+			Art.tiles.draw(flashEffect.renderFrame, 0,0, tsetOffsetX, tsetOffsetY, width, height, (direction == 2));
 			flashEffect.render(level.game.tickcount, dest, xx,yy);
 		} else {			
-			Art.sprites.draw(dest, xx, yy, tsetOffsetX, tsetOffsetY, width, height, (direction == 2));
+			Art.tiles.draw(dest, xx, yy, tsetOffsetX, tsetOffsetY, width, height, (direction == 2));
 		}
 	}
 	@Override

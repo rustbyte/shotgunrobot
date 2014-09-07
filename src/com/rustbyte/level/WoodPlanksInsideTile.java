@@ -8,7 +8,7 @@ public class WoodPlanksInsideTile extends Tile {
 		this.typeID = 0x4C1E00;
 		this.blocking = false;
 		this.baseColor = Art.getColor(150,60, 0);
-		this.tsetOffsetX = 72;
+		this.tsetOffsetX = 22;
 		this.tsetOffsetY = 106;
 	}
 }

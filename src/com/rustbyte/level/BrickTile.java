@@ -9,7 +9,7 @@ public class BrickTile extends Tile {
 		this.typeID = 0x404040;
 		this.blocking = true;
 		this.baseColor = Art.getColor(180,180,180);
-		this.tsetOffsetX = 51;
+		this.tsetOffsetX = 1;
 		this.tsetOffsetY = 1;
 	}
 

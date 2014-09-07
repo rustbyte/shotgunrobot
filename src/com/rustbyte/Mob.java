@@ -19,7 +19,7 @@ public abstract class Mob extends Entity implements Destructable {
 	protected Random rand = new Random();
 	protected FlashEffect flashEffect;
 	
-	public Mob(int x, int y, int w, int h, Entity p, Game g) {
+	public Mob(double x, double y, int w, int h, Entity p, Game g) {
 		super(x, y, w, h, p, g);
 		flashEffect = new FlashEffect(0xFFFFFF, 5, w,h);
 	}

@@ -3,6 +3,7 @@ package com.rustbyte;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.awt.event.KeyEvent;
 
 import com.rustbyte.Game;
@@ -16,6 +17,9 @@ public class Player extends Mob  {
 	private int ANIM_IDLE_RIGHT;	
 	private int ANIM_JUMP_LEFT;
 	private int ANIM_JUMP_RIGHT;
+	private int ANIM_IDLE_BORED_RIGHT;
+	private int ANIM_IDLE_BORED_LEFT;
+	
 	private InputHandler input = null;
 	
 	public boolean weaponFired = false;
@@ -23,15 +27,23 @@ public class Player extends Mob  {
 	private final int weaponDelay = 10;
 	private final int weaponDamage = 35;
 	private int grenadeTimer = 0;
+	private int playerIdleTime = 0;
+	private int shotgunRobotBoredWithPlayerTime = 200;
+	
+	public int shells = 0;
+	public int grenades = 0;	
 	
 	public Player(int x, int y, int w, int h, Entity p, Game g)	{
 		super(x, y, w, h, p, g);
-		ANIM_WALK_RIGHT = this.animator.addAnimation(5, 121, 0, w, h, false,0);
-		ANIM_WALK_LEFT = this.animator.addAnimation(5, 121, 0, w, h, true,0);
+		ANIM_WALK_RIGHT = this.animator.addAnimation(5, 121, 1, w, h, false,1);
+		ANIM_WALK_LEFT = this.animator.addAnimation(5, 121, 1, w, h, true,1);
 		ANIM_IDLE_RIGHT = this.animator.addAnimation(5, 200, 72, w, h, false,1);
 		ANIM_IDLE_LEFT = this.animator.addAnimation(5, 200, 72, w, h, true,1);		
-		ANIM_JUMP_RIGHT = this.animator.addAnimation(1, 101 + w * 3, 0, w, h, false,0);
-		ANIM_JUMP_LEFT = this.animator.addAnimation(1, 101  + w * 3, 0, w, h, true,0);
+		ANIM_JUMP_RIGHT = this.animator.addAnimation(1, 163, 1, w, h, false,1);
+		ANIM_JUMP_LEFT = this.animator.addAnimation(1, 163, 1, w, h, true,1);
+		ANIM_IDLE_BORED_RIGHT = this.animator.addAnimation(4, 100, 43, w, h, false, 1);
+		ANIM_IDLE_BORED_LEFT = this.animator.addAnimation(4, 100, 43, w, h, true, 1);
+		
 		this.animator.setFrameRate(15.0);
 		
 		animator.setCurrentAnimation(ANIM_IDLE_RIGHT);
@@ -44,7 +56,7 @@ public class Player extends Mob  {
 	@Override
 	public void tick() {
 		super.tick();								
-		
+				
 		if(hitpoints <= 0) {
 			this.explode(16, Art.getColor(255,255,0), 100);
 			//this.breakApart(16, Art.getColor(255,255,0), 100);
@@ -82,20 +94,33 @@ public class Player extends Mob  {
 			velX = dirX * speed;		
 			
 			if(weaponFired && --weaponTimer <= 0)
-				weaponFired = false;			
+				weaponFired = false;
+			
+			List<Entity> ents = game.level.getTileFromPoint(xx,yy).getEntities();
+			for(int i=0; i < ents.size(); i++) {
+				Entity nextEntity = ents.get(i);
+				if(nextEntity != null && nextEntity instanceof Powerup) {
+					((Powerup)nextEntity).pickup();
+				}
+			}
 		}					
 		
 		move();								
 		
 		if(!knockedBack) {
-			if(velX < 0 ) this.animator.setCurrentAnimation(ANIM_WALK_LEFT);
-			else if(velX > 0) this.animator.setCurrentAnimation(ANIM_WALK_RIGHT);
-			else {
-				if(facing == -1) this.animator.setCurrentAnimation(ANIM_IDLE_LEFT);
-				if(facing == 1) this.animator.setCurrentAnimation(ANIM_IDLE_RIGHT);
-			}				
-			if(jumping && facing == 1) this.animator.setCurrentAnimation(ANIM_JUMP_RIGHT);
-			if(jumping && facing == -1) this.animator.setCurrentAnimation(ANIM_JUMP_LEFT);
+			if(input.idleTime > 200 ) {
+				if( facing == -1 ) this.animator.setCurrentAnimation(ANIM_IDLE_BORED_LEFT);
+				if( facing == 1 ) this.animator.setCurrentAnimation(ANIM_IDLE_BORED_RIGHT);
+			} else {		
+				if(velX < 0 ) this.animator.setCurrentAnimation(ANIM_WALK_LEFT);
+				else if(velX > 0) this.animator.setCurrentAnimation(ANIM_WALK_RIGHT);
+				else {
+					if(facing == -1) this.animator.setCurrentAnimation(ANIM_IDLE_LEFT);
+					if(facing == 1) this.animator.setCurrentAnimation(ANIM_IDLE_RIGHT);
+				}				
+				if(jumping && facing == 1) this.animator.setCurrentAnimation(ANIM_JUMP_RIGHT);
+				if(jumping && facing == -1) this.animator.setCurrentAnimation(ANIM_JUMP_LEFT);
+			}
 		}
 		
 		animator.tick();				
@@ -136,7 +161,7 @@ public class Player extends Mob  {
 							for(int i=0; i < entities.size();i++) {
 								Entity ent = entities.get(i);
 								if( ent!= this && ent instanceof Mob) {
-									if(ent instanceof Human)
+									if(ent instanceof Human || ent instanceof Powerup)
 										break;
 									Mob m = (Mob)ent;
 									m.takeDamage(this, weaponDamage);
@@ -154,7 +179,7 @@ public class Player extends Mob  {
 			}
 			if(!bulletHit)
 				cx = xx + (bulletTravelDistance * facing);
-			BulletTrace bt = new BulletTrace(xx + (10 * facing),yy+1, cx, yy+1,0,0,null,game);
+			BulletTrace bt = new BulletTrace(xx + (11 * facing),yy+1, cx, yy+1,0,0,null,game);
 			game.addEntity(bt);			
 		}
 	}
@@ -163,10 +188,10 @@ public class Player extends Mob  {
 		if(weaponFired && (weaponTimer > weaponDelay - (weaponDelay / 2)) && !isHurt()) {
 			if(facing > 0)
 				Art.sprites.draw(game.screen, (((int)xx) + wid/2) - game.level.viewX, 
-										      (((int)yy)) - 2 - game.level.viewY, 36, 72,9,7,false);
+										      (((int)yy)) - 2 - game.level.viewY, 22, 28,18,7,false);
 			else
-				Art.sprites.draw(game.screen, (((int)xx) - 9 - wid/2)  - game.level.viewX, 
-						 					  (((int)yy)) - 2 - game.level.viewY, 36, 72,9,7,true);			
+				Art.sprites.draw(game.screen, (((int)xx) - 18 - wid/2)  - game.level.viewX, 
+						 					  (((int)yy)) - 2 - game.level.viewY, 22, 28,18,7,true);			
 		}				
 		
 		if(isHurt()) {

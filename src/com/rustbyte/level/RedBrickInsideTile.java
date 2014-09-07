@@ -5,7 +5,7 @@ public class RedBrickInsideTile extends Tile {
 		super(x, y, wid, hgt, lev);
 		this.typeID = 0x910000;
 		this.blocking = false;
-		this.tsetOffsetX = 72;
+		this.tsetOffsetX = 22;
 		this.tsetOffsetY = 85;
 	}
 }

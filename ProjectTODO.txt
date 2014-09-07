@@ -1,6 +1,11 @@
 Journal:
 --------------------
 
+2014-09-06
+
+	Added hud with progress counters. Added zombie zerg-attack when spotting victims. 
+	Modified drawText to use color-codes.
+
 2013-09-21
 	Fixed movement/animation stuttering occuring when entities try
 	to move through blocking tiles.

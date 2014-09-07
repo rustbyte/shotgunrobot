@@ -7,7 +7,7 @@ public class FloatingText extends Entity {
 	private String text;
 	private Vector2 floatDir;
 	private int color = 0xFFFFFF;
-	private int timer = 50;
+	private int timer = 80;
 	
 	public FloatingText(String t, int col,double x, double y, Vector2 dir, Entity p, Game g) {
 		super(x, y, t.length() * Bitmap.FONTWIDTH, Bitmap.FONTHEIGHT, p, g);
@@ -27,8 +27,8 @@ public class FloatingText extends Entity {
 
 	@Override
 	public void tick() {
-		//if(--timer <= 0)
-		//	alive = false;
+		if(--timer <= 0)
+			alive = false;
 		move();
 	}
 	@Override

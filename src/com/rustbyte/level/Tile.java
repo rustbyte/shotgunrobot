@@ -59,7 +59,7 @@ public class Tile implements Destructable {
 		return t;
 	}
 	public void draw(Bitmap dest, int xx, int yy) {
-		Art.sprites.draw(dest, xx, yy, tsetOffsetX, tsetOffsetY, width, height);		
+		Art.tiles.draw(dest, xx, yy, tsetOffsetX, tsetOffsetY, width, height);		
 	}
 	public void addEntity(Entity ent) {
 		entities.add(ent);

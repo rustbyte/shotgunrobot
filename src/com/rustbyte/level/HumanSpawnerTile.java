@@ -4,11 +4,11 @@ import java.util.Random;
 
 import com.rustbyte.Human;
 
-public class HumanSpawnerTile extends Tile {
+public class HumanSpawnerTile extends Tile {	
 	public HumanSpawnerTile(int x, int y, int wid, int hgt, Level lev) {
 		super(x, y, wid, hgt, lev);
 		this.baseColor = 0x00FF21;
-		this.tsetOffsetX = 51;
+		this.tsetOffsetX = 1;
 		this.tsetOffsetY = 43;
 	}
 	@Override

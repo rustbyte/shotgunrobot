@@ -35,6 +35,8 @@ public class Zombie extends Mob {
 		if(hitpoints <= 0)
 			alive = false;
 				
+		facing = -1;
+		
 		if(hurtTimer <= 0)
 			knockedBack = false;
 		
@@ -60,11 +62,16 @@ public class Zombie extends Mob {
 			// Try to find something to chew on..........
 			if( currentTarget == null) {							
 				Tile currentTile = game.level.getTileFromPoint(xx,yy);
-				int txStart = currentTile.tx;
+				
+				// "Sence" things two tiles behind, and "see" things 4 tiles infront.
+				int txStart = currentTile.tx + ( (-facing) * 2);
 				int tyStart = currentTile.ty;
-				for(int i=1; i < 5 && currentTarget == null; i++) {
+				for(int i=0; i < 7 && currentTarget == null; i++) {
 					Tile nextTile = game.level.getTile(txStart + (facing * i), tyStart);
-					if( nextTile == null || nextTile.blocking) break;
+					if( nextTile == null || nextTile.blocking) {
+						//System.out.println("Wall blocking my senses.");
+						break;
+					}
 					List<Entity> ents = nextTile.getEntities();
 					for(int j=0; j < ents.size();j++) {
 						Entity nextEntity = ents.get(j);
@@ -158,6 +165,11 @@ public class Zombie extends Mob {
 				this.explode(16, Art.getColor(255,0,0), 50);
 			else
 				this.breakApart(16, Art.getColor(255,0,0), 10);
+			
+			Powerup p = Powerup.createPowerup(Powerup.POWERUP_TYPE_BATTERY, (int)xx, (int)yy, null, game);
+			p.velX = -1.5;
+			p.velY = -2.5;
+			game.addEntity( p );
 			
 			game.zombiesKilled++;
 		}

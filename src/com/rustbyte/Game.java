@@ -61,7 +61,7 @@ public class Game {
 		level.viewHeight = HEIGHT;
 		/*Random rand = new Random();
 		int xx = 100;
-		int nummobs = 500;
+		int nummobs = 400;
 		int humanCount = 0;
 		if(nummobs > 0) {
 			int minspacing = WIDTH / nummobs;
@@ -71,17 +71,33 @@ public class Game {
 					xx = 100;
 				if( xx >= ((level.width * level.tileWidth) - 40))
 					xx = (level.width * level.tileWidth) - 40;
-				if(humanCount < (nummobs / 2)) {
+				/*if(humanCount < (nummobs / 2)) {
 					addEntity(new Human(xx,100, 20, 20, null ,this));
 					humanCount++;
 				} else {
 					addEntity(new Zombie(xx,100, 20, 20, null ,this));
 				}
+				addEntity( Powerup.createPowerup(  1 + rand.nextInt(3), xx, 100, null, this));
 			}	
 		}*/			
 		
-		//addEntity(new Human(50, 120,20,20,null,this));
-		//addEntity(new Zombie(150, 120,20,20,null, this));
+		
+		//addEntity(new Zombie( ((level.width - 3) * 20) - 10, 120,20,20,null, this));
+		//addEntity(new Human( ((level.width - 10) * 20) - 10, 120,20,20,null,this));
+		
+		
+		/*
+		addEntity(new Powerup( ((level.width /2 ) * 20) - 10, 120,20,20, 
+				  Powerup.POWERUP_TYPE_BATTERY, null, this));
+
+		addEntity(new Powerup( ((level.width /2 ) * 20) - 30, 120,20,20, 
+				  Powerup.POWERUP_TYPE_SHELLS, null, this));
+
+		addEntity(new Powerup( ((level.width /2 ) * 20) - 50, 120,20,20, 
+				  Powerup.POWERUP_TYPE_GRENADES, null, this));
+		*/
+		
+		
 		
 		layers[0] = new BackgroundLayer(Art.background, 0, 100);
 		layers[1] = new BackgroundLayer(Art.background, 100, 50);		
@@ -138,6 +154,8 @@ public class Game {
 	}
 	public void tick() {
 		tickcount++;
+		
+		input.tick();
 		
 		/*if(input.keys[KeyEvent.VK_F].pressed && !stepPathKeyPressed) {
 			stepPathKeyPressed = true;

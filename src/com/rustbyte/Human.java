@@ -3,6 +3,7 @@ package com.rustbyte;
 import java.util.List;
 
 import com.rustbyte.PathFinder.Node;
+import com.rustbyte.level.RescueZoneTile;
 import com.rustbyte.level.Tile;
 import com.rustbyte.vector.Vector2;
 
@@ -13,8 +14,11 @@ public class Human extends Mob {
 	private int ANIM_IDLE_RIGHT;	
 	private int actionTimer = 0;
 	private boolean followingPlayer = false;
-	private boolean foundPlayer = false;
+	private Entity currentTarget = null;
 	private int foundPlayerTimer = 0;
+	private int minSpacingToPlayer = 0;
+	private int maxSpacingToPlayer = 0;
+	
 	private FlashEffect flashEffectPlayerFound = null;
 	private List<Node> path;
 	
@@ -30,7 +34,7 @@ public class Human extends Mob {
 		
 		hitpoints = 100;
 		speed = 0.75;
-		flashEffectPlayerFound = new FlashEffect(0x00FF00, 3, w,h);
+		flashEffectPlayerFound = new FlashEffect(0x00FF00, 4, w,h);
 		flashEffect.setColor(0xFFFF00);		
 	}	
 
@@ -44,6 +48,12 @@ public class Human extends Mob {
 	public void tick() {
 		super.tick();
 				
+		if(hitpoints <= 0) {
+			this.breakApart(16, Art.getColor(255,0,0), 10);
+			alive = false;
+			game.humansLost++;
+		}
+		
 		if(hurtTimer <= 0)
 			knockedBack = false;	
 		
@@ -68,6 +78,93 @@ public class Human extends Mob {
 				} 
 			}
 			
+			Tile currentTile = game.level.getTileFromPoint(xx,yy);
+			
+			// Try to find that handsome hero.....
+			if( currentTarget == null) {										
+				
+				// "Sence" things two tiles behind, and "see" things 4 tiles infront.
+				int txStart = currentTile.tx + ( (-facing) * 2);
+				int tyStart = currentTile.ty;
+				for(int i=0; i < 7 && currentTarget == null; i++) {
+					Tile nextTile = game.level.getTile(txStart + (facing * i), tyStart);
+					if( nextTile == null || nextTile.blocking) break;
+					
+					List<Entity> ents = nextTile.getEntities();
+					for(int j=0; j < ents.size();j++) {
+						Entity nextEntity = ents.get(j);
+						if(  nextEntity instanceof Player) {
+							
+							// Atlast! Rescued! Thank god you're here!
+							// WAIT! DONT SHOOT! Im with the science team!!!
+							//System.out.println("I found a hero!!!.");
+							currentTarget = nextEntity;
+							followingPlayer = true;
+							foundPlayerTimer = 200;
+							minSpacingToPlayer = 1 + rand.nextInt(5);
+							maxSpacingToPlayer = minSpacingToPlayer + 10 + rand.nextInt(20);
+							
+							game.addEntity(new FloatingText("GET ME OUT!",
+									Art.getColor(255,255,0),xx - 80,yy - 20,
+									new Vector2(0,-1), null, game));
+							
+							break;
+						}
+					}
+				}
+			} else {
+				
+				// Is there an exit near here?
+				Tile nextTile = game.level.getTile( currentTile.tx, currentTile.ty);
+				if( !(nextTile instanceof RescueZoneTile) ) {					
+					
+					// Gona try and stay close to this guy. So tall, and kind of handsome...
+					Vector2 v1 = new Vector2(xx,yy);
+					Vector2 v2 = new Vector2(currentTarget.xx, currentTarget.yy);
+					Vector2 v3 = v1.sub(v2);
+					double dist = v3.length();
+					if(dist > minSpacingToPlayer &&
+					   dist < maxSpacingToPlayer) {
+						System.out.println("Stopping");
+						dirX = 0;
+					} else if(dist < (minSpacingToPlayer - 10)) {
+						System.out.println("Im to close!");
+						dirX = currentTarget.xx < xx ? 1 : -1; 	// Dont get to close.
+					} else if(dist > maxSpacingToPlayer && dist < 90) {
+						System.out.println("Moving closer");
+						dirX = currentTarget.xx < xx ? -1 : 1; 	// Moving a bit closer
+					} else if(dist > 100 ) {
+						// He left me!!! That bastard left me here!!
+						//System.out.println("Hero is to far away!");
+						currentTarget = null;
+					}
+				} else {
+					// Found an exit!
+					this.explode(16, Art.getColor(0,255,0), 10);
+					this.alive = false;
+					game.humansSaved++;
+					game.addEntity( new FloatingText("SAVED!",
+								    Art.getColor(0,255,0), xx, yy, new Vector2(0,-1), null, game));
+					
+					double throwVel = -1.5;
+					for(int i=0; i < 5 + (rand.nextInt(3)); i++) {
+						
+						Powerup p = Powerup.createPowerup(1 + rand.nextInt(2), (int)xx, (int)yy - 20, null, game);
+						p.velX = (throwVel * (1 + rand.nextInt(2)) * 0.1 );
+						p.velY = -(2.5 + ((double)rand.nextInt(3)));
+						throwVel = -throwVel;
+						game.addEntity( p );
+					}
+					
+				}
+			}
+			
+			if((currentTarget == null || !currentTarget.alive) && followingPlayer) {
+				//System.out.println("The hero left me here to die!!!!");
+				currentTarget = null;
+				followingPlayer = false;
+			}
+			
 			if(blockedX && onground) {
 				int tx = (int)this.xx / game.level.tileWidth;
 				int ty = (int)this.yy / game.level.tileHeight;
@@ -84,7 +181,7 @@ public class Human extends Mob {
 					dirX = -dirX;
 				}
 			}
-			velX = dirX * speed;				
+			velX = dirX * (speed * (currentTarget != null ? 2 : 1)); 				
 		}
 		
 		move();
@@ -109,13 +206,7 @@ public class Human extends Mob {
 			game.addEntity(new FloatingText("-" + amount,Art.getColor(255,0,0),xx,yy,new Vector2(0,-1), null, game));
 			double force = 1.0;
 			this.knockBack((source.xx - xx), force);
-		}
-		
-		if(hitpoints <= 0) {
-			this.breakApart(16, Art.getColor(255,0,0), 10);
-			alive = false;
-			game.humansLost++;
-		}		
+		}	
 	}
 
 	@Override
@@ -127,18 +218,16 @@ public class Human extends Mob {
 			flashEffectPlayerFound.render(game.tickcount, game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
 				   	  					    			    (((int)yy) - (hgt / 2)) - game.level.viewY);			 			
 		} else {
-			animator.render(game.screen, ((int)xx - wid / 2) - game.level.viewX,
-					 					 ((int)yy - hgt / 2) - game.level.viewY);
+			if(isHurt()) {
+				flashEffect.clear();
+				animator.render(flashEffect.renderFrame, 0, 0);
+				flashEffect.render(game.tickcount, game.screen, (((int)xx) - (wid / 2)) - game.level.viewX,
+																(((int)yy) - (hgt / 2)) - game.level.viewY);
+			} else {
+				animator.render(game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
+					   	 					 (((int)yy) - (hgt / 2)) - game.level.viewY);
+			}			
 		}
 		
-		if(isHurt()) {
-			flashEffect.clear();
-			animator.render(flashEffect.renderFrame, 0, 0);
-			flashEffect.render(game.tickcount, game.screen, (((int)xx) - (wid / 2)) - game.level.viewX,
-															(((int)yy) - (hgt / 2)) - game.level.viewY);
-		} else {
-			animator.render(game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
-				   	 					 (((int)yy) - (hgt / 2)) - game.level.viewY);
-		}		
 	}
 }
