@@ -11,4 +11,15 @@ public class RedBrickTile extends Tile {
 		this.tsetOffsetX = 22;
 		this.tsetOffsetY = 64;
 	}
+	
+	public void init() {
+		if(sloped) {
+			blocking = false;
+			tsetOffsetX = 43;
+			tsetOffsetY = 64;			
+			Tile leftTile = level.getTile(tx-1, ty);			
+			if(leftTile.blocking)
+				flipTile = true;
+		}
+	}
 }

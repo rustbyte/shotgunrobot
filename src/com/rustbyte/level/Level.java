@@ -51,6 +51,12 @@ public class Level {
 		for(int i=0; i < (width * height);i++)
 			map[i].init();			
 	}
+	public Tile getPlayerSpawn() {
+		for(int i=0; i < map.length; i++)
+			if( map[i] instanceof PlayerSpawnTile )
+				return map[i];
+		return null;
+	}
 	public Tile getTile(int tx, int ty) {
 		if(tx < 0 || tx > (width-1) || ty < 0 || ty > (height-1)) return null;
 		return ((Tile)map[tx + ty * width]);
@@ -119,27 +125,41 @@ public class Level {
 		
 		for(int yt=ytMin; yt <= ytMax; yt++) {
 			for(int xt=xtMin; xt <= xtMax; xt++) {
-				if(xt >=xtoMin && xt <= xtoMax && yt >= ytoMin && yt <= ytoMax)
-					continue;				
-				if(tileIsBlocking(xt,yt)) {
-					if( dy > 0) {
-						ent.yy = (yt * tileHeight) - yr - 1;
-						ent.velY = 0.0;
-						ent.onground = true;						
-					}
-					if( dy < 0) {
-						ent.yy = ((yt * tileHeight) + tileHeight) + yr;
-						ent.velY = 0.0;						
-					}
-					if( dx > 0) {
-						ent.xx = (xt * tileWidth) - xr - 1;						
-						ent.velX = 0.0;				
-					}
-					if( dx < 0) {
-						ent.xx = ((xt * tileWidth) + tileWidth) + xr;
-						ent.velX = 0.0;						
-					}
+				//if(xt >=xtoMin && xt <= xtoMax && yt >= ytoMin && yt <= ytoMax)
+				//	continue;
+				Tile t = getTile(xt,yt);
+				if(t == null) continue;
+				
+				if(t.sloped) {
+					// calculate hight based on how far in the entity is
+					double ydelta = Math.abs((ent.xx)  - (t.tx * 20));
+					//System.out.println("ydelta: " + ydelta);
+
+					ent.yy = (((yt * 20) + 20) - (ydelta)) - ent.yr;
+					ent.velocity.y = 0.0;
+					ent.onground = true;
 					return false;
+				} else {				
+					if(tileIsBlocking(xt,yt)) {
+						if( dy > 0) {			
+							ent.yy = (yt * tileHeight) - yr - 1;
+							ent.velocity.y = 0.0;
+							ent.onground = true;
+						}
+						if( dy < 0) {
+							ent.yy = ((yt * tileHeight) + tileHeight) + yr;
+							ent.velocity.y = 0.0;						
+						}
+						if( dx > 0) {
+							ent.xx = (xt * tileWidth) - xr - 1;						
+							ent.velocity.x = 0.0;
+						}
+						if( dx < 0) {
+							ent.xx = ((xt * tileWidth) + tileWidth) + xr;
+							ent.velocity.x = 0.0;						
+						}
+						return false;
+					}
 				}
 			}
 		}

@@ -4,14 +4,14 @@ import java.util.Random;
 
 import com.rustbyte.Game;
 import com.rustbyte.level.Tile;
+import com.rustbyte.vector.Vector2;
 
 public abstract class Mob extends Entity implements Destructable {	
 	public int hitpoints;	
 	protected int hurtTimer = 0;	
 	
 	public boolean jumping = false;
-	public double jumpVel = -4.45;
-	public boolean knockedBack = false;
+	public double jumpVel = -4.45;	
 	
 	protected boolean blockedX = false;
 	protected boolean blockedY = false;
@@ -35,9 +35,9 @@ public abstract class Mob extends Entity implements Destructable {
 		hurtTimer = time;
 	}
 	protected void knockBack(double d, double force) {		
-		velX = d == 0 ? 0 : -( (d / Math.sqrt(d * d))  * force);
-		dirX = velX < 0 ? -1 : 1;
-		velY = -2;
+		velocity.x = d == 0 ? 0 : -( (d / Math.sqrt(d * d))  * force);		
+		dirX = velocity.x < 0 ? -1 : 1;
+		velocity.y = -2;
 		jumping = true;
 		knockedBack = true;		
 	}
@@ -56,14 +56,14 @@ public abstract class Mob extends Entity implements Destructable {
 			
 			boolean flip = this.animator.getCurrentAnimation().flip;
 			Debris d = new Debris(x, y, wid/cells, hgt/cells, sx, sy, flip, this, this.game);			
-			d.velY = -(4 + rand.nextInt(5 + i));
+			d.velocity.y = -(4 + rand.nextInt(5 + i));
 			if(i % 2 == 0)
-				d.velX = 1.0 + rand.nextDouble();
+				d.velocity.x = 1.0 + rand.nextDouble();
 			else
-				d.velX = -1.0 + rand.nextDouble();				
+				d.velocity.x = -1.0 + rand.nextDouble();				
 			
 			game.addEntity(d);
-			ParticleEmitter pe = new ParticleEmitter(0, 0, -d.velX, -1.0, 1, particleCount, color, d, game);
+			ParticleEmitter pe = new ParticleEmitter(0, 0, -d.velocity.x, -1.0, 1, particleCount, color, d, game);
 			game.addEntity(pe);				
 		}		
 	}
@@ -82,14 +82,14 @@ public abstract class Mob extends Entity implements Destructable {
 			
 			boolean flip = this.animator.getCurrentAnimation().flip;
 			Debris d = new Debris(x, y, wid/cells, hgt/cells, sx, sy, flip, this, this.game);
-			d.velY = -(1 + rand.nextInt(2));
+			d.velocity.y = -(1 + rand.nextInt(2));
 			if(i % 2 == 0)
-				d.velX = 0.5;
+				d.velocity.x = 0.5;
 			else
-				d.velX = -0.5;				
+				d.velocity.x = -0.5;				
 			
 			game.addEntity(d);
-			ParticleEmitter pe = new ParticleEmitter(0, 0, -d.velX, -1.0, 1, particleCount, color, d, game);
+			ParticleEmitter pe = new ParticleEmitter(0, 0, -d.velocity.x, -1.0, 1, particleCount, color, d, game);
 			game.addEntity(pe);				
 		}
 	}
@@ -105,16 +105,16 @@ public abstract class Mob extends Entity implements Destructable {
 		if(dirX < 0) facing = -1;
 		if(dirX > 0) facing = 1;
 		
-		blockedX = !game.level.moveEntity(this, velX, 0);		
-		blockedY = !game.level.moveEntity(this, 0, velY);		
+		blockedX = !game.level.moveEntity(this, velocity.x, 0);		
+		blockedY = !game.level.moveEntity(this, 0, velocity.y);		
 		
-		if(velY != 0)
+		if(velocity.y != 0 )
 			onground = false;
 		if(onground)
 			jumping = false;
 				
-		yy += velY;
-		xx += velX;	
+		yy += velocity.y;
+		xx += velocity.x;	
 	}
 	
 	public void jump() {
@@ -127,7 +127,7 @@ public abstract class Mob extends Entity implements Destructable {
 			}
 			jumping = true;
 			onground = false;
-			velY = jumpVel;
+			velocity.y = jumpVel;
 		}
 	}
 }

@@ -146,12 +146,14 @@ public class Human extends Mob {
 					game.addEntity( new FloatingText("SAVED!",
 								    Art.getColor(0,255,0), xx, yy, new Vector2(0,-1), null, game));
 					
-					double throwVel = -1.5;
+					rand.setSeed(game.tickcount);
+					
+					double throwVel = -1;
 					for(int i=0; i < 5 + (rand.nextInt(3)); i++) {
 						
-						Powerup p = Powerup.createPowerup(1 + rand.nextInt(2), (int)xx, (int)yy - 20, null, game);
-						p.velX = (throwVel * (1 + rand.nextInt(2)) * 0.1 );
-						p.velY = -(2.5 + ((double)rand.nextInt(3)));
+						Powerup p = Powerup.createPowerup(1 + rand.nextInt(3), (int)xx, (int)yy - 20, null, game);
+						p.velocity.x = (throwVel * (1 + (rand.nextInt(2) * 0.1)));
+						p.velocity.y = -(2.0 + ((double)rand.nextInt(3)));
 						throwVel = -throwVel;
 						game.addEntity( p );
 					}
@@ -181,14 +183,14 @@ public class Human extends Mob {
 					dirX = -dirX;
 				}
 			}
-			velX = dirX * (speed * (currentTarget != null ? 2 : 1)); 				
+			velocity.x = dirX * (speed * (currentTarget != null ? 2 : 1)); 				
 		}
 		
 		move();
 
 		if(!knockedBack) {
-			if(velX < 0 ) this.animator.setCurrentAnimation(ANIM_WALK_LEFT);
-			else if(velX > 0) this.animator.setCurrentAnimation(ANIM_WALK_RIGHT);
+			if(velocity.x < 0 ) this.animator.setCurrentAnimation(ANIM_WALK_LEFT);
+			else if(velocity.x > 0) this.animator.setCurrentAnimation(ANIM_WALK_RIGHT);
 			else {
 				if(facing == -1) this.animator.setCurrentAnimation(ANIM_IDLE_LEFT);
 				if(facing == 1) this.animator.setCurrentAnimation(ANIM_IDLE_RIGHT);

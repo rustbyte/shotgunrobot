@@ -24,7 +24,6 @@ public class ZombieSpawnerTile extends Tile {
 			level.game.addEntity(new Zombie((tx * 20) + 10, (ty * 20) + 10,20,20,null, level.game));
 			nextZombieTimer = 60;
 			numZombiesSpawned++;
-			System.out.println("Zombie spawned!");
 		}
 		if( --nextZombieTimer < 0 ) 
 			nextZombieTimer = 0;
@@ -44,7 +43,6 @@ public class ZombieSpawnerTile extends Tile {
 			double distance = delta.length();
 			if( distance < 80) {
 				// Activate!
-				System.out.println("Zombie spawner activated!");
 				activated = true;
 				waveActivationTimer = 500;
 			}

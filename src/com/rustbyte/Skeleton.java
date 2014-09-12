@@ -2,30 +2,30 @@ package com.rustbyte;
 
 import java.util.List;
 
-import com.rustbyte.Game;
+import com.rustbyte.level.Tile;
 import com.rustbyte.vector.Vector2;
-import com.rustbyte.level.*;
 
-public class Zombie extends Mob {
+public class Skeleton extends Mob {
 	private int ANIM_WALK_RIGHT;
 	private int ANIM_WALK_LEFT;
 	private int ANIM_IDLE_LEFT;
-	private int ANIM_IDLE_RIGHT;	
-	private int actionTimer = 0;	
-	
+	private int ANIM_IDLE_RIGHT;
+	private int actionTimer = 0;
 	private Entity currentTarget = null;
 	private boolean targetAquired = false;
 	
-	public Zombie(int x, int y, int w, int h, Entity p, Game g) {
+	public Skeleton(double x, double y, int w, int h, Entity p, Game g) {
 		super(x, y, w, h, p, g);
+
+		ANIM_WALK_RIGHT = animator.addAnimation(7, 121,164, w, h, false, 1);
+		ANIM_WALK_LEFT = animator.addAnimation(7, 121,164, w, h, true, 1);
+		ANIM_IDLE_RIGHT = animator.addAnimation(8, 100,185, w, h, false, 1);
+		ANIM_IDLE_LEFT = animator.addAnimation(8, 100,185, w, h, true, 1);
 				
-		ANIM_WALK_RIGHT = this.animator.addAnimation(5, 121, 101, w, h, false,1);
-		ANIM_WALK_LEFT = this.animator.addAnimation(5, 121, 101, w, h, true,1);
-		ANIM_IDLE_RIGHT = this.animator.addAnimation(8, 100, 122, w, h, false,1);
-		ANIM_IDLE_LEFT = this.animator.addAnimation(8, 100, 122, w, h, true,1);
+		animator.setCurrentAnimation(ANIM_IDLE_LEFT);
 		
-		this.hitpoints = 100;		
-		this.speed = 0.75;			
+		hitpoints = 100;
+		speed = 0.75;
 	}
 
 	@Override
@@ -141,21 +141,7 @@ public class Zombie extends Mob {
 		
 		animator.tick();		
 	}
-
-	@Override
-	public void render() {
-				
-		if(isHurt()) {
-			flashEffect.clear();
-			animator.render(flashEffect.renderFrame, 0, 0);			
-			flashEffect.render(game.tickcount, game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
-				   	  					    			    (((int)yy) - (hgt / 2)) - game.level.viewY);
-		} else {		
-			animator.render(game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
-	                				   	 (((int)yy) - (hgt / 2)) - game.level.viewY);
-		}
-	}
-
+	
 	@Override
 	public void takeDamage(Entity source, int amount) {
 		hitpoints -= amount;
@@ -180,6 +166,21 @@ public class Zombie extends Mob {
 		int px = 0;
 		int py = -10;
 		ParticleEmitter pe = new ParticleEmitter(px, py, (double)source.facing, -1.0, 1, 10, Art.getColor(255,0,0), this, game);
-		game.addEntity(pe);
+		game.addEntity(pe);		
+		
 	}
+
+	@Override
+	public void render() throws Exception {
+		if(isHurt()) {
+			flashEffect.clear();
+			animator.render(flashEffect.renderFrame, 0, 0);			
+			flashEffect.render(game.tickcount, game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
+				   	  					    			    (((int)yy) - (hgt / 2)) - game.level.viewY);
+		} else {		
+			animator.render(game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
+	                				   	 (((int)yy) - (hgt / 2)) - game.level.viewY);
+		}				
+	}
+
 }

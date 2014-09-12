@@ -47,15 +47,15 @@ public class Debris extends Entity {
 	public void move() {
 		blockedX = blockedY = false;
 		
-		blockedX = !game.level.moveEntity(this, (int)velX, 0);		
-		blockedY = !game.level.moveEntity(this, 0, (int)velY);
+		blockedX = !game.level.moveEntity(this, (int)velocity.x, 0);		
+		blockedY = !game.level.moveEntity(this, 0, (int)velocity.y);
 
-		if(velY != 0)
+		if(velocity.y != 0)
 			onground = false;
 				
-		yy += (int)velY;
+		yy += (int)velocity.y;
 		if(ticks > 0)
-			xx += (int)velX;	
+			xx += (int)velocity.x;	
 	}
 
 }

@@ -79,27 +79,27 @@ public class Grenade extends Entity {
 	public void move() {
 		boolean blockedX, blockedY = false;
 
-		double oldVelX = velX;
+		double oldVelX = velocity.x;
 		
-		blockedX = !game.level.moveEntity(this, velX, 0);
-		blockedY = !game.level.moveEntity(this, 0, velY);
+		blockedX = !game.level.moveEntity(this, velocity.x, 0);
+		blockedY = !game.level.moveEntity(this, 0, velocity.y);
 		
 		if(blockedX) 
-			velX = -oldVelX * 0.5;
+			velocity.x = -oldVelX * 0.5;
 		
-		if(velX > 0)
-			velX -= 0.02;
-		if( velX < 0)
-			velX += 0.02;
+		if(velocity.x > 0)
+			velocity.x -= 0.02;
+		if( velocity.x < 0)
+			velocity.x += 0.02;
 		
-		if(velX > -0.1 && velX < 0.1)
-			velX = 0;
+		if(velocity.x > -0.1 && velocity.x < 0.1)
+			velocity.x = 0;
 		
-		if(velY != 0)
+		if(velocity.y != 0)
 			onground = false;
 		
-		yy += velY;
-		xx += velX;
+		yy += velocity.y;
+		xx += velocity.x;
 	}
 
 	@Override

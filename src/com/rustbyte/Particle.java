@@ -10,8 +10,8 @@ public class Particle extends Entity {
 		super(xxx, yyy, 0, 0, p, g);
 		lifetime = l;	
 		alive = true;
-		velX = xv;
-		velY = yv;
+		velocity.x = xv;
+		velocity.y = yv;
 		px = xxx;
 		py = yyy;
 		color = col;
@@ -44,8 +44,8 @@ public class Particle extends Entity {
 	@Override
 	public void move() {		
 		
-		px += velX;
-		py += velY;
+		px += velocity.x;
+		py += velocity.y;
 		xx = (int)px;
 		yy = (int)py;
 	}

@@ -21,9 +21,11 @@ public class Tile implements Destructable {
 	public int tsetOffsetX;
 	public int tsetOffsetY;
 	public boolean blocking;
+	public boolean sloped;		
 	public int baseColor;
 	protected int hitpoints = 100;
-	protected int hurtTimer = 0;	
+	protected int hurtTimer = 0;
+	protected boolean flipTile = false;
 	public Level level;
 	private List<Entity> entities = new ArrayList<Entity>();
 	
@@ -47,6 +49,10 @@ public class Tile implements Destructable {
 		case 0x498FFF: t = new EmptyTile(tx, ty, tw, th, l); break;
 		case 0x404040: t = new BrickTile(tx,ty,tw,th,l); break;
 		case 0xB70000: t = new RedBrickTile(tx,ty,tw,th,l); break;
+		case 0xA80000: {
+			t = new RedBrickTile(tx,ty,tw,th,l);
+			t.sloped = true;
+		} break;
 		case 0x910000: t = new RedBrickInsideTile(tx,ty,tw,th,l); break;
 		case 0x963C00: t = new WoodPlanksTile(tx,ty,tw,th,l); break;
 		case 0x4C1E00: t = new WoodPlanksInsideTile(tx,ty,tw,th,l); break;
@@ -55,11 +61,15 @@ public class Tile implements Destructable {
 		case 0x00FF21: t = new HumanSpawnerTile(tx,ty,tw,th,l); break;
 		case 0x0026FF: t = new RescueZoneTile(tx,ty,tw,th,l); break;
 		case 0xFF0000: t = new ZombieSpawnerTile(tx,ty,tw,th,l); break;
+		case 0xFFFF00: t = new PlayerSpawnTile(tx,ty,tw,th,l); break;
+		case 0xFFFFFF: t = new SkeletonSpawnerTile(tx,ty,tw,th,l); break;
 		}
 		return t;
 	}
 	public void draw(Bitmap dest, int xx, int yy) {
-		Art.tiles.draw(dest, xx, yy, tsetOffsetX, tsetOffsetY, width, height);		
+		if( tsetOffsetX + tsetOffsetY == 0 ) 
+			return;
+		Art.tiles.draw(dest, xx, yy, tsetOffsetX, tsetOffsetY, width, height, flipTile);		
 	}
 	public void addEntity(Entity ent) {
 		entities.add(ent);

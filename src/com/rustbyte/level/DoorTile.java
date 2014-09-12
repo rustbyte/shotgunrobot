@@ -66,7 +66,7 @@ public class DoorTile extends Tile {
 			this.blocking = !this.isOpen;
 			this.tsetOffsetX = this.isOpen ? this.openTileX : this.closedTileX;
 			this.tsetOffsetY = this.isOpen ? this.openTileY : this.closedTileY;
-			interactTimer = 30;
+			interactTimer = 20;
 			
 			// TODO:
 			// Need to push out any entities that are standing on this tile
@@ -88,7 +88,7 @@ public class DoorTile extends Tile {
 	}
 	@Override
 	public void takeDamage(Entity source, int amount) {
-		if(hurtTimer <= 0) {
+		/*if(hurtTimer <= 0) {
 			this.hitpoints -= amount;
 			if(hitpoints <= 0) {
 				this.tsetOffsetX = this.openTileX;
@@ -97,6 +97,6 @@ public class DoorTile extends Tile {
 			} else {			
 				this.hurtTimer = 50;
 			}
-		}
+		}*/
 	}
 }

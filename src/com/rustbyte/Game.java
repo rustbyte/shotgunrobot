@@ -52,16 +52,14 @@ public class Game {
 		
 		input = new InputHandler();
 		level = new Level(Art.level1, 20,20, this);
-		player = new Player(50, 50, 20, 20, null, this);
-		player.alive = true;
-		
+				
 		level.viewX = 0;
 		level.viewY = 0;
 		level.viewWidth = WIDTH;
 		level.viewHeight = HEIGHT;
-		/*Random rand = new Random();
+		Random rand = new Random();
 		int xx = 100;
-		int nummobs = 400;
+		int nummobs = 0;
 		int humanCount = 0;
 		if(nummobs > 0) {
 			int minspacing = WIDTH / nummobs;
@@ -71,18 +69,18 @@ public class Game {
 					xx = 100;
 				if( xx >= ((level.width * level.tileWidth) - 40))
 					xx = (level.width * level.tileWidth) - 40;
-				/*if(humanCount < (nummobs / 2)) {
+				if(humanCount < (nummobs / 2)) {
 					addEntity(new Human(xx,100, 20, 20, null ,this));
 					humanCount++;
 				} else {
 					addEntity(new Zombie(xx,100, 20, 20, null ,this));
 				}
-				addEntity( Powerup.createPowerup(  1 + rand.nextInt(3), xx, 100, null, this));
+				//addEntity( Powerup.createPowerup(  1 + rand.nextInt(3), xx, 100, null, this));
 			}	
-		}*/			
+		}			
+				
 		
-		
-		//addEntity(new Zombie( ((level.width - 3) * 20) - 10, 120,20,20,null, this));
+		//addEntity(new Zombie( ((level.width - 5) * 20) - 10, 120,20,20,null, this));
 		//addEntity(new Human( ((level.width - 10) * 20) - 10, 120,20,20,null,this));
 		
 		
@@ -107,6 +105,12 @@ public class Game {
 		//pf = new PathFinder(level);
 		//pf.initSearch(1, 19, 61 , 20);
 		//pf.initSearch(1, 1, 18 , 14);
+		
+		respawnPlayer();
+		
+		addEntity(new Skeleton( player.xx + 100, player.yy, 20, 20, null, this));
+		addEntity(new Zombie( (int)player.xx + 140, (int)player.yy, 20, 20, null, this));
+		
 	}
 	
 	
@@ -146,10 +150,17 @@ public class Game {
 	}
 	
 	public void respawnPlayer() {
-		player.xx = 30;
-		player.yy = 30;
-		player.hitpoints = 100;
-		player.alive = true;
+		
+		Tile playerSpawn = level.getPlayerSpawn();
+		int spawnX = (playerSpawn.tx * 20) + 10;
+		int spawnY = (playerSpawn.ty * 20) + 10;
+		if(player == null)
+			player = new Player(0, 0, 20, 20, null, this);
+		
+		player.xx = spawnX;
+		player.yy = spawnY;
+		player.alive = true;	
+		player.hitpoints = 100;		
 		playerDeadTimer = 0;		
 	}
 	public void tick() {
@@ -197,7 +208,7 @@ public class Game {
 		if(player.alive) {
 			if( level.viewX > 0 && (level.viewX + level.viewWidth) < level.tileWidth * level.width) {
 				for(int i=0; i<numLayers;i++) {				
-					double layerSpeed = player.velX / (numLayers - i);
+					double layerSpeed = player.velocity.x / (numLayers - i);
 					layers[i].move(-layerSpeed * 1.1);				
 				}
 			}			

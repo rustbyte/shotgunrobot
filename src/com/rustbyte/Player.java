@@ -27,11 +27,9 @@ public class Player extends Mob  {
 	private final int weaponDelay = 10;
 	private final int weaponDamage = 35;
 	private int grenadeTimer = 0;
-	private int playerIdleTime = 0;
-	private int shotgunRobotBoredWithPlayerTime = 200;
-	
 	public int shells = 0;
 	public int grenades = 0;	
+	private int stompTimer = 0;
 	
 	public Player(int x, int y, int w, int h, Entity p, Game g)	{
 		super(x, y, w, h, p, g);
@@ -59,31 +57,40 @@ public class Player extends Mob  {
 				
 		if(hitpoints <= 0) {
 			this.explode(16, Art.getColor(255,255,0), 100);
-			//this.breakApart(16, Art.getColor(255,255,0), 100);
 			this.alive = false;
-		}
+		}				
 		
-		if(hurtTimer < 40)
+		if(hurtTimer < 10)
 			knockedBack = false;
 		
 		if(--grenadeTimer < 0)
 			grenadeTimer = 0;
 		
+		if(--stompTimer < 0)
+			stompTimer = 0;
+		
 		if(!knockedBack) {
-			dirY = dirX = 0;		
-
+			if(onground || jumping)
+				dirY = dirX = 0;
+			
+			if(input.keys[KeyEvent.VK_T].pressed) {
+				stomp();
+			}
 			if(input.keys[KeyEvent.VK_SPACE].pressed)
 				jump();		
-			if(input.keys[KeyEvent.VK_LEFT].pressed)
+			if(input.keys[KeyEvent.VK_LEFT].pressed) {
 				dirX = -1;
-			if(input.keys[KeyEvent.VK_RIGHT].pressed)
+			}
+			if(input.keys[KeyEvent.VK_RIGHT].pressed) {
 				dirX = 1;
+			}		
+
 			if(input.keys[KeyEvent.VK_D].pressed)
 				fireWeapon();
 			if(input.keys[KeyEvent.VK_G].pressed && !(grenadeTimer > 0)) {
 				Grenade g = new Grenade(xx,yy,game);
-				g.velX = (facing * 2) + velX;
-				g.velY = -3;
+				g.velocity.x = (facing * 2) + velocity.x;
+				g.velocity.y = -3;
 				grenadeTimer = 50;
 				game.addEntity(g);
 			}
@@ -91,7 +98,6 @@ public class Player extends Mob  {
 				Tile t = game.level.getTileFromPoint((xx + ((xr + 16) * facing)), yy);
 				t.interact(this);
 			}
-			velX = dirX * speed;		
 			
 			if(weaponFired && --weaponTimer <= 0)
 				weaponFired = false;
@@ -105,15 +111,19 @@ public class Player extends Mob  {
 			}
 		}					
 		
-		move();								
+		velocity.x = dirX * speed;
+		if(externalForce.x != 0.0)
+			velocity = velocity.add(externalForce);
 		
+		move();
+				
 		if(!knockedBack) {
 			if(input.idleTime > 200 ) {
 				if( facing == -1 ) this.animator.setCurrentAnimation(ANIM_IDLE_BORED_LEFT);
 				if( facing == 1 ) this.animator.setCurrentAnimation(ANIM_IDLE_BORED_RIGHT);
 			} else {		
-				if(velX < 0 ) this.animator.setCurrentAnimation(ANIM_WALK_LEFT);
-				else if(velX > 0) this.animator.setCurrentAnimation(ANIM_WALK_RIGHT);
+				if(velocity.x < 0 ) this.animator.setCurrentAnimation(ANIM_WALK_LEFT);
+				else if(velocity.x > 0 ) this.animator.setCurrentAnimation(ANIM_WALK_RIGHT);
 				else {
 					if(facing == -1) this.animator.setCurrentAnimation(ANIM_IDLE_LEFT);
 					if(facing == 1) this.animator.setCurrentAnimation(ANIM_IDLE_RIGHT);
@@ -125,6 +135,36 @@ public class Player extends Mob  {
 		
 		animator.tick();				
 	}
+	
+	private void stomp() {
+		if(stompTimer == 0) {
+			Tile myTile = game.level.getTileFromPoint((int)xx, (int)yy);
+			for(int x = myTile.tx-1;x <= myTile.tx+1;x++) {
+				for(int y=myTile.ty-1;y <= myTile.ty+1;y++) {
+					Tile t = game.level.getTile(x,y);
+					if(t != null) {
+						List<Entity> ents = t.getEntities();
+						for(int i=0; i < ents.size();i++) {
+							Entity ent = ents.get(i);
+							if(ent != this && !(ent instanceof Human) 
+									       && (ent instanceof Mob)) {
+								Vector2 pushVector = new Vector2();
+								double force = 2.0 + (rand.nextDouble() * (1 * rand.nextInt(4)));
+								pushVector.x = ((1 + (Math.signum(ent.xx - xx) * force)));
+								pushVector.y = -(1.0 + force);
+								ent.applyForce(pushVector);
+								ent.knockedBack = true;
+								stompTimer = 50;
+								((Mob)ent).hurt(80);
+								((Mob)ent).hitpoints /= 2;
+							}
+						}
+					}
+				}
+			}
+		}
+	}	
+	
 	private void fireWeapon() {						
 		if(!weaponFired) {
 			weaponFired = true;
@@ -183,6 +223,7 @@ public class Player extends Mob  {
 			game.addEntity(bt);			
 		}
 	}
+	
 	@Override
 	public void render() {		
 		if(weaponFired && (weaponTimer > weaponDelay - (weaponDelay / 2)) && !isHurt()) {
@@ -210,8 +251,11 @@ public class Player extends Mob  {
 			hitpoints -= amount;
 			hurt(50);		
 			game.addEntity(new FloatingText("-" + amount,Art.getColor(255,0,0),xx,yy,new Vector2(0,-1), null, game));
-			double force = 1.0;
-			this.knockBack((source.xx - xx), force);
+			double force = 10.0;
+			//this.knockBack((source.xx - xx), force);
+			velocity.x = velocity.y = 0.0;
+			this.applyForce( new Vector2( -(1.0 + (Math.signum(source.xx - xx) * force)), -(1 + rand.nextInt(4))));
+			knockedBack = true;
 		}
 	}
 }

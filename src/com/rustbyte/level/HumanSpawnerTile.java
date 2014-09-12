@@ -13,9 +13,11 @@ public class HumanSpawnerTile extends Tile {
 	}
 	@Override
 	public void init() {	
-		Random rand = new Random();		
+		Random rand = new Random();
+		rand.setSeed(level.game.tickcount);
+		
 		for(int i = 0; i < 5 + rand.nextInt(5); i++) {
-			level.game.addEntity(new Human(tx * 20, (ty * 20) - 50,20,20,null, level.game));
+			level.game.addEntity(new Human(tx * 20, ty * 20,20,20,null, level.game));
 		}
 	}
 }

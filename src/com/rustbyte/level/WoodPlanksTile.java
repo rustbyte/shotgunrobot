@@ -6,7 +6,7 @@ public class WoodPlanksTile extends Tile {
 	public WoodPlanksTile(int x, int y, int wid, int hgt, Level lev) {
 		super(x, y, wid, hgt,  lev);
 		this.typeID = 0x963C00;
-		this.blocking = false;
+		this.blocking = true;
 		this.baseColor = Art.getColor(150,60, 0);
 		this.tsetOffsetX = 1;
 		this.tsetOffsetY = 106;

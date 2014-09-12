@@ -11,7 +11,7 @@ public class Powerup extends Mob {
 	private int pickupTimer = -1;
 	private boolean pickedup = false;
 	private int spawnTimer = 60;
-	
+	private int lifetime = 0;
 	public Powerup(int x, int y, int w, int h, int type, Entity p, Game game) {
 		super(x,y,w,h, p, game );
 		
@@ -37,19 +37,20 @@ public class Powerup extends Mob {
 		super.tick();	
 		
 		if( --spawnTimer < 0 ) spawnTimer = 0;
+		if( ++lifetime > 1200 ) this.alive = false;
 		
 		if(onground) {
-			if(velX > 0)
-				velX -= 0.02;
-			if( velX < 0)
-				velX += 0.02;
+			if(velocity.x > 0)
+				velocity.x -= 0.3;
+			if( velocity.x < 0)
+				velocity.x += 0.3;
 			
-			if(velX > -0.1 && velX < 0.1)
-				velX = 0;
+			if(velocity.x > -0.1 && velocity.x < 0.1)
+				velocity.x = 0;
 		}
 		if(pickedup && pickupTimer > 0 ) {
-			velY += -0.3;
-			yy += velY;
+			velocity.y += -0.3;
+			yy += velocity.y;
 			ignoresGravity = true;
 			if(--pickupTimer <= 0) 
 				this.alive = false;
@@ -69,8 +70,10 @@ public class Powerup extends Mob {
 			flashEffect.render(game.tickcount, game.screen, (((int)xx) - (wid / 2)) - game.level.viewX,
 															(((int)yy) - (hgt / 2)) - game.level.viewY);			
 		} else {
-			animator.render(game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
-						 				 (((int)yy + 2) - (hgt / 2)) - game.level.viewY);
+			if( (lifetime < 800 ) || ( lifetime % 4 == 0) ) {				
+				animator.render(game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
+							 				 (((int)yy + 2) - (hgt / 2)) - game.level.viewY);				
+			}
 		}
 	}
 	
