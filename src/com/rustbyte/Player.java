@@ -139,7 +139,7 @@ public class Player extends Mob  {
 	private void stomp() {
 		if(stompTimer == 0) {
 			Tile myTile = game.level.getTileFromPoint((int)xx, (int)yy);
-			for(int x = myTile.tx-1;x <= myTile.tx+1;x++) {
+			for(int x = myTile.tx-2;x <= myTile.tx+2;x++) {
 				for(int y=myTile.ty-1;y <= myTile.ty+1;y++) {
 					Tile t = game.level.getTile(x,y);
 					if(t != null) {

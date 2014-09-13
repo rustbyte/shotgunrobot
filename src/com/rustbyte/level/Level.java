@@ -107,21 +107,42 @@ public class Level {
 		double xr = ent.xr;
 		double yr = ent.yr;		
 				
+		if( dx != 0.0) {
+			if((xo - xr + dx) < 0) { 
+				ent.xx = 1.0 + xr; 
+				return true; 
+			}
+			if((xo + xr + dx) >= width * tileWidth) { 
+				ent.xx = (width * tileWidth) - xr - 1.0; 
+				return true; 
+			}			
+		}		
+		
+		if( dy != 0.0) {
+			if((yo - yr + dy) < 0) {
+				ent.yy = 1.0 + yr;
+				return true;
+			}
+			if((yo + yr + dy) >= height * tileHeight) {
+				ent.yy = (height * tileHeight) - yr - 1.0;
+				return true;
+			}
+		}
 		// Get min/max tile currently standing on
 		// NOTE: Right now we only use the tile directly under entity center point.
 		//       Not sure if this will cut it in the future. Previous version use xr/yr
 		//       to include additional tiles the entity touch.
-		int xtoMin = (int)(xo) / tileWidth;
+		/*int xtoMin = (int)(xo) / tileWidth;
 		int ytoMin = (int)(yo) / tileHeight;
 		int xtoMax = (int)(xo) / tileWidth;
-		int ytoMax = (int)(yo) / tileHeight;
+		int ytoMax = (int)(yo) / tileHeight;*/
 		
 		// Get min/max tile that we move to
 		int xtMin = (int)((xo + xv) - xr) / tileWidth;
 		int ytMin = (int)((yo + yv) - yr) / tileHeight;
 		int xtMax = (int)((xo + xv) + xr) / tileWidth;
 		int ytMax = (int)((yo + yv) + yr) / tileHeight;
-		
+				
 		
 		for(int yt=ytMin; yt <= ytMax; yt++) {
 			for(int xt=xtMin; xt <= xtMax; xt++) {

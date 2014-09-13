@@ -58,11 +58,16 @@ public class Tile implements Destructable {
 		case 0x4C1E00: t = new WoodPlanksInsideTile(tx,ty,tw,th,l); break;
 		case 0x202020: t = new WallTile(tx,ty,tw,th,l); break;
 		case 0x7F6A00: t = new DoorTile(tx,ty,tw,th,l); break;
-		case 0x00FF21: t = new HumanSpawnerTile(tx,ty,tw,th,l); break;
-		case 0x0026FF: t = new RescueZoneTile(tx,ty,tw,th,l); break;
-		case 0xFF0000: t = new ZombieSpawnerTile(tx,ty,tw,th,l); break;
-		case 0xFFFF00: t = new PlayerSpawnTile(tx,ty,tw,th,l); break;
-		case 0xFFFFFF: t = new SkeletonSpawnerTile(tx,ty,tw,th,l); break;
+		case 0x00FF21: // MOB_SPAWN_TYPE_HUMAN, fall through to skelly
+		case 0xFF0000: // MOB_SPAWN_TYPE_ZOMBIE ----- || ----------
+		case 0xFFFFFF: t = new MobSpawnerTile(typeID,tx,ty,tw,th,l); break; // Skelly spawn
+		case 0x0026FF: t = new RescueZoneTile(tx,ty,tw,th,l); break;		
+		case 0xFFFF00: t = new PlayerSpawnTile(tx,ty,tw,th,l); break;		
+		case 0x2D2D2D: t = new RockTile(tx,ty,tw,th,l); break;
+		case 0x803401: t = new DirtTile(tx,ty,tw,th,l); break;
+		default: {
+			System.out.println("Unknown tile type. TypeID: " + typeID + " tx: " + tx + " ty: " + ty);
+		}break;
 		}
 		return t;
 	}

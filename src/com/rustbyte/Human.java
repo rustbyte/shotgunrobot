@@ -25,10 +25,10 @@ public class Human extends Mob {
 	public Human(int x, int y, int w, int h, Entity p, Game g) {
 		super(x, y, w, h, p, g);
 		
-		ANIM_WALK_RIGHT = this.animator.addAnimation(5, 121, 122, w, h, false,1);
-		ANIM_WALK_LEFT = this.animator.addAnimation(5, 121, 122, w, h, true,1);
-		ANIM_IDLE_RIGHT = this.animator.addAnimation(1, 100, 122, w, h, false,1);
-		ANIM_IDLE_LEFT = this.animator.addAnimation(1, 100, 122, w, h, true,1);
+		ANIM_WALK_RIGHT = this.animator.addAnimation(5, 121, 143, w, h, false,1);
+		ANIM_WALK_LEFT = this.animator.addAnimation(5, 121, 143, w, h, true,1);
+		ANIM_IDLE_RIGHT = this.animator.addAnimation(1, 100, 143, w, h, false,1);
+		ANIM_IDLE_LEFT = this.animator.addAnimation(1, 100, 143, w, h, true,1);
 		
 		animator.setCurrentAnimation(ANIM_WALK_RIGHT);
 		

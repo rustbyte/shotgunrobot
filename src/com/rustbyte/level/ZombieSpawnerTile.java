@@ -9,7 +9,7 @@ public class ZombieSpawnerTile extends Tile {
 	private boolean activated = false;
 	private int waveActivationTimer = 0;
 	private int nextZombieTimer = 0;
-	private int maxZombies = 20;
+	private int maxZombies = 10;
 	private int numZombiesSpawned = 0;
 	
 	public ZombieSpawnerTile(int x, int y, int wid, int hgt, Level lev) {
@@ -30,7 +30,32 @@ public class ZombieSpawnerTile extends Tile {
 	}
 	@Override
 	public void init() {			
-
+				
+		// Set proper background tile
+		Tile[] tlist = new Tile[] {
+			level.getTile(tx-1, ty),
+			level.getTile(tx+1, ty)
+		};
+		
+		for(int i=0; i < tlist.length; i++) {
+			Tile t = tlist[i];
+			if(t != null) {
+				if(t.typeID == 0x202020) {			
+					tsetOffsetX = 85;
+					tsetOffsetY = 1;
+					break;
+				}
+				if(t.typeID == 0x910000) {
+					tsetOffsetX = 106;
+					tsetOffsetY = 1;
+					break;
+				}
+				if(t.typeID == 0x4C1E00) {
+					tsetOffsetX = 127;
+					tsetOffsetY = 1;
+				}
+			}
+		}
 	}	
 	@Override
 	public void tick() {

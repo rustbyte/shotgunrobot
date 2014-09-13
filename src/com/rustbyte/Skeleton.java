@@ -100,6 +100,21 @@ public class Skeleton extends Mob {
 					// Rabbit got away from me....
 					currentTarget = null;
 				}
+				if( currentTarget != null && currentTarget.alive) {
+					Tile myTile = game.level.getTileFromPoint(xx,yy);
+					Tile targetTile = game.level.getTileFromPoint(currentTarget.xx, currentTarget.yy);
+					int yStart = myTile.ty < targetTile.ty ? myTile.ty : targetTile.ty;
+					int yEnd = myTile.ty < targetTile.ty ? targetTile.ty : myTile.ty;
+					if(myTile.ty != targetTile.ty) {
+						for(int y=yStart; y < yEnd; y++) {
+							Tile t = game.level.getTile(myTile.tx,y);
+							if(t != null && t.blocking) {
+								System.out.println("Roof/floor blocking my path!");
+								currentTarget = null;
+							}
+						}
+					}					
+				}
 			}
 			
 			if((currentTarget == null || !currentTarget.alive) && targetAquired) {
