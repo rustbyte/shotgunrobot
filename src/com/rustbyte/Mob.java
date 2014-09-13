@@ -60,7 +60,7 @@ public abstract class Mob extends Entity implements Destructable {
 			if(i % 2 == 0)
 				d.velocity.x = 1.0 + rand.nextDouble();
 			else
-				d.velocity.x = -1.0 + rand.nextDouble();				
+				d.velocity.x = -(1.0 + rand.nextDouble());				
 			
 			game.addEntity(d);
 			ParticleEmitter pe = new ParticleEmitter(0, 0, -d.velocity.x, -1.0, 1, particleCount, color, d, game);

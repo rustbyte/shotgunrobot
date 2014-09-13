@@ -51,7 +51,7 @@ public class Game {
 		colorfadeEffect = new ColorFadeEffect(0,WIDTH,HEIGHT);
 		
 		input = new InputHandler();
-		level = new Level(Art.level1, 20,20, this);
+		level = new Level(Art.level2, 20,20, this);
 				
 		level.viewX = 0;
 		level.viewY = 0;

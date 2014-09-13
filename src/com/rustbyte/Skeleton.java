@@ -17,10 +17,10 @@ public class Skeleton extends Mob {
 	public Skeleton(double x, double y, int w, int h, Entity p, Game g) {
 		super(x, y, w, h, p, g);
 
-		ANIM_WALK_RIGHT = animator.addAnimation(7, 121,164, w, h, false, 1);
-		ANIM_WALK_LEFT = animator.addAnimation(7, 121,164, w, h, true, 1);
-		ANIM_IDLE_RIGHT = animator.addAnimation(8, 100,185, w, h, false, 1);
-		ANIM_IDLE_LEFT = animator.addAnimation(8, 100,185, w, h, true, 1);
+		ANIM_IDLE_RIGHT = animator.addAnimation(7, 121,164, w, h, false, 1);
+		ANIM_IDLE_LEFT = animator.addAnimation(7, 121,164, w, h, true, 1);
+		ANIM_WALK_RIGHT = animator.addAnimation(8, 100,185, w, h, false, 1);
+		ANIM_WALK_LEFT = animator.addAnimation(8, 100,185, w, h, true, 1);
 				
 		animator.setCurrentAnimation(ANIM_IDLE_LEFT);
 		

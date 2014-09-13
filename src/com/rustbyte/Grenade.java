@@ -19,7 +19,7 @@ public class Grenade extends Entity {
 	public Grenade(double x, double y, Game game) {
 		super(x,y,5,8,null, game);
 		ANIM_UNEXPLODED = this.animator.addAnimation(1, 201, 51, wid, hgt, false, 0);
-		ANIM_EXPLOSION = this.animator.addAnimation(9, 0, 198, 20, 20, false, 1);
+		ANIM_EXPLOSION = this.animator.addAnimation(9, 0, 219, 20, 20, false, 1);
 		animator.setCurrentAnimation(ANIM_UNEXPLODED);		
 		this.xr = 2;
 		this.yr = 3;
