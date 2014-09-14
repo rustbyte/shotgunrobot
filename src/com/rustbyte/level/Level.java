@@ -23,6 +23,7 @@ public class Level {
 	public int viewWidth;
 	public int viewHeight;
 	public Game game = null;
+	private Tile lastUnlockedSpawnLocation = null;
 	
 	public Level(int w, int h, int tw, int th, Game g) {
 		width = w;
@@ -51,11 +52,22 @@ public class Level {
 		for(int i=0; i < (width * height);i++)
 			map[i].init();			
 	}
+	
+	public void setPlayerSpawn(Tile t) {
+		lastUnlockedSpawnLocation = t;
+	}
 	public Tile getPlayerSpawn() {
-		for(int i=0; i < map.length; i++)
-			if( map[i] instanceof PlayerSpawnTile )
-				return map[i];
-		return null;
+		Tile spawnLocation = null;
+		if(lastUnlockedSpawnLocation != null) {
+			spawnLocation = lastUnlockedSpawnLocation;
+		} else {
+			for(int i=0; i < map.length; i++)
+				if( map[i] instanceof PlayerSpawnTile ) {
+					spawnLocation = map[i];
+					break;
+				}
+		}
+		return spawnLocation;
 	}
 	public Tile getTile(int tx, int ty) {
 		if(tx < 0 || tx > (width-1) || ty < 0 || ty > (height-1)) return null;
@@ -102,7 +114,7 @@ public class Level {
 		
 		double xo = ent.xx;
 		double yo = ent.yy;
-		double xv = dx < 0 ? Math.floor(dx) : Math.ceil(dx);
+		double xv = dx < 0.0 ? Math.floor(dx) : Math.ceil(dx);
 		double yv = dy;		
 		double xr = ent.xr;
 		double yr = ent.yr;		
@@ -110,22 +122,22 @@ public class Level {
 		if( dx != 0.0) {
 			if((xo - xr + dx) < 0) { 
 				ent.xx = 1.0 + xr; 
-				return true; 
+				return false; 
 			}
 			if((xo + xr + dx) >= width * tileWidth) { 
 				ent.xx = (width * tileWidth) - xr - 1.0; 
-				return true; 
+				return false; 
 			}			
 		}		
 		
 		if( dy != 0.0) {
 			if((yo - yr + dy) < 0) {
 				ent.yy = 1.0 + yr;
-				return true;
+				return false;
 			}
 			if((yo + yr + dy) >= height * tileHeight) {
 				ent.yy = (height * tileHeight) - yr - 1.0;
-				return true;
+				return false;
 			}
 		}
 		// Get min/max tile currently standing on
@@ -152,14 +164,18 @@ public class Level {
 				if(t == null) continue;
 				
 				if(t.sloped) {
+					double dir = Math.signum(xv);
+					dir = xr * (dir == 0.0 ? 1.0 : dir);
+					System.out.println("dir: " + dir + " xr: " + xr);
+					
 					// calculate hight based on how far in the entity is
-					double ydelta = Math.abs((ent.xx)  - (t.tx * 20));
+					double ydelta = Math.abs((ent.xx + dir)  - (t.tx * 20));
 					//System.out.println("ydelta: " + ydelta);
 
-					ent.yy = (((yt * 20) + 20) - (ydelta)) - ent.yr;
+					ent.yy = (((yt * 20) + 20) - (ydelta)) - ent.yr;					
 					ent.velocity.y = 0.0;
 					ent.onground = true;
-					return false;
+					return true;
 				} else {				
 					if(tileIsBlocking(xt,yt)) {
 						if( dy > 0) {			

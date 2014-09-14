@@ -110,7 +110,10 @@ public class Game {
 		
 		//addEntity(new Skeleton( player.xx + 100, player.yy, 20, 20, null, this));
 		//addEntity(new Zombie( (int)player.xx + 140, (int)player.yy, 20, 20, null, this));
+		//addEntity(new BatBoss( (level.width * 20) / 2, 50, 62,41, null, this));
 		
+		System.out.println("Floor(-0.5) : " + Math.floor(-0.5));
+		System.out.println("Ceil(0.5) : " + Math.ceil(0.5));
 	}
 	
 	
@@ -159,6 +162,8 @@ public class Game {
 		
 		player.xx = spawnX;
 		player.yy = spawnY;
+		player.velocity = new Vector2();
+		player.dirX = 0;
 		player.alive = true;	
 		player.hitpoints = 100;		
 		playerDeadTimer = 0;		

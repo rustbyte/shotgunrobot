@@ -10,6 +10,7 @@ public class SpriteAnimator {
 	private long now = 0;
 	private double unprocessed = 0;
 	private double nsPerTick = 1000000000.0 / 10.0;
+	public Bitmap bitmap = null;
 	
 	public class Animation {
 		public int numFrames;
@@ -44,7 +45,7 @@ public class SpriteAnimator {
 	private int currentAnimation = 0;
 	
 	public SpriteAnimator() {
-		
+		this.bitmap = Art.sprites;
 	}
 	
 	public String getStatusString() {
@@ -77,7 +78,7 @@ public class SpriteAnimator {
 		return animations.get(currentAnimation);
 	}
 	public void render(Bitmap dest, int xx, int yy) {
-		Art.sprites.draw(dest, xx, yy, 
+		bitmap.draw(dest, xx, yy, 
 			getCurrentAnimation().getOffsetX(), 
 			getCurrentAnimation().getOffsetY(), 
 			getCurrentAnimation().frameWidth, 
@@ -86,7 +87,7 @@ public class SpriteAnimator {
 	}
 
 	public void renderScaled(Bitmap dest, int xx, int yy, int sx, int sy) {
-		Art.sprites.drawScaled(dest, xx, yy, sx, sy, 
+		bitmap.drawScaled(dest, xx, yy, sx, sy, 
 				getCurrentAnimation().getOffsetX(), 
 				getCurrentAnimation().getOffsetY(), 
 				getCurrentAnimation().frameWidth, 

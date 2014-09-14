@@ -10,7 +10,7 @@ public class Powerup extends Mob {
 	private int powerupType = 0;
 	private int pickupTimer = -1;
 	private boolean pickedup = false;
-	private int spawnTimer = 60;
+	private int spawnTimer = 20;
 	private int lifetime = 0;
 	public Powerup(int x, int y, int w, int h, int type, Entity p, Game game) {
 		super(x,y,w,h, p, game );

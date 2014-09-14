@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 
 public class Art {
 	public static Bitmap sprites = loadBitmap("/tex/spritesheet.png");
+	public static Bitmap sprites2 = loadBitmap("/tex/spritesheet2.png");
 	public static Bitmap tiles = loadBitmap("/tex/tilesheet.png");
 	public static Bitmap level1 = loadBitmap("/tex/level1.png");
 	public static Bitmap level2 = loadBitmap("/tex/level2.png");

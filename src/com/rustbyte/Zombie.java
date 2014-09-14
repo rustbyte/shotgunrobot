@@ -126,15 +126,21 @@ public class Zombie extends Mob {
 				int tx = (int)this.xx / game.level.tileWidth;
 				int ty = (int)this.yy / game.level.tileHeight;
 				boolean jumpObstacle = false;
+				boolean attackDoor = false;
 				for(int i=0; i < 2; i++) {
-					Tile t = game.level.getTile(tx + dirX, ty - (i+1));
-					if( t == null || !t.blocking) {
+					Tile t = game.level.getTile(tx + dirX, ty - (i));
+					if( t instanceof DoorTile) {
+						t.takeDamage(this, 10);
+						attackDoor = true;
+						break;
+					}					
+					if( t != null && !t.blocking) {
 						jump();
 						jumpObstacle = true;
 						break;
 					}
 				}
-				if(!jumpObstacle)
+				if(!jumpObstacle && !attackDoor)
 					dirX = -dirX;
 			}
 			velocity.x = dirX * ( speed * (currentTarget == null ? 1 : 2));
@@ -184,10 +190,10 @@ public class Zombie extends Mob {
 			else
 				this.breakApart(16, Art.getColor(255,0,0), 10);
 			
-			Powerup p = Powerup.createPowerup(Powerup.POWERUP_TYPE_BATTERY, (int)xx, (int)yy, null, game);
+			/*Powerup p = Powerup.createPowerup(Powerup.POWERUP_TYPE_BATTERY, (int)xx, (int)yy, null, game);
 			p.velocity.x = -1.5;
 			p.velocity.y = -2.5;
-			game.addEntity( p );
+			game.addEntity( p );*/
 			
 			game.zombiesKilled++;
 		}

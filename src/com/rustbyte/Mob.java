@@ -31,6 +31,7 @@ public abstract class Mob extends Entity implements Destructable {
 		case "HUMAN": result = new Human(x,y,w,h,ent,game); break;
 		case "ZOMBIE": result = new Zombie(x,y,w,h,ent,game); break;
 		case "SKELETON": result = new Skeleton(x,y,w,h,ent,game); break;
+		case "BATBOSS": result = new BatBoss(x,y,62,41,ent,game); break; 
 		}
 		return result;
 	}

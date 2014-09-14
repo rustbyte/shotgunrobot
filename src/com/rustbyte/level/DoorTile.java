@@ -10,6 +10,7 @@ public class DoorTile extends Tile {
 	private boolean isInside = true; // If both adjecent tiles are Empty(outdoor tx-1 and tx+1) tiles, 
 									  // isInside is false
 	private boolean isOpen = false;
+	private boolean isBroken = false;
 	private int interactTimer = 0;
 	private int openTileX = 22;
 	private int openTileY = 22;
@@ -60,7 +61,7 @@ public class DoorTile extends Tile {
 	
 	@Override
 	public void interact(Entity e) {
-		if(interactTimer == 0) {
+		if(interactTimer == 0 && !isBroken) {
 			System.out.println( this.isOpen ? "Closing door" : "Opening door");
 			this.isOpen = !this.isOpen;
 			this.blocking = !this.isOpen;
@@ -88,15 +89,16 @@ public class DoorTile extends Tile {
 	}
 	@Override
 	public void takeDamage(Entity source, int amount) {
-		/*if(hurtTimer <= 0) {
+		if(hurtTimer <= 0) {
 			this.hitpoints -= amount;
 			if(hitpoints <= 0) {
-				this.tsetOffsetX = this.openTileX;
-				this.tsetOffsetY = this.openTileY;		
+				this.tsetOffsetX = 43;
+				this.tsetOffsetY = 22;		
 				this.blocking = false;
+				this.isBroken = true;
 			} else {			
 				this.hurtTimer = 50;
 			}
-		}*/
+		}
 	}
 }

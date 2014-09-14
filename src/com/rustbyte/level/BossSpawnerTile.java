@@ -1,41 +1,51 @@
 package com.rustbyte.level;
 
-import com.rustbyte.Zombie;
-import com.rustbyte.level.Tile;
+import java.util.Random;
+import com.rustbyte.Mob;
 import com.rustbyte.Player;
 import com.rustbyte.vector.Vector2;
 
-public class ZombieSpawnerTile extends Tile {
-	private boolean activated = false;
-	private int waveActivationTimer = 0;
-	private int nextZombieTimer = 0;
-	private int maxZombies = 10;
-	private int numZombiesSpawned = 0;
+public class BossSpawnerTile extends Tile {
+	private static final int BOSS_SPAWN_TYPE_BAT = 0x7F006E;
 	
-	public ZombieSpawnerTile(int x, int y, int wid, int hgt, Level lev) {
+	private boolean activated = false;
+	private int bossActivationTimer = 0;
+	private int nextMobTimer = 0;
+	private int maxMobs = 1;
+	private int numMobsSpawned = 0;
+	private int spawnType = 0;
+	private String mobName;
+	
+	public BossSpawnerTile(int type, int x, int y, int wid, int hgt, Level lev) {
 		super(x, y, wid, hgt, lev);
 		this.baseColor = 0xFF0000;
 		this.tsetOffsetX = 1;
 		this.tsetOffsetY = 64;
+		this.spawnType = type;
+		
+		switch(this.spawnType) {
+		case BOSS_SPAWN_TYPE_BAT: mobName = "BATBOSS"; break;
+		}
 	}
 	
-	private void spawnZombie() {
-		if( nextZombieTimer <= 0 && numZombiesSpawned < maxZombies) {
-			level.game.addEntity(new Zombie((tx * 20) + 10, (ty * 20) + 10,20,20,null, level.game));
-			nextZombieTimer = 60;
-			numZombiesSpawned++;
+	private void spawnMob() {
+		
+		if( nextMobTimer <= 0 && numMobsSpawned < maxMobs) {
+			level.game.addEntity( Mob.createMob(mobName, (tx * 20) + 10, (ty * 20) + 10,20,20,null, level.game));
+			nextMobTimer = 60;
+			numMobsSpawned++;
 		}
-		if( --nextZombieTimer < 0 ) 
-			nextZombieTimer = 0;
+		if( --nextMobTimer < 0 ) 
+			nextMobTimer = 0;
 	}
 	@Override
-	public void init() {			
+	public void init() {
 				
 		// Set proper background tile
 		Tile[] tlist = new Tile[] {
 			level.getTile(tx-1, ty),
 			level.getTile(tx+1, ty)
-		};
+		};				
 		
 		for(int i=0; i < tlist.length; i++) {
 			Tile t = tlist[i];
@@ -55,7 +65,7 @@ public class ZombieSpawnerTile extends Tile {
 					tsetOffsetY = 1;
 				}
 			}
-		}
+		}	
 	}	
 	@Override
 	public void tick() {
@@ -69,15 +79,15 @@ public class ZombieSpawnerTile extends Tile {
 			if( distance < 80) {
 				// Activate!
 				activated = true;
-				waveActivationTimer = 500;
+				bossActivationTimer = 500;
 			}
 		} else {
-			if( --waveActivationTimer < 0 ) 
-				waveActivationTimer = 0;
+			if( --bossActivationTimer < 0 ) 
+				bossActivationTimer = 0;
 		}
 				
-		if( activated && waveActivationTimer <= 0) {
-			spawnZombie();
+		if( activated && bossActivationTimer <= 0) {
+			spawnMob();
 		}			
 	}
 }

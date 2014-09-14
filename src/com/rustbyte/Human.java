@@ -19,6 +19,9 @@ public class Human extends Mob {
 	private int minSpacingToPlayer = 0;
 	private int maxSpacingToPlayer = 0;
 	
+	private boolean exitFound = false;
+	private int dirToExit = 0;
+	
 	private FlashEffect flashEffectPlayerFound = null;
 	private List<Node> path;
 	
@@ -81,7 +84,7 @@ public class Human extends Mob {
 			Tile currentTile = game.level.getTileFromPoint(xx,yy);
 			
 			// Try to find that handsome hero.....
-			if( currentTarget == null) {										
+			if( currentTarget == null && !exitFound) {										
 				
 				// "Sence" things two tiles behind, and "see" things 4 tiles infront.
 				int txStart = currentTile.tx + ( (-facing) * 2);
@@ -98,11 +101,12 @@ public class Human extends Mob {
 							// Atlast! Rescued! Thank god you're here!
 							// WAIT! DONT SHOOT! Im with the science team!!!
 							//System.out.println("I found a hero!!!.");
+							rand.setSeed(game.tickcount);
 							currentTarget = nextEntity;
 							followingPlayer = true;
 							foundPlayerTimer = 200;
-							minSpacingToPlayer = 1 + rand.nextInt(5);
-							maxSpacingToPlayer = minSpacingToPlayer + 10 + rand.nextInt(20);
+							minSpacingToPlayer = 10 + rand.nextInt(10);
+							maxSpacingToPlayer = minSpacingToPlayer + 20 + rand.nextInt(20);
 							
 							game.addEntity(new FloatingText("GET ME OUT!",
 									Art.getColor(255,255,0),xx - 80,yy - 20,
@@ -115,49 +119,64 @@ public class Human extends Mob {
 			} else {
 				
 				// Is there an exit near here?
-				Tile nextTile = game.level.getTile( currentTile.tx, currentTile.ty);
-				if( !(nextTile instanceof RescueZoneTile) ) {					
+				Tile nextTile = game.level.getTile( currentTile.tx + (facing * 2) , currentTile.ty);
+				if( !(nextTile instanceof RescueZoneTile) && !exitFound ) {					
 					
 					// Gona try and stay close to this guy. So tall, and kind of handsome...
 					Vector2 v1 = new Vector2(xx,yy);
 					Vector2 v2 = new Vector2(currentTarget.xx, currentTarget.yy);
 					Vector2 v3 = v1.sub(v2);
 					double dist = v3.length();
-					if(dist > minSpacingToPlayer &&
-					   dist < maxSpacingToPlayer) {
-						System.out.println("Stopping");
-						dirX = 0;
-					} else if(dist < (minSpacingToPlayer - 10)) {
+					
+					if(dist < (minSpacingToPlayer)) {
 						System.out.println("Im to close!");
+						
 						dirX = currentTarget.xx < xx ? 1 : -1; 	// Dont get to close.
-					} else if(dist > maxSpacingToPlayer && dist < 90) {
+						if(Math.signum(currentTarget.velocity.x) == Math.signum(dirX))
+							dirX = 0;
+						
+					} else if(dist > (minSpacingToPlayer) &&
+					   dist < maxSpacingToPlayer) {
+						//System.out.println("Stopping");
+						dirX = 0;
+					} else if(dist > (maxSpacingToPlayer + 10 ) && dist < 90 ) {
 						System.out.println("Moving closer");
 						dirX = currentTarget.xx < xx ? -1 : 1; 	// Moving a bit closer
-					} else if(dist > 100 ) {
+					} else if(dist > 110 ) {
 						// He left me!!! That bastard left me here!!
 						//System.out.println("Hero is to far away!");
 						currentTarget = null;
 					}
 				} else {
-					// Found an exit!
-					this.explode(16, Art.getColor(0,255,0), 10);
-					this.alive = false;
-					game.humansSaved++;
-					game.addEntity( new FloatingText("SAVED!",
-								    Art.getColor(0,255,0), xx, yy, new Vector2(0,-1), null, game));
-					
-					rand.setSeed(game.tickcount);
-					
-					double throwVel = -1;
-					for(int i=0; i < 5 + (rand.nextInt(3)); i++) {
-						
-						Powerup p = Powerup.createPowerup(1 + rand.nextInt(3), (int)xx, (int)yy - 20, null, game);
-						p.velocity.x = (throwVel * (1 + (rand.nextInt(2) * 0.1)));
-						p.velocity.y = -(2.0 + ((double)rand.nextInt(3)));
-						throwVel = -throwVel;
-						game.addEntity( p );
+					if( !exitFound ) {
+						exitFound = true;
+						dirToExit = Math.signum( xx - ((nextTile.tx * 20) + 10)) == 0.0 ? -1 : 1;
+					} else {
+						Tile curTile = game.level.getTileFromPoint(xx,yy);
+						if(curTile instanceof RescueZoneTile) {
+							// Free atlast!!!!!
+							this.explode(16, Art.getColor(0,255,0), 10);
+							this.alive = false;
+							game.humansSaved++;
+							game.addEntity( new FloatingText("SAVED!",
+										    Art.getColor(0,255,0), xx, yy, new Vector2(0,-1), null, game));
+							
+							rand.setSeed(game.tickcount);
+							
+							double throwVel = -1;
+							for(int i=0; i < 5 + (rand.nextInt(3)); i++) {
+								
+								Powerup p = Powerup.createPowerup(1 + rand.nextInt(3), (int)xx, (int)yy - 20, null, game);
+								p.velocity.x = (throwVel * (1 + (rand.nextInt(2) * 0.1)));
+								p.velocity.y = -(2.0 + ((double)rand.nextInt(3)));
+								throwVel = -throwVel;
+								game.addEntity( p );
+							}
+							((RescueZoneTile)curTile).unlockSpawnPoint();
+						} else {
+							dirX = dirToExit;
+						}
 					}
-					
 				}
 			}
 			

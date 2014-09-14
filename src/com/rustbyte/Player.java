@@ -247,7 +247,7 @@ public class Player extends Mob  {
 	}
 	@Override
 	public void takeDamage(Entity source, int amount) {		
-		if(!isHurt()) {
+		/*if(!isHurt()) {
 			hitpoints -= amount;
 			hurt(50);		
 			game.addEntity(new FloatingText("-" + amount,Art.getColor(255,0,0),xx,yy,new Vector2(0,-1), null, game));
@@ -256,6 +256,6 @@ public class Player extends Mob  {
 			velocity.x = velocity.y = 0.0;
 			this.applyForce( new Vector2( -(1.0 + (Math.signum(source.xx - xx) * force)), -(1 + rand.nextInt(4))));
 			knockedBack = true;
-		}
+		}*/
 	}
 }

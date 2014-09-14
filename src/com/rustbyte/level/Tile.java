@@ -61,6 +61,7 @@ public class Tile implements Destructable {
 		case 0x00FF21: // MOB_SPAWN_TYPE_HUMAN, fall through to skelly
 		case 0xFF0000: // MOB_SPAWN_TYPE_ZOMBIE ----- || ----------
 		case 0xFFFFFF: t = new MobSpawnerTile(typeID,tx,ty,tw,th,l); break; // Skelly spawn
+		case 0x7F006E: t = new BossSpawnerTile(typeID,tx,ty,tw,th,l); break;
 		case 0x0026FF: t = new RescueZoneTile(tx,ty,tw,th,l); break;		
 		case 0xFFFF00: t = new PlayerSpawnTile(tx,ty,tw,th,l); break;		
 		case 0x2D2D2D: t = new RockTile(tx,ty,tw,th,l); break;
