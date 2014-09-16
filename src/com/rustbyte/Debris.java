@@ -38,7 +38,7 @@ public class Debris extends Entity {
 	
 	@Override
 	public void render() {
-		Art.sprites.draw(game.screen, (((int)xx) - game.level.viewX) - (wid/2),
+		parent.animator.bitmap.draw(game.screen, (((int)xx) - game.level.viewX) - (wid/2),
 									  (((int)yy) - game.level.viewY) - (hgt/2),
 									  spriteX, spriteY, wid, hgt, flip);
 	}

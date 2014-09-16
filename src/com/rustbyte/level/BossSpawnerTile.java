@@ -88,6 +88,6 @@ public class BossSpawnerTile extends Tile {
 				
 		if( activated && bossActivationTimer <= 0) {
 			spawnMob();
-		}			
+		}
 	}
 }
