@@ -14,6 +14,7 @@ public class Art {
 	public static Bitmap level2 = loadBitmap("/tex/level2.png");
 	public static Bitmap font = loadBitmap("/tex/font.png");
 	public static Bitmap background = loadBitmap("/tex/backgroundMountains.png");	
+	public static Bitmap gui = loadBitmap("/tex/gui.png");
 	
 	public static Bitmap loadBitmap(String filename) {
 		try {

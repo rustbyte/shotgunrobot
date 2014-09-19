@@ -15,6 +15,7 @@ public class BossSpawnerTile extends Tile {
 	private int numMobsSpawned = 0;
 	private int spawnType = 0;
 	private String mobName;
+	private Mob boss = null;
 	
 	public BossSpawnerTile(int type, int x, int y, int wid, int hgt, Level lev) {
 		super(x, y, wid, hgt, lev);
@@ -30,8 +31,8 @@ public class BossSpawnerTile extends Tile {
 	
 	private void spawnMob() {
 		
-		if( nextMobTimer <= 0 && numMobsSpawned < maxMobs) {
-			level.game.addEntity( Mob.createMob(mobName, (tx * 20) + 10, (ty * 20) + 10,20,20,null, level.game));
+		if( nextMobTimer <= 0 && numMobsSpawned < maxMobs) {					
+			level.game.addEntity( boss );
 			nextMobTimer = 60;
 			numMobsSpawned++;
 		}
@@ -58,6 +59,7 @@ public class BossSpawnerTile extends Tile {
 				if(t.typeID == 0x910000) {
 					tsetOffsetX = 106;
 					tsetOffsetY = 1;
+					setSpawnBackground(85, 127);
 					break;
 				}
 				if(t.typeID == 0x4C1E00) {
@@ -65,8 +67,20 @@ public class BossSpawnerTile extends Tile {
 					tsetOffsetY = 1;
 				}
 			}
-		}	
+		}
+				
 	}	
+	
+	private void setSpawnBackground(int backOffsetX, int backOffsetY) {
+		
+		for(int x=0; x < 3; x++ ) {
+			for(int y=0; y < 3; y++ ) {
+				Tile t = level.getTile((tx - 1) + x, (ty - 1) + y);
+				t.tsetOffsetX = backOffsetX + ( x * 21);
+				t.tsetOffsetY = backOffsetY + ( y * 21);
+			}
+		}
+	}
 	@Override
 	public void tick() {
 		if( !activated ) {
@@ -76,10 +90,12 @@ public class BossSpawnerTile extends Tile {
 			Vector2 myPos = new Vector2((this.tx * 20) + 10, (this.ty * 20) + 10);
 			Vector2 delta = myPos.sub(playerPos);
 			double distance = delta.length();
-			if( distance < 80) {
+			if( distance < 200) {
 				// Activate!
 				activated = true;
 				bossActivationTimer = 500;
+				boss = Mob.createMob(mobName, (tx * 20) + 10, (ty * 20) + 10,20,20,null, level.game);
+				level.game.activateBoss(boss);
 			}
 		} else {
 			if( --bossActivationTimer < 0 ) 

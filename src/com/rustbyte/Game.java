@@ -15,6 +15,7 @@ import com.rustbyte.Player;
 import com.rustbyte.Zombie;
 import com.rustbyte.level.*;
 import com.rustbyte.vector.Vector2;
+import com.rustbyte.gui.Frame;
 
 public class Game {
 	public int WIDTH;
@@ -37,12 +38,18 @@ public class Game {
 	public int numZombies = 0;
 	public int numHumans = 0;
 	
+	private boolean bossActivated = false;
+	private Mob boss = null;
+	
 	// parallax background
 	private int numLayers = 3;
 	private BackgroundLayer[] layers = new BackgroundLayer[numLayers];	
 	private ColorFadeEffect colorfadeEffect;
 	private PathFinder pf;
 	private boolean stepPathKeyPressed = false;
+	
+	private Frame testFrame;
+	private Frame testFrame2;
 	
 	public Game(int wid, int hgt) {
 		this.WIDTH = wid;
@@ -110,10 +117,16 @@ public class Game {
 		
 		//addEntity(new Skeleton( player.xx + 100, player.yy, 20, 20, null, this));
 		//addEntity(new Zombie( (int)player.xx + 140, (int)player.yy, 20, 20, null, this));
-		//addEntity(new BatBoss( ((level.width * 20) / 2) + 20, 100, 62,41, null, this));			
+		//addEntity(new BatBoss( ((level.width * 20) / 2) + 20, 100, 62,41, null, this));
+		
+		testFrame = new Frame( WIDTH - 105, 2, 80, 15);
+		testFrame2 = new Frame( 5, 2, 120, 27);
 	}
 	
-	
+	public void activateBoss(Mob bossMob) {
+		boss = bossMob;
+		bossActivated = true;
+	}
 	private void renderPath() {
 		Iterator<Entity> iter = entities.iterator();
 		while(iter.hasNext()) {
@@ -229,13 +242,8 @@ public class Game {
 		level.draw(screen);
 				
 		//screen.drawText(Art.font, "fps: " + FPS, 0,0,0xFFFF00, true);
-		if(player.alive) {
-			screen.drawText(Art.font, "HP: " + player.hitpoints, 5, 5,0xFFFF00, true);
-			screen.drawText(Art.font, "{FFFF00}Mission: {00FF00}" + 
-											humansSaved + " {FFFF00}/ {FF0000}" + 
-											humansLost + " {FFFF00}/ {0000FF}" + zombiesKilled, 
-											5, 15,0xFFFF00, true);			
-		}
+		
+				
 		for(int i=0; i < entities.size();i++) {
 			Entity ent = entities.get(i);
 			if( ent.alive ) {
@@ -249,6 +257,18 @@ public class Game {
 		}
 		
 		if(player.alive) {
+			testFrame2.render(screen);
+			screen.drawText(Art.font, "HP: " + player.hitpoints, 10, 7,0xFFFF00, true);
+			screen.drawText(Art.font, "{FFFF00}Mission: {00FF00}" + 
+											humansSaved + " {FFFF00}/ {FF0000}" + 
+											humansLost + " {FFFF00}/ {0000FF}" + zombiesKilled, 
+											10, 17,0xFFFF00, true);			
+			if(bossActivated) {
+				testFrame.render(screen);
+				screen.drawText(Art.font, "{FF0000}ENEMY: {FFFFFF}" + (boss.hitpoints < 0 ? 0 : boss.hitpoints) , 
+								screen.width - 100, 6, 0xFFFFFF, true );
+			}
+			
 			player.render();
 		} else {
 			if(playerDeadTimer >= 100) {				
@@ -258,7 +278,6 @@ public class Game {
 				screen.drawText(Art.font, "YOU HAVE FAILED!", WIDTH / 2 - 40, HEIGHT / 2 - 20,0xFFFF00, true);
 				screen.drawText(Art.font, "press space to continue...", WIDTH / 2 - 50, HEIGHT / 2,0xFFFF00, true);
 			}
-		}
-		
+		}		
 	}
 }

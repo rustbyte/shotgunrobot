@@ -3,23 +3,27 @@ package com.rustbyte;
 import com.rustbyte.vector.Vector2;
 
 public class BatBoss extends Mob {
-	private int ANIM_IDLE = 0;
+	private int ANIM_MOVE_LEFT = 0;
+	private int ANIM_MOVE_RIGHT = 1;
 	
+	private final double TWOPI = Math.PI * 2;
 	private double xAng = 0.0;
 	private double yAng = 0.0;
 	private double xAngIncrement = 0.0;
 	private double yAngIncrement = 0.0;
 	private Vector2 rotVec;
 	private Vector2 rotPoint;
-	private double TWOPI = Math.PI * 2;
+	
 	
 	public BatBoss(double x, double y, int w, int h, Entity p, Game g) {
 		super(x, y, w, h, p, g);
 		
-		ANIM_IDLE = animator.addAnimation(5, 0, 1, w, h, false, 1);
+		ANIM_MOVE_LEFT = animator.addAnimation(5, 0, 1, w, h, false, 1);
+		ANIM_MOVE_RIGHT = animator.addAnimation(5, 0, 1, w, h, true, 1);
 		
 		animator.bitmap = Art.sprites2;
-		animator.setCurrentAnimation(ANIM_IDLE);
+		animator.setCurrentAnimation(ANIM_MOVE_LEFT);
+		
 		this.ignoresGravity = true;
 		
 		xAngIncrement = 0.04;
@@ -59,7 +63,12 @@ public class BatBoss extends Mob {
 		//xx = rotPoint.x + rotVec.x;
 		//yy = rotPoint.y + rotVec.y;
 		
+		dirX = (int)velocity.x;
+				
 		move();
+		
+		if(facing == -1) animator.setCurrentAnimation(ANIM_MOVE_LEFT);
+		if(facing == 1) animator.setCurrentAnimation(ANIM_MOVE_RIGHT);
 		
 		animator.tick();
 	}
@@ -84,8 +93,15 @@ public class BatBoss extends Mob {
 	@Override
 	public void render() throws Exception {
 
-		animator.render(game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
-					 				 (((int)yy) - (hgt / 2)) - game.level.viewY);		
+		if(this.isHurt()) {
+			flashEffect.clear();
+			animator.render(flashEffect.renderFrame, 0, 0);			
+			flashEffect.render(game.tickcount, game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
+				   	  					    			    (((int)yy) - (hgt / 2)) - game.level.viewY);
+		} else {
+			animator.render(game.screen, (((int)xx) - (wid / 2)) - game.level.viewX, 
+						 				 (((int)yy) - (hgt / 2)) - game.level.viewY);
+		}
 	}
 
 }

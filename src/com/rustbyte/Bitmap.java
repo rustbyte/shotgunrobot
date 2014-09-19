@@ -22,11 +22,15 @@ public class Bitmap {
 		for(int i=0; i < width * height; i++)
 			pixels[i] = col;
 	}
-	
 	public void draw(Bitmap dest, int x, int y) {
+		draw(dest,x,y,false);
+	}
+	public void draw(Bitmap dest, int x, int y, boolean useTransparency) {
 		for(int yy=0; yy<height;yy++) {
 			for(int xx=0; xx<width; xx++) {
-				dest.pixels[(x + xx) + ((y + yy)*dest.width)] = pixels[xx + yy * width];
+				if(useTransparency && pixels[xx + yy * width] == 0xFF5DFF)
+					continue;
+				dest.pixels[(x + xx) + ((y + yy)*dest.width)] = pixels[xx + yy * width]; 
 			}
 		}
 	}
