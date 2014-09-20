@@ -6,11 +6,11 @@ import com.rustbyte.Entity;
 import com.rustbyte.FlashEffect;
 
 public class DoorTile extends Tile {
-	private int direction = 1; // 1=EAST,2=WEST,3=NORTH,4=SOUTH
-	private boolean isInside = true; // If both adjecent tiles are Empty(outdoor tx-1 and tx+1) tiles, 
+	protected int direction = 1; // 1=EAST,2=WEST,3=NORTH,4=SOUTH
+	protected boolean isInside = true; // If both adjecent tiles are Empty(outdoor tx-1 and tx+1) tiles, 
 									  // isInside is false
-	private boolean isOpen = false;
-	private boolean isBroken = false;
+	protected boolean isOpen = false;
+	protected boolean isBroken = false;
 	private int interactTimer = 0;
 	private int openTileX = 22;
 	private int openTileY = 22;
@@ -35,19 +35,23 @@ public class DoorTile extends Tile {
 		Tile leftTile = this.level.getTile(tx-1, ty);
 		Tile rightTile = this.level.getTile(tx+1, ty);
 		
-		if( leftTile instanceof EmptyTile ) {				
+		if( (leftTile != null) && leftTile instanceof EmptyTile ) {				
 			direction = 1;
 			isInside = !(rightTile instanceof EmptyTile);
 			backgroundTileX = rightTile.tsetOffsetX;
 			backgroundTileY = rightTile.tsetOffsetY;
-		} else if( rightTile instanceof EmptyTile ) {
+		} else if( (rightTile != null) && rightTile instanceof EmptyTile ) {
 			direction = 2;
 			backgroundTileX = leftTile.tsetOffsetX;
 			backgroundTileY = leftTile.tsetOffsetY;
-		} else {
+		} else if( rightTile != null ) {
 			direction = 1;
 			backgroundTileX = rightTile.tsetOffsetX;
 			backgroundTileY = rightTile.tsetOffsetY;			
+		} else if ( leftTile != null ) {
+			direction = 1;
+			backgroundTileX = leftTile.tsetOffsetX;
+			backgroundTileY = leftTile.tsetOffsetY;			
 		}
 		
 	}

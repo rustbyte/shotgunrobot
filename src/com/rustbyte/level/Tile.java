@@ -66,6 +66,7 @@ public class Tile implements Destructable {
 		case 0xFFFF00: t = new PlayerSpawnTile(tx,ty,tw,th,l); break;		
 		case 0x2D2D2D: t = new RockTile(tx,ty,tw,th,l); break;
 		case 0x803401: t = new DirtTile(tx,ty,tw,th,l); break;
+		case 0x0094FF: t = new LevelExitTile(tx,ty,tw,th,l); break;
 		default: {
 			System.out.println("Unknown tile type. TypeID: " + typeID + " tx: " + tx + " ty: " + ty);
 		}break;

@@ -96,7 +96,8 @@ public class Player extends Mob  {
 			}
 			if(input.keys[KeyEvent.VK_E].pressed) {
 				Tile t = game.level.getTileFromPoint((xx + ((xr + 16) * facing)), yy);
-				t.interact(this);
+				if( t != null )
+					t.interact(this);
 			}
 			
 			if(weaponFired && --weaponTimer <= 0)

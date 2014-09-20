@@ -127,6 +127,11 @@ public class Game {
 		boss = bossMob;
 		bossActivated = true;
 	}
+	
+	public boolean isBossDefeated() {
+		return (bossActivated && boss.hitpoints <= 0);
+	}
+	
 	private void renderPath() {
 		Iterator<Entity> iter = entities.iterator();
 		while(iter.hasNext()) {
