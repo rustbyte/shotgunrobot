@@ -12,12 +12,12 @@ public class DoorTile extends Tile {
 	protected boolean isOpen = false;
 	protected boolean isBroken = false;
 	private int interactTimer = 0;
-	private int openTileX = 22;
-	private int openTileY = 22;
-	private int closedTileX = 1;
-	private int closedTileY = 22;
-	private int backgroundTileX;
-	private int backgroundTileY;
+	protected int openTileX = 22;
+	protected int openTileY = 22;
+	protected int closedTileX = 1;
+	protected int closedTileY = 22;
+	protected int backgroundTileX;
+	protected int backgroundTileY;
 	
 	private FlashEffect flashEffect;
 	
@@ -26,8 +26,8 @@ public class DoorTile extends Tile {
 		this.typeID = 0x7F6A00;
 		this.blocking = true;
 		this.baseColor = 0x7F6A00;
-		this.tsetOffsetX = 1;
-		this.tsetOffsetY = 22;
+		this.tsetOffsetX = closedTileX;
+		this.tsetOffsetY = closedTileY;
 		this.flashEffect = new FlashEffect(0xFFFFFF, 5, wid,hgt);
 	}
 	@Override

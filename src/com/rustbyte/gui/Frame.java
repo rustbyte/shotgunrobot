@@ -3,28 +3,30 @@ package com.rustbyte.gui;
 import com.rustbyte.Bitmap;
 import com.rustbyte.Art;
 
-public class Frame {
+public class Frame extends Control {
 	private final int DEFAULT_BACKGROUND_COLOR = 0x303030;
-	private int width;
-	private int height;
-	private int xpos;
-	private int ypos;
 	private int backgroundColor = DEFAULT_BACKGROUND_COLOR;
 	private Bitmap bitmap;	
 	
 	public Frame(int x, int y, int wid, int hgt) {
+		super(x,y,wid,hgt);
 		this.xpos = x;
 		this.ypos = y;
 		this.width = wid;
 		this.height = hgt;
-		this.bitmap = new Bitmap( wid, hgt);
-		
-		init();
 	}
 	
-	private void init() {
+	/*
+	 * NOTE:
+	 * This method must be called after controls are added to the frame.
+	 * Otherwise frame border/background will be incorrectly sized. 
+	 * @see com.rustbyte.gui.Control#init()
+	 */
+	public void init() {
 		int x = 0;
 		int y = 0;
+		
+		this.bitmap = new Bitmap( width, height);
 		
 		for(x=0; x < width; x++) {
 			for(y=0; y < height; y++) {
@@ -63,7 +65,9 @@ public class Frame {
 		}		
 	}
 	
-	public void render(Bitmap dest) {
-		bitmap.draw(dest, xpos, ypos, true);
+	public void render(Bitmap dest, int offsetx, int offsety) throws Exception {
+		bitmap.draw(dest, offsetx + xpos, offsety + ypos, true);
+		for(int i=0; i < children.size(); i++)
+			children.get(i).render(dest, offsetx + xpos, offsety + ypos);
 	}
 }

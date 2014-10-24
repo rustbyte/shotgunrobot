@@ -111,7 +111,7 @@ public class Skeleton extends Mob {
 							if(t != null && t.blocking) {
 								System.out.println("Roof/floor blocking my path!");
 								currentTarget = null;
-							}
+							} 
 						}
 					}					
 				}

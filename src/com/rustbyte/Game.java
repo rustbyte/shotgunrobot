@@ -16,6 +16,7 @@ import com.rustbyte.Zombie;
 import com.rustbyte.level.*;
 import com.rustbyte.vector.Vector2;
 import com.rustbyte.gui.Frame;
+import com.rustbyte.gui.Label;
 
 public class Game {
 	public int WIDTH;
@@ -48,8 +49,12 @@ public class Game {
 	private PathFinder pf;
 	private boolean stepPathKeyPressed = false;
 	
+	private Frame playerHUD;
+	private Label playerHealthStatusLabel;
+	private Label playerMissionStatusLabel;
+	
 	private Frame testFrame;
-	private Frame testFrame2;
+	private Label bossStatusLabel;
 	
 	public Game(int wid, int hgt) {
 		this.WIDTH = wid;
@@ -58,7 +63,7 @@ public class Game {
 		colorfadeEffect = new ColorFadeEffect(0,WIDTH,HEIGHT);
 		
 		input = new InputHandler();
-		level = new Level(Art.level1, 20,20, this);
+		level = new Level(Art.level2, 20,20, this);
 				
 		level.viewX = 0;
 		level.viewY = 0;
@@ -120,7 +125,16 @@ public class Game {
 		//addEntity(new BatBoss( ((level.width * 20) / 2) + 20, 100, 62,41, null, this));
 		
 		testFrame = new Frame( WIDTH - 105, 2, 80, 15);
-		testFrame2 = new Frame( 5, 2, 120, 27);
+		testFrame.addControl( (bossStatusLabel = new Label("",0,0, 0xFFFFFF)) );
+		testFrame.init();
+		
+		playerHUD = new Frame( 5, 2, 120, 27);
+		playerHUD.addControl( (playerHealthStatusLabel = new Label("HP: 999", 10, 7, 0xFFFF00)) );
+		playerHUD.addControl( (playerMissionStatusLabel = new Label("{FFFF00}Mission: {00FF00}" + 
+																	 "99 {FFFF00}/ {FF0000}" + 
+																	 "99 {FFFF00}/ {0000FF}99", 
+																	 10, 17,0xFFFF00)) );
+		playerHUD.init();
 	}
 	
 	public void activateBoss(Mob bossMob) {
@@ -262,17 +276,17 @@ public class Game {
 		}
 		
 		if(player.alive) {
-			testFrame2.render(screen);
-			screen.drawText(Art.font, "HP: " + player.hitpoints, 10, 7,0xFFFF00, true);
-			screen.drawText(Art.font, "{FFFF00}Mission: {00FF00}" + 
+			playerHealthStatusLabel.setText("HP: " + player.hitpoints);
+			playerMissionStatusLabel.setText("{FFFF00}Mission: {00FF00}" + 
 											humansSaved + " {FFFF00}/ {FF0000}" + 
-											humansLost + " {FFFF00}/ {0000FF}" + zombiesKilled, 
-											10, 17,0xFFFF00, true);			
-			if(bossActivated) {
-				testFrame.render(screen);
+											humansLost + " {FFFF00}/ {0000FF}" + zombiesKilled);
+			
+			playerHUD.render(screen, 0, 0);
+			/*if(bossActivated) {
+				testFrame.render(screen, 0, 0);
 				screen.drawText(Art.font, "{FF0000}ENEMY: {FFFFFF}" + (boss.hitpoints < 0 ? 0 : boss.hitpoints) , 
 								screen.width - 100, 6, 0xFFFFFF, true );
-			}
+			}*/
 			
 			player.render();
 		} else {

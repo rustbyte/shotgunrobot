@@ -11,6 +11,14 @@ public class LevelExitTile extends DoorTile {
 	
 	public LevelExitTile(int x, int y, int wid, int hgt, Level lev) {
 		super(x, y, wid, hgt, lev);
+
+		this.closedTileX = 1;
+		this.closedTileY = 43;
+		this.openTileX = 22;
+		this.openTileY = 43;
+		this.baseColor = 0xFFFFFF;
+		this.tsetOffsetX = closedTileX;
+		this.tsetOffsetY = closedTileY;
 	}
 
 	@Override
@@ -41,6 +49,7 @@ public class LevelExitTile extends DoorTile {
 	public void takeDamage(Entity e, int amount) {
 		// This door cannot be harmed.
 		// overriden to hide inherited method.
+		addImpactParticles(e, amount);
 	}
 	
 	@Override
