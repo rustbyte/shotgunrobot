@@ -1,6 +1,6 @@
 package com.rustbyte;
 
-public class Particle extends Entity {
+public class Particle extends Entity implements Moveable {
 	private int lifetime;
 	private double px = 0.0;
 	private double py = 0.0;

@@ -6,7 +6,7 @@ import java.util.Random;
 import com.rustbyte.level.Tile;
 import com.rustbyte.vector.Vector2;
 
-public class Grenade extends Entity {
+public class Grenade extends Entity implements Moveable {
 	private int damage = 100;
 	private int fuseTimer = 200;
 	private boolean detonated = false;	

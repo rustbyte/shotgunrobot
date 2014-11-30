@@ -6,7 +6,7 @@ import com.rustbyte.Game;
 import com.rustbyte.level.Tile;
 import com.rustbyte.vector.Vector2;
 
-public abstract class Mob extends Entity implements Destructable {	
+public abstract class Mob extends Entity implements Destructable, Moveable {	
 	public int hitpoints;	
 	protected int hurtTimer = 0;	
 	

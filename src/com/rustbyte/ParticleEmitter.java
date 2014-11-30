@@ -58,10 +58,4 @@ public class ParticleEmitter extends Entity {
 	public void render() {
 
 	}
-
-	@Override
-	public void move() {
-		// TODO Auto-generated method stub
-
-	}
 }
