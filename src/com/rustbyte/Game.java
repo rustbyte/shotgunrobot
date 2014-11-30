@@ -24,7 +24,7 @@ public class Game {
 	
 	public InputHandler input;
 	public Level level;
-	public Player player;
+	private Player player;
 	private List<Entity> entities = new ArrayList<Entity>();
 	public int tickcount = 0;	
 	public int FPS = 0;
@@ -113,6 +113,7 @@ public class Game {
 		//addEntity(new BatBoss( ((level.width * 20) / 2) + 20, 100, 62,41, null, this));			
 	}
 	
+	public Player getPlayer() {return this.player;}
 	
 	private void renderPath() {
 		Iterator<Entity> iter = entities.iterator();

@@ -43,7 +43,7 @@ public class Human extends Mob {
 
 	private double distanceToPlayer() {
 		Vector2 v1 = new Vector2(xx,yy);
-		Vector2 v2 = new Vector2(game.player.xx, game.player.yy);				
+		Vector2 v2 = new Vector2(game.getPlayer().xx, game.getPlayer().yy);
 		return v1.sub(v2).length();		
 	}
 	

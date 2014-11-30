@@ -80,9 +80,9 @@ public class Powerup extends Mob {
 	public void pickup() {	
 		if(!pickedup && spawnTimer == 0) {
 			switch(this.powerupType) {
-			case POWERUP_TYPE_BATTERY: game.player.hitpoints += 20; break;
-			case POWERUP_TYPE_SHELLS: game.player.shells += 10;  break;
-			case POWERUP_TYPE_GRENADES: game.player.grenades += 5; break;
+			case POWERUP_TYPE_BATTERY: game.getPlayer().hitpoints += 20; break;
+			case POWERUP_TYPE_SHELLS: game.getPlayer().shells += 10;  break;
+			case POWERUP_TYPE_GRENADES: game.getPlayer().grenades += 5; break;
 			}
 			
 			pickupTimer = 200;
