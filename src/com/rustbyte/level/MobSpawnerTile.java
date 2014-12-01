@@ -1,8 +1,12 @@
 package com.rustbyte.level;
 
 import java.util.Random;
+import com.rustbyte.HumanMobFactory;
 import com.rustbyte.Mob;
+import com.rustbyte.MobFactory;
 import com.rustbyte.Player;
+import com.rustbyte.SkeletonMobFactory;
+import com.rustbyte.ZombieMobFactory;
 import com.rustbyte.vector.Vector2;
 
 public class MobSpawnerTile extends Tile {
@@ -26,16 +30,22 @@ public class MobSpawnerTile extends Tile {
 		this.spawnType = type;
 		
 		switch(this.spawnType) {
-		case MOB_SPAWN_TYPE_HUMAN: mobName = "HUMAN"; break;
-		case MOB_SPAWN_TYPE_ZOMBIE: mobName = "ZOMBIE"; break;
-		case MOB_SPAWN_TYPE_SKELETON: mobName = "SKELETON"; break;
+		case MOB_SPAWN_TYPE_HUMAN: 
+			mobFactory = HumanMobFactory.getInstance();
+			break;
+		case MOB_SPAWN_TYPE_ZOMBIE: 
+			mobFactory = ZombieMobFactory.getInstance();
+			break;
+		case MOB_SPAWN_TYPE_SKELETON: 
+			mobFactory = SkeletonMobFactory.getInstance();
+			break;
 		}
 	}
 	
 	private void spawnMob() {
 		
 		if( nextMobTimer <= 0 && numMobsSpawned < maxMobs) {
-			level.game.addEntity( Mob.createMob(mobName, (tx * 20) + 10, (ty * 20) + 10,20,20,null, level.game));
+			level.game.addEntity(mobFactory.spawnMob((tx * 20) + 10, (ty * 20) + 10,20,20,null, level.game)); 
 			nextMobTimer = 60;
 			numMobsSpawned++;
 		}
@@ -50,7 +60,7 @@ public class MobSpawnerTile extends Tile {
 			rand.setSeed(level.game.tickcount);
 			
 			for(int i = 0; i < 5 + rand.nextInt(5); i++) {
-				level.game.addEntity(Mob.createMob(mobName, tx * 20, ty * 20,20,20,null, level.game));
+				level.game.addEntity(mobFactory.spawnMob(tx * 20, ty * 20,20,20,null, level.game));
 			}			
 		}		
 				

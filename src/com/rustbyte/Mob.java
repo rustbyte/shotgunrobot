@@ -24,17 +24,7 @@ public abstract class Mob extends Entity implements Destructable {
 		flashEffect = new FlashEffect(0xFFFFFF, 5, w,h);
 	}
 
-	public static Mob createMob(String mobType, int x, int y, int w, int h, Entity ent, Game game) {
-		
-		Mob result = null;
-		switch(mobType) {
-		case "HUMAN": result = new Human(x,y,w,h,ent,game); break;
-		case "ZOMBIE": result = new Zombie(x,y,w,h,ent,game); break;
-		case "SKELETON": result = new Skeleton(x,y,w,h,ent,game); break;
-		case "BATBOSS": result = new BatBoss(x,y,62,41,ent,game); break; 
-		}
-		return result;
-	}
+
 	
 	@Override
 	public void tick() {
