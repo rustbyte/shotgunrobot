@@ -10,6 +10,8 @@ import com.rustbyte.Game;
 import com.rustbyte.Bitmap;
 import com.rustbyte.Entity;
 import com.rustbyte.Human;
+import com.rustbyte.Game;
+import com.rustbyte.Player;
 
 public class Level {	
 	public int width;
@@ -51,6 +53,9 @@ public class Level {
 		
 		for(int i=0; i < (width * height);i++)
 			map[i].init();			
+	}
+	public Player getPlayer() {
+		return this.game.getPlayer();
 	}
 	
 	public void setPlayerSpawn(Tile t) {
