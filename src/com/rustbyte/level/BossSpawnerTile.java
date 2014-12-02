@@ -1,7 +1,9 @@
 package com.rustbyte.level;
 
 import java.util.Random;
+import com.rustbyte.BatBossMobFactory;
 import com.rustbyte.Mob;
+import com.rustbyte.MobFactory;
 import com.rustbyte.Player;
 import com.rustbyte.vector.Vector2;
 
@@ -14,8 +16,12 @@ public class BossSpawnerTile extends Tile {
 	private int maxMobs = 1;
 	private int numMobsSpawned = 0;
 	private int spawnType = 0;
+<<<<<<< HEAD
 	private String mobName;
 	private Mob boss = null;
+=======
+	private MobFactory mobFactory;
+>>>>>>> 2b1b2e3a7bc133acf172dae064331d5e8ecc500f
 	
 	public BossSpawnerTile(int type, int x, int y, int wid, int hgt, Level lev) {
 		super(x, y, wid, hgt, lev);
@@ -25,14 +31,21 @@ public class BossSpawnerTile extends Tile {
 		this.spawnType = type;
 		
 		switch(this.spawnType) {
-		case BOSS_SPAWN_TYPE_BAT: mobName = "BATBOSS"; break;
+		case BOSS_SPAWN_TYPE_BAT: 
+			mobFactory = BatBossMobFactory.getInstance();
+			break;
 		}
 	}
 	
 	private void spawnMob() {
 		
+<<<<<<< HEAD
 		if( nextMobTimer <= 0 && numMobsSpawned < maxMobs) {					
 			level.game.addEntity( boss );
+=======
+		if( nextMobTimer <= 0 && numMobsSpawned < maxMobs) {
+			level.game.addEntity(mobFactory.spawnMob((tx * 20) + 10, (ty * 20) + 10,20,20,null, level.game));
+>>>>>>> 2b1b2e3a7bc133acf172dae064331d5e8ecc500f
 			nextMobTimer = 60;
 			numMobsSpawned++;
 		}
