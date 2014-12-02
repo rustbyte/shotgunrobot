@@ -26,7 +26,7 @@ public class Game {
 	
 	public InputHandler input;
 	public Level level;
-	public Player player;
+	private Player player;
 	private List<Entity> entities = new ArrayList<Entity>();
 	public int tickcount = 0;	
 	public int FPS = 0;
@@ -137,6 +137,7 @@ public class Game {
 		playerHUD.init();
 	}
 	
+<<<<<<< HEAD
 	public void activateBoss(Mob bossMob) {
 		boss = bossMob;
 		bossActivated = true;
@@ -145,6 +146,9 @@ public class Game {
 	public boolean isBossDefeated() {
 		return (bossActivated && boss.hitpoints <= 0);
 	}
+=======
+	public Player getPlayer() {return this.player;}
+>>>>>>> 93d246f6211968e3d4537ede53a0fb337dfcd5ad
 	
 	private void renderPath() {
 		Iterator<Entity> iter = entities.iterator();

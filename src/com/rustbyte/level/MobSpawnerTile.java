@@ -89,7 +89,7 @@ public class MobSpawnerTile extends Tile {
 	public void tick() {
 		if( !activated ) {
 			// Check distance to player.
-			Player p = level.game.player;
+			Player p = level.getPlayer();
 			Vector2 playerPos = new Vector2(p.xx, p.yy);
 			Vector2 myPos = new Vector2((this.tx * 20) + 10, (this.ty * 20) + 10);
 			Vector2 delta = myPos.sub(playerPos);
