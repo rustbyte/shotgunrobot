@@ -2,7 +2,7 @@ package com.rustbyte;
 
 import com.rustbyte.Entity;
 
-public class Powerup extends Mob {
+public class Powerup extends Entity implements Moveable {
 	public static final int POWERUP_TYPE_BATTERY = 1;
 	public static final int POWERUP_TYPE_SHELLS = 2;
 	public static final int POWERUP_TYPE_GRENADES = 3;
@@ -12,19 +12,21 @@ public class Powerup extends Mob {
 	private boolean pickedup = false;
 	private int spawnTimer = 20;
 	private int lifetime = 0;
+	private FlashEffect flashEffect;
+	
 	public Powerup(int x, int y, int w, int h, int type, Entity p, Game game) {
-		super(x,y,w,h, p, game );
+		super(x, y, w, h, p, game);
 		
+		flashEffect = new FlashEffect(0xFFFFFF, 5, w, h);
 		this.powerupType = type;
 		int animID = 0; 
 		
 		switch(this.powerupType) {
-		case POWERUP_TYPE_BATTERY: animID = animator.addAnimation(1, 0, 43, w,h, false, 1); break;
-		case POWERUP_TYPE_SHELLS: animID = animator.addAnimation(1, 21, 43, w,h, false, 1); break;
-		case POWERUP_TYPE_GRENADES: animID = animator.addAnimation(1, 21, 64, w,h, false, 1); break;
+			case POWERUP_TYPE_BATTERY: animID = animator.addAnimation(1, 0, 43, w,h, false, 1); break;
+			case POWERUP_TYPE_SHELLS: animID = animator.addAnimation(1, 21, 43, w,h, false, 1); break;
+			case POWERUP_TYPE_GRENADES: animID = animator.addAnimation(1, 21, 64, w,h, false, 1); break;
 		}
 		
-		this.hitpoints = 1;
 		this.animator.setCurrentAnimation(animID);
 	}
 	
@@ -89,7 +91,24 @@ public class Powerup extends Mob {
 			pickedup = true;
 		}
 	}
+	
+	/**
+	 *	Slightly Modified version of Mob's move code. The Powerup class doesn't
+	 * 	rely on jumping, blockedX, or blockedY attributes to perform its 
+	 * 	behaviour, so code using those variables was removed.
+	 */
+	public void move() {
+		if(dirX < 0) facing = -1;
+		if(dirX > 0) facing = 1;
+		
+		game.level.moveEntity(this, velocity.x, 0);		
+		game.level.moveEntity(this, 0, velocity.y);		
+		
+		if(velocity.y != 0 )
+			onground = false;
+		
+		yy += velocity.y;
+		xx += velocity.x;
+	}
 
-	@Override
-	public void takeDamage(Entity source, int amount) { }
 }
