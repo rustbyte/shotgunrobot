@@ -128,7 +128,7 @@ public class Game {
 		testFrame.addControl( (bossStatusLabel = new Label("",0,0, 0xFFFFFF)) );
 		testFrame.init();
 		
-		playerHUD = new Frame( 5, 2, 120, 27);
+		playerHUD = new Frame( 20, 30, 120, 27);
 		playerHUD.addControl( (playerHealthStatusLabel = new Label("HP: 999", 10, 7, 0xFFFF00)) );
 		playerHUD.addControl( (playerMissionStatusLabel = new Label("{FFFF00}Mission: {00FF00}" + 
 																	 "99 {FFFF00}/ {FF0000}" + 
