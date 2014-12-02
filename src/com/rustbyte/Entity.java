@@ -81,5 +81,4 @@ public abstract class Entity {
 		}
 	}
 	public abstract void render() throws Exception;
-	public abstract void move();	
 }

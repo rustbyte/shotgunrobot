@@ -2,7 +2,7 @@ package com.rustbyte;
 
 import java.util.Random;
 
-public class Debris extends Entity {
+public class Debris extends Entity implements Moveable {
 
 	private int ticks;
 	private int spriteX;

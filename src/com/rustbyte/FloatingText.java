@@ -2,7 +2,7 @@ package com.rustbyte;
 
 import com.rustbyte.vector.Vector2;
 
-public class FloatingText extends Entity {
+public class FloatingText extends Entity implements Moveable {
 
 	private String text;
 	private Vector2 floatDir;
