@@ -16,12 +16,8 @@ public class BossSpawnerTile extends Tile {
 	private int maxMobs = 1;
 	private int numMobsSpawned = 0;
 	private int spawnType = 0;
-<<<<<<< HEAD
-	private String mobName;
 	private Mob boss = null;
-=======
 	private MobFactory mobFactory;
->>>>>>> 2b1b2e3a7bc133acf172dae064331d5e8ecc500f
 	
 	public BossSpawnerTile(int type, int x, int y, int wid, int hgt, Level lev) {
 		super(x, y, wid, hgt, lev);
@@ -39,18 +35,15 @@ public class BossSpawnerTile extends Tile {
 	
 	private void spawnMob() {
 		
-<<<<<<< HEAD
-		if( nextMobTimer <= 0 && numMobsSpawned < maxMobs) {					
+		if( nextMobTimer <= 0 && numMobsSpawned < maxMobs)					
 			level.game.addEntity( boss );
-=======
 		if( nextMobTimer <= 0 && numMobsSpawned < maxMobs) {
 			level.game.addEntity(mobFactory.spawnMob((tx * 20) + 10, (ty * 20) + 10,20,20,null, level.game));
->>>>>>> 2b1b2e3a7bc133acf172dae064331d5e8ecc500f
 			nextMobTimer = 60;
 			numMobsSpawned++;
 		}
 		if( --nextMobTimer < 0 ) 
-			nextMobTimer = 0;
+			nextMobTimer = 0;		
 	}
 	@Override
 	public void init() {
@@ -107,7 +100,8 @@ public class BossSpawnerTile extends Tile {
 				// Activate!
 				activated = true;
 				bossActivationTimer = 500;
-				boss = Mob.createMob(mobName, (tx * 20) + 10, (ty * 20) + 10,20,20,null, level.game);
+				//boss = Mob.createMob(mobName, (tx * 20) + 10, (ty * 20) + 10,20,20,null, level.game);
+				//boss = mobFactory.spawnMob((tx * 20) + 10, (ty * 20) + 10,20,20,null, level.game);
 				level.game.activateBoss(boss);
 			}
 		} else {

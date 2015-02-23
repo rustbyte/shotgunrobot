@@ -21,6 +21,7 @@ public class MobSpawnerTile extends Tile {
 	private int numMobsSpawned = 0;
 	private int spawnType = 0;
 	private String mobName;
+	private MobFactory mobFactory;
 	
 	public MobSpawnerTile(int type, int x, int y, int wid, int hgt, Level lev) {
 		super(x, y, wid, hgt, lev);

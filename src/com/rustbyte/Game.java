@@ -137,18 +137,16 @@ public class Game {
 		playerHUD.init();
 	}
 	
-<<<<<<< HEAD
 	public void activateBoss(Mob bossMob) {
 		boss = bossMob;
 		bossActivated = true;
 	}
 	
 	public boolean isBossDefeated() {
-		return (bossActivated && boss.hitpoints <= 0);
+		return (bossActivated && (boss != null) && boss.hitpoints <= 0);
 	}
-=======
+
 	public Player getPlayer() {return this.player;}
->>>>>>> 93d246f6211968e3d4537ede53a0fb337dfcd5ad
 	
 	private void renderPath() {
 		Iterator<Entity> iter = entities.iterator();

@@ -23,8 +23,6 @@ public abstract class Mob extends Entity implements Destructable, Moveable {
 		super(x, y, w, h, p, g);
 		flashEffect = new FlashEffect(0xFFFFFF, 5, w,h);
 	}
-
-
 	
 	@Override
 	public void tick() {
